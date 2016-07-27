@@ -39,16 +39,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
 
-import evogpj.operator.Crossover;
-import evogpj.operator.CrowdedTournamentSelection;
-import evogpj.operator.Initialize;
-import evogpj.operator.Mutate;
-import evogpj.operator.Select;
-import evogpj.operator.SinglePointKozaCrossover;
-import evogpj.operator.SinglePointUniformCrossover;
-import evogpj.operator.SubtreeMutate;
-import evogpj.operator.TournamentSelection;
-import evogpj.operator.TreeInitialize;
+import evogpj.operator.*;
 import evogpj.sort.CrowdingSort;
 import evogpj.sort.DominatedCount;
 import evogpj.sort.DominatedCount.DominationException;
@@ -102,6 +93,8 @@ public class SymbRegMOO {
     protected int MEAN_POW = Parameters.Defaults.MEAN_POW;
     // METHOD EMPLOYED TO SELECT A SOLUTION FROM A PARETO FRONT
     protected String FRONT_RANK_METHOD = Parameters.Defaults.FRONT_RANK_METHOD;
+    // DEFAULT REPRODUCE OPERATOR
+    protected String REPRODUCE = Parameters.Defaults.REPRODUCE;
     
     
     // ALL THE OPERATORS USED TO BUILD GP TREES
@@ -152,6 +145,8 @@ public class SymbRegMOO {
     protected Select select;
     // MUTATION
     protected Mutate mutate;
+    // REPRODUCTION
+    protected Reproduce reproduce;
 
     // FITNESS FUNCTIONS
     protected LinkedHashMap<String, FitnessFunction> fitnessFunctions;
@@ -297,6 +292,8 @@ public class SymbRegMOO {
                 INITIALIZE = props.getProperty(Parameters.Names.INITIALIZE);
         if (props.containsKey(Parameters.Names.FRONT_RANK_METHOD))
                 FRONT_RANK_METHOD = props.getProperty(Parameters.Names.FRONT_RANK_METHOD);
+        if (props.containsKey(Parameters.Names.REPRODUCE))
+                REPRODUCE = props.getProperty(Parameters.Names.REPRODUCE);
         
     }
 
@@ -421,6 +418,20 @@ public class SymbRegMOO {
         if (SELECT.equals(Parameters.Operators.CROWD_SELECT)) {
             CrowdingSort.computeCrowdingDistances(pop, fitnessFunctions);
         }
+
+        // Set up reproduction operator
+        Reproduce.ReproduceBuilder reproduceBuilder = new Reproduce.ReproduceBuilder()
+                .setMersenneTwisterFast(rand)
+                .setSelect(select)
+                .setMutate(mutate)
+                .setCrossover(xover)
+                .setProperties(props);
+        if (REPRODUCE.equals(Parameters.Operators.ORDINARY_REPRODUCE)) {
+            reproduce = new OrdinaryReproduce(reproduceBuilder);
+        } else {
+            System.err.format("Invalid reproduce function %s specified%n",REPRODUCE);
+            System.exit(-1);
+        }
     }
 
     /**
@@ -457,26 +468,10 @@ public class SymbRegMOO {
         // generate children from previous population. don't use elitism
         // here since that's done later
         childPop = new Population();
-        Population children;
         while (childPop.size() < POP_SIZE) {
-            Individual p1 = select.select(pop);
-            double prob = rand.nextDouble();
-            // Select exactly one operator to use
-            if (prob < XOVER_RATE) {
-                Individual p2 = select.select(pop);
-                children = xover.crossOver(p1, p2);
-                for (Individual ind : children) {    
-                    if(!ind.equals(p1) && !ind.equals(p2) && (childPop.size() < POP_SIZE)){
-                        childPop.add(ind);
-                    }
-                }
-            } else if (prob < MUTATION_RATE + XOVER_RATE) {
-                Individual ind = mutate.mutate(p1);
-                if(!ind.equals(p1) && (childPop.size() < POP_SIZE)){
-                    childPop.add(ind);
-                }
-            }
+            reproduce.addChildren(childPop, pop);
         }
+
         // evaluate all children
         for (String fname : fitnessFunctions.keySet()) {
             FitnessFunction f = fitnessFunctions.get(fname);
