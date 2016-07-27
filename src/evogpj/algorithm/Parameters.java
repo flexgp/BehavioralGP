@@ -232,6 +232,7 @@ public final class Parameters {
         public static final String RULETREE_FITNESS = "fitness.RT_MO_Fitness.Java, fitness.SubtreeComplexity";
         public static final String PROBLEM = "ProblemData/TrainDatasetBalanced2.txt";
         public static final String CROSS_VAL_SET = "ProblemData/TrainDatasetBalanced2.txt";
+        public static final String ORDINARY_GP_FITNESS = "fitness.OrdinaryGP.Java, fitness.SubtreeComplexity";
 
         public static final int EXTERNAL_THREADS = 4;
         public static final int TARGET_NUMBER = 1;

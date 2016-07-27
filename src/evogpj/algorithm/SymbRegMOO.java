@@ -17,11 +17,8 @@
  */
 package evogpj.algorithm;
 
-import evogpj.evaluation.java.CSVDataJava;
-import evogpj.evaluation.java.DataJava;
+import evogpj.evaluation.java.*;
 import evogpj.evaluation.FitnessFunction;
-import evogpj.evaluation.java.SubtreeComplexityFitness;
-import evogpj.evaluation.java.SRLARSJava;
 import evogpj.genotype.Tree;
 import evogpj.genotype.TreeGenerator;
 import evogpj.gp.GPException;
@@ -100,7 +97,7 @@ public class SymbRegMOO {
     // DEFAULT MUTATION OPERATOR
     protected String MUTATE = Parameters.Defaults.MUTATE;
     // DEFAULT MUTATION OPERATOR
-    protected String FITNESS = Parameters.Defaults.SRFITNESS;
+    protected String FITNESS = Parameters.Defaults.ORDINARY_GP_FITNESS;
     // METHOD EMPLOYED TO AGGREGATE THE FITNESS OF CANDIDATE SOLUTIONS
     protected int MEAN_POW = Parameters.Defaults.MEAN_POW;
     // METHOD EMPLOYED TO SELECT A SOLUTION FROM A PARETO FRONT
@@ -344,6 +341,22 @@ public class SymbRegMOO {
                 }
                 fitnessFunctions.put(fitnessOperatorName,new SRLARSJava(data, MEAN_POW, COERCE_TO_INT,EXTERNAL_THREADS));
                 //modelScalerJava = new SRModelScalerJava(data);
+            } else if (fitnessOperatorName.equals(Parameters.Operators.ORDINARY_GP_FITNESS)) {
+                DataJava data = new CSVDataJava(PROBLEM);
+                minTarget = data.getTargetMin();
+                maxTarget = data.getTargetMax();
+
+                if (TERM_SET == null) {
+                    TERM_SET = new ArrayList<String>();
+                    for (int i = 0; i < data.getNumberOfFeatures(); i++) {
+                        TERM_SET.add("X" + (i + 1));
+                    }
+                    System.out.println(TERM_SET);
+                }
+                fitnessFunctions.put(
+                        fitnessOperatorName,
+                        new OrdinaryGP(data, MEAN_POW, COERCE_TO_INT, EXTERNAL_THREADS)
+                );
             } else if (fitnessOperatorName.equals(Parameters.Operators.SUBTREE_COMPLEXITY_FITNESS)) {
                 fitnessFunctions.put(fitnessOperatorName,new SubtreeComplexityFitness());
             } else {
@@ -569,70 +582,78 @@ public class SymbRegMOO {
         }
 
         String firstFitnessFunction = fitnessFunctions.keySet().iterator().next();
-        if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS) ){
-            this.saveText(MODELS_PATH, "", false);
-            for(Individual ind:bestPop){
+        this.saveText(MODELS_PATH, "", false);
+        for(Individual ind:bestPop){
+            if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
                 for(int j = 0;j<ind.getWeights().size()-1;j++){
                     this.saveText(MODELS_PATH, ind.getWeights().get(j) + " ", true);
                 }
                 this.saveText(MODELS_PATH, ind.getWeights().get(ind.getWeights().size()-1) + ",", true);
                 this.saveText(MODELS_PATH, ind.getLassoIntercept() + ",", true);
-                this.saveText(MODELS_PATH, ind.toString() + "\n", true);
             }
-            Individual acc = paretoFront.get(0);
-            Individual comp = paretoFront.get(0);
-            Individual knee = paretoFront.get(0);
-            paretoFront.calculateEuclideanDistances(fitnessFunctions);
-            this.saveText(PARETO_PATH, "", false);
-            for(Individual ind:paretoFront){
-                if(ind.getFitness(Parameters.Operators.SR_JAVA_FITNESS) > acc.getFitness(Parameters.Operators.SR_JAVA_FITNESS)){
-                    acc = ind;
-                }
-                if(ind.getFitness(Parameters.Operators.SUBTREE_COMPLEXITY_FITNESS) < comp.getFitness(Parameters.Operators.SUBTREE_COMPLEXITY_FITNESS)){
-                    comp = ind;
-                }
-                if(ind.getEuclideanDistance()<knee.getEuclideanDistance()){
-                    knee = ind;
-                }
-                this.saveText(PARETO_PATH, minTarget + "," + maxTarget + ",", true);
+            this.saveText(MODELS_PATH, ind.toString() + "\n", true);
+        }
+        Individual acc = paretoFront.get(0);
+        Individual comp = paretoFront.get(0);
+        Individual knee = paretoFront.get(0);
+        paretoFront.calculateEuclideanDistances(fitnessFunctions);
+        this.saveText(PARETO_PATH, "", false);
+        for(Individual ind:paretoFront){
+            if(ind.getFitness(firstFitnessFunction) > acc.getFitness(firstFitnessFunction)){
+                acc = ind;
+            }
+            if(ind.getFitness(Parameters.Operators.SUBTREE_COMPLEXITY_FITNESS) < comp.getFitness(Parameters.Operators.SUBTREE_COMPLEXITY_FITNESS)){
+                comp = ind;
+            }
+            if(ind.getEuclideanDistance()<knee.getEuclideanDistance()){
+                knee = ind;
+            }
+            this.saveText(PARETO_PATH, minTarget + "," + maxTarget + ",", true);
+            if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
                 for(int j = 0;j<ind.getWeights().size()-1;j++){
                     this.saveText(PARETO_PATH, ind.getWeights().get(j) + " ", true);
                 }
                 this.saveText(PARETO_PATH, ind.getWeights().get(ind.getWeights().size()-1) + ",", true);
                 this.saveText(PARETO_PATH, ind.getLassoIntercept() + ",", true);
-                this.saveText(PARETO_PATH, ind.toString() + "\n", true);
-                
             }
-            // SAVE LEAST COMPLEX MODEL OF THE PARETO FRONT
-            this.saveText(LEAST_COMPLEX_PATH, "", false);
-            this.saveText(LEAST_COMPLEX_PATH, minTarget + "," + maxTarget + ",", true);
+            this.saveText(PARETO_PATH, ind.toString() + "\n", true);
+
+        }
+        // SAVE LEAST COMPLEX MODEL OF THE PARETO FRONT
+        this.saveText(LEAST_COMPLEX_PATH, "", false);
+        this.saveText(LEAST_COMPLEX_PATH, minTarget + "," + maxTarget + ",", true);
+        if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
             for(int j = 0;j<comp.getWeights().size()-1;j++){
                 this.saveText(LEAST_COMPLEX_PATH, comp.getWeights().get(j) + " ", true);
             }
             this.saveText(LEAST_COMPLEX_PATH, comp.getWeights().get(comp.getWeights().size()-1) + ",", true);
             this.saveText(LEAST_COMPLEX_PATH, comp.getLassoIntercept() + ",", true);
-            this.saveText(LEAST_COMPLEX_PATH, comp.toString() + "\n", true);
-            
-            // SAVE MOST ACCURATE MODEL OF THE PARETO FRONT
-            this.saveText(MOST_ACCURATE_PATH, "", false);
-            this.saveText(MOST_ACCURATE_PATH, minTarget + "," + maxTarget + ",", true);
+        }
+        this.saveText(LEAST_COMPLEX_PATH, comp.toString() + "\n", true);
+
+        // SAVE MOST ACCURATE MODEL OF THE PARETO FRONT
+        this.saveText(MOST_ACCURATE_PATH, "", false);
+        this.saveText(MOST_ACCURATE_PATH, minTarget + "," + maxTarget + ",", true);
+        if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
             for(int j = 0;j<acc.getWeights().size()-1;j++){
                 this.saveText(MOST_ACCURATE_PATH, acc.getWeights().get(j) + " ", true);
             }
             this.saveText(MOST_ACCURATE_PATH, acc.getWeights().get(acc.getWeights().size()-1) + ",", true);
             this.saveText(MOST_ACCURATE_PATH, acc.getLassoIntercept() + ",", true);
-            this.saveText(MOST_ACCURATE_PATH, acc.toString() + "\n", true);
-            
-            // SAVE KNEE MODEL OF THE PARETO FRONT
-            this.saveText(KNEE_PATH, "", false);
-            this.saveText(KNEE_PATH, minTarget + "," + maxTarget + ",", true);
+        }
+        this.saveText(MOST_ACCURATE_PATH, acc.toString() + "\n", true);
+
+        // SAVE KNEE MODEL OF THE PARETO FRONT
+        this.saveText(KNEE_PATH, "", false);
+        this.saveText(KNEE_PATH, minTarget + "," + maxTarget + ",", true);
+        if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
             for(int j = 0;j<knee.getWeights().size()-1;j++){
                 this.saveText(KNEE_PATH, knee.getWeights().get(j) + " ", true);
             }
             this.saveText(KNEE_PATH, knee.getWeights().get(knee.getWeights().size()-1) + ",", true);
             this.saveText(KNEE_PATH, knee.getLassoIntercept() + ",", true);
-            this.saveText(KNEE_PATH, knee.toString() + "\n", true);
-        }  
+        }
+        this.saveText(KNEE_PATH, knee.toString() + "\n", true);
         return bestOnCrossVal;
     }
     
