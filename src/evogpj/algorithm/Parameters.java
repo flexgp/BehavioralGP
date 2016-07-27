@@ -54,6 +54,7 @@ public final class Parameters {
         public static final String TERMINAL_SET = "terminal_set";
         public static final String MUTATE = "mutate_op";
         public static final String XOVER = "xover_op";
+        public static final String REPRODUCE = "reproduce_op";
         public static final String SELECTION = "selection_op";
         public static final String FITNESS = "fitness_op";
         public static final String FALSE_NEGATIVE_WEIGHT = "false_negative_weight";
@@ -176,6 +177,9 @@ public final class Parameters {
         public static final String SPU_XOVER = "operator.SinglePointUniformCrossover";
         // single point Koza crossover
         public static final String SPK_XOVER = "operator.SinglePointKozaCrossover";
+
+        // REPRODUCE values
+        public static final String ORDINARY_REPRODUCE = "operator.OrdinaryReproduce";
     }
 
     /**
@@ -253,6 +257,7 @@ public final class Parameters {
         public static final String MUTATE = Operators.SUBTREE_MUTATE;
         public static final String EQUALIZER = Operators.TREE_DYN_EQUAL;
         public static final String XOVER = Operators.SPU_XOVER;
+        public static final String REPRODUCE = Operators.ORDINARY_REPRODUCE;
         /**
          * To handle support for multiple fitness functions, this field can be
          * filled with any number of comma-separated fitness operator class
