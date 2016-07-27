@@ -245,7 +245,7 @@ public final class Parameters {
         /**
          * the initial seed to use for the rng in the algorithm.
          */
-        public static final long SEED = System.currentTimeMillis();
+        public static final long SEED = 9999; // System.currentTimeMillis();
         /**
          * Normally regression is over real numbers. Sometimes we want to do
          * regression over Integers. Set this to true to do so.
