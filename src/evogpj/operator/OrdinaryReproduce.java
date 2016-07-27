@@ -31,13 +31,12 @@ public class OrdinaryReproduce implements Reproduce {
     }
 
     public void addChildren(Population childPop, Population pop) throws GPException {
-        Population children;
         Individual p1 = select.select(pop);
         double prob = rand.nextDouble();
         // Select exactly one operator to use
         if (prob < XOVER_RATE) {
             Individual p2 = select.select(pop);
-            children = xover.crossOver(p1, p2);
+            Population children = xover.crossOver(p1, p2);
             for (Individual ind : children) {
                 if (!ind.equals(p1) && !ind.equals(p2) && (childPop.size() < POP_SIZE)) {
                     childPop.add(ind);
