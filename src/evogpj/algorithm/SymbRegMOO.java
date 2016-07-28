@@ -89,7 +89,7 @@ public class SymbRegMOO {
     protected String XOVER = Parameters.Defaults.XOVER;
     // DEFAULT MUTATION OPERATOR
     protected String MUTATE = Parameters.Defaults.MUTATE;
-    // DEFAULT MUTATION OPERATOR
+    // DEFAULT FITNESS FUNCTION
     protected String FITNESS = Parameters.Defaults.ORDINARY_GP_FITNESS;
     // METHOD EMPLOYED TO AGGREGATE THE FITNESS OF CANDIDATE SOLUTIONS
     protected int MEAN_POW = Parameters.Defaults.MEAN_POW;

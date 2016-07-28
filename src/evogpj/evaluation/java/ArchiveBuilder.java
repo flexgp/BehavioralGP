@@ -41,7 +41,6 @@ public class ArchiveBuilder extends FitnessFunction {
         USE_INT = is_int;
         numThreads = anumThreads;
     }
-    
     /**
      * Should this fitness function be minimized (i.e. mean squared error) or
      * maximized?
