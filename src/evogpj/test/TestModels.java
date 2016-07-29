@@ -100,12 +100,17 @@ public class TestModels {
         for(Individual ind:models){
             BufferedWriter bw = new BufferedWriter(new FileWriter(filePath + "_" + indexIndi + ".csv"));
             PrintWriter printWriter = new PrintWriter(bw);
-            ArrayList<String> alWeights = ind.getWeights();
-            double[] lassoWeights = new double[alWeights.size()];
-            for(int i=0;i<alWeights.size();i++){
-                lassoWeights[i] = Double.parseDouble(alWeights.get(i));
+            ArrayList<String> alWeights = null;
+            double[] lassoWeights = null;
+            double lassoIntercept = 0;
+            if (mrgp) {
+                alWeights = ind.getWeights();
+                lassoWeights = new double[alWeights.size()];
+                for(int i=0;i<alWeights.size();i++){
+                    lassoWeights[i] = Double.parseDouble(alWeights.get(i));
+                }
+                lassoIntercept = Double.parseDouble(ind.getLassoIntercept());
             }
-            double lassoIntercept = Double.parseDouble(ind.getLassoIntercept());
             double sqDiff = 0;
             double absDiff = 0;
             Tree genotype = (Tree) ind.getGenotype();
@@ -120,15 +125,19 @@ public class TestModels {
                     d.add(j, inputValuesAux[i][j]);
                 }
                 interVals = new ArrayList<Double>();
-                func.evalIntermediate(d,interVals);
-                for(int t=0;t<interVals.size();t++){
-                    intermediateValues[i][t] = interVals.get(t).floatValue();
-                }
                 double prediction = 0;
-                for(int j=0;j<lassoWeights.length;j++){
-                    prediction += intermediateValues[i][j]*lassoWeights[j];
+                if (mrgp) {
+                    func.evalIntermediate(d,interVals);
+                    for(int t=0;t<interVals.size();t++){
+                        intermediateValues[i][t] = interVals.get(t).floatValue();
+                    }
+                    for(int j=0;j<lassoWeights.length;j++){
+                        prediction += intermediateValues[i][j]*lassoWeights[j];
+                    }
+                    prediction += lassoIntercept;
+                } else {
+                    prediction = func.eval(d);
                 }
-                prediction += lassoIntercept;
                 if (round) prediction = Math.round(prediction);
                 if(prediction<minTarget) prediction = minTarget;
                 if(prediction>maxTarget) prediction = maxTarget;
