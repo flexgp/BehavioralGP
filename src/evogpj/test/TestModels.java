@@ -26,6 +26,9 @@ public class TestModels {
     private boolean round;
 
     private double minTarget, maxTarget;
+
+    private static final int MRGP_TOKENS = 5;
+    private boolean mrgp = false;
     /**
      * Create a new fitness operator, using the provided data, for assessing
      * individual solutions to Symbolic Regression problems. There is one
@@ -59,20 +62,29 @@ public class TestModels {
         for(int i=0;i<popSize;i++){
             String scaledModel = alModels.get(i);
             String[] tokens = scaledModel.split(",");
+            mrgp = tokens.length == MRGP_TOKENS;
             minTarget = Double.parseDouble(tokens[0]);
             maxTarget = Double.parseDouble(tokens[1]);
-            String[] weightsArrayS = tokens[2].split(" ");
-            ArrayList<String> alWeights = new ArrayList<String>();
-            for(int j=0;j<weightsArrayS.length;j++){
-                alWeights.add(weightsArrayS[j]);
+            ArrayList<String> alWeights = null;
+            String interceptS = null;
+            String model = null;
+            if (mrgp) {
+                String[] weightsArrayS = tokens[2].split(" ");
+                alWeights = new ArrayList<String>();
+                for(int j=0;j<weightsArrayS.length;j++){
+                    alWeights.add(weightsArrayS[j]);
+                }
+                interceptS = tokens[3];
+                model = tokens[4];
+            } else {
+                model = tokens[2];
             }
-            String interceptS = tokens[3];
-            String model = tokens[4];
-
             Tree g = TreeGenerator.generateTree(model);
             Individual iAux = new Individual(g);
-            iAux.setWeights(alWeights);
-            iAux.setLassoIntercept(interceptS);
+            if (mrgp) {
+                iAux.setWeights(alWeights);
+                iAux.setLassoIntercept(interceptS);
+            }
             models.add(i, iAux);
         }
     }
@@ -137,12 +149,17 @@ public class TestModels {
     public void evalPop() {
         double[] targets = data.getTargetValues();
         for(Individual ind:models){
-            ArrayList<String> alWeights = ind.getWeights();
-            double[] lassoWeights = new double[alWeights.size()];
-            for(int i=0;i<alWeights.size();i++){
-                lassoWeights[i] = Double.parseDouble(alWeights.get(i));
+            ArrayList<String> alWeights = null;
+            double[] lassoWeights = null;
+            double lassoIntercept = 0;
+            if (mrgp) {
+                alWeights = ind.getWeights();
+                lassoWeights = new double[alWeights.size()];
+                for(int i=0;i<alWeights.size();i++){
+                    lassoWeights[i] = Double.parseDouble(alWeights.get(i));
+                }
+                lassoIntercept = Double.parseDouble(ind.getLassoIntercept());
             }
-            double lassoIntercept = Double.parseDouble(ind.getLassoIntercept());
             double sqDiff = 0;
             double absDiff = 0;
             Tree genotype = (Tree) ind.getGenotype();
@@ -157,15 +174,19 @@ public class TestModels {
                     d.add(j, inputValuesAux[i][j]);
                 }
                 interVals = new ArrayList<Double>();
-                func.evalIntermediate(d,interVals);
-                for(int t=0;t<interVals.size();t++){
-                    intermediateValues[i][t] = interVals.get(t).floatValue();
-                }
                 double prediction = 0;
-                for(int j=0;j<lassoWeights.length;j++){
-                    prediction += intermediateValues[i][j]*lassoWeights[j];
+                if (mrgp) {
+                    func.evalIntermediate(d, interVals);
+                    for (int t = 0; t < interVals.size(); t++) {
+                        intermediateValues[i][t] = interVals.get(t).floatValue();
+                    }
+                    for (int j = 0; j < lassoWeights.length; j++) {
+                        prediction += intermediateValues[i][j] * lassoWeights[j];
+                    }
+                    prediction += lassoIntercept;
+                } else {
+                    prediction = func.eval(d);
                 }
-                prediction += lassoIntercept;
                 //phenotype_tmp.addNewDataValue(prediction);
                 if (round) prediction = Math.round(prediction);
                 if(prediction<minTarget) prediction = minTarget;
