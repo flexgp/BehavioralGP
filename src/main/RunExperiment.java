@@ -1,8 +1,8 @@
 package main;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import evogpj.algorithm.Parameters;
+
+import java.io.*;
 import java.util.Scanner;
 
 /**
@@ -10,7 +10,10 @@ import java.util.Scanner;
  */
 public class RunExperiment {
 
+    private static final String EXPERIMENT_OUTPUT = Parameters.Defaults.EXPERIMENT_OUTPUT;
+
     public static void main(String[] args) throws FileNotFoundException {
+        saveText(EXPERIMENT_OUTPUT, "", false);
         String filename;
         Scanner scanner;
         if (args.length == 2) {
@@ -53,10 +56,18 @@ public class RunExperiment {
                         durationOfRun = args[6];
                         if (args[7].equals("-repetitions")) {
                             repetitions = Integer.parseInt(args[8]);
+                            saveText(EXPERIMENT_OUTPUT, "######################\n", true);
+                            saveText(EXPERIMENT_OUTPUT, "training data: " + trainingDataPath + "\n", true);
+                            saveText(EXPERIMENT_OUTPUT, "testing data: " + testingDataPath + "\n", true);
+                            saveText(EXPERIMENT_OUTPUT, "properties: " + propertiesPath + "\n", true);
+                            saveText(EXPERIMENT_OUTPUT, "run duration: " + durationOfRun + "\n", true);
+                            saveText(EXPERIMENT_OUTPUT, "repetitions: " + repetitions + "\n", true);
+                            saveText(EXPERIMENT_OUTPUT, "######################\n", true);
                             for (int i = 0; i < repetitions; i++) {
                                 SRLearnerMenuManager m = new SRLearnerMenuManager();
                                 train(m, trainingDataPath, durationOfRun, propertiesPath);
                                 test(m, testingDataPath);
+                                saveOutput();
                             }
                         } else {
                             System.err.println("Error: expected -repetitions flag");
@@ -110,7 +121,41 @@ public class RunExperiment {
         }
     }
 
-    private static void storeResults() {
+    private static void saveOutput() {
+        File folder = new File("./");
+        for (File file : folder.listFiles()) {
+            if (file.getName().matches("test(.*).txt")) {
+                saveText(EXPERIMENT_OUTPUT, file.getName() + "\n", true);
+                try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        saveText(EXPERIMENT_OUTPUT, line + "\n", true);
+                    }
+                } catch (FileNotFoundException fnfe) {
+                    fnfe.printStackTrace();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+                saveText(EXPERIMENT_OUTPUT, "--------------\n", true);
+            }
+        }
+    }
 
+    /**
+     * Save text to a filepath
+     * @param filepath
+     * @param text
+     * @param append
+     */
+    private static void saveText(String filepath, String text, Boolean append) {
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(filepath,append));
+            PrintWriter printWriter = new PrintWriter(bw);
+            printWriter.write(text);
+            printWriter.flush();
+            printWriter.close();
+        } catch (IOException e) {
+            System.exit(-1);
+        }
     }
 }
