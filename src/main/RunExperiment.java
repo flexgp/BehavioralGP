@@ -56,13 +56,13 @@ public class RunExperiment {
                         durationOfRun = args[6];
                         if (args[7].equals("-repetitions")) {
                             repetitions = Integer.parseInt(args[8]);
-                            saveText(EXPERIMENT_OUTPUT, "######################\n", true);
+                            saveText(EXPERIMENT_OUTPUT, "########################\n", true);
                             saveText(EXPERIMENT_OUTPUT, "training data: " + trainingDataPath + "\n", true);
                             saveText(EXPERIMENT_OUTPUT, "testing data: " + testingDataPath + "\n", true);
                             saveText(EXPERIMENT_OUTPUT, "properties: " + propertiesPath + "\n", true);
                             saveText(EXPERIMENT_OUTPUT, "run duration: " + durationOfRun + "\n", true);
                             saveText(EXPERIMENT_OUTPUT, "repetitions: " + repetitions + "\n", true);
-                            saveText(EXPERIMENT_OUTPUT, "######################\n", true);
+                            saveText(EXPERIMENT_OUTPUT, "########################\n", true);
                             for (int i = 0; i < repetitions; i++) {
                                 SRLearnerMenuManager m = new SRLearnerMenuManager();
                                 train(m, trainingDataPath, durationOfRun, propertiesPath);
@@ -136,7 +136,7 @@ public class RunExperiment {
                 } catch (IOException ioe) {
                     ioe.printStackTrace();
                 }
-                saveText(EXPERIMENT_OUTPUT, "--------------\n", true);
+                saveText(EXPERIMENT_OUTPUT, "------------------------\n", true);
             }
         }
     }
