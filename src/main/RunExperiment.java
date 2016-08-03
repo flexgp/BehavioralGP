@@ -34,11 +34,6 @@ public class RunExperiment {
         }
     }
 
-    /*
-     * trainingData
-     * testingData
-     * store output
-     */
     private static void parseRun(String run) {
         String trainingDataPath;
         String testingDataPath;
@@ -67,6 +62,7 @@ public class RunExperiment {
                                 SRLearnerMenuManager m = new SRLearnerMenuManager();
                                 train(m, trainingDataPath, durationOfRun, propertiesPath);
                                 test(m, testingDataPath);
+                                saveText(EXPERIMENT_OUTPUT, "##### Repetition " + (i+1) + " #####\n", true);
                                 saveOutput();
                             }
                         } else {
