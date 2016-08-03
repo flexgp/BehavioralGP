@@ -319,5 +319,10 @@ public final class Parameters {
 
         public static final String FRONT_RANK_METHOD = Names.FIRST_FITNESS;
         public static final String SAVE_JSON = "false";
+
+        /**
+         * Experiment output file
+         */
+        public static final String EXPERIMENT_OUTPUT = "output.txt";
     }
 }
