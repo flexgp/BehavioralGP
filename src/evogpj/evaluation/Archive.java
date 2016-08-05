@@ -24,5 +24,5 @@ public interface Archive {
      * Get a subtree from the archive.
      * @return The subtree that is retrieved from the archive.
      */
-    TreeNode getSubtree();
+    TreeNode getSubtree() throws EmptyArchiveException;
 }
