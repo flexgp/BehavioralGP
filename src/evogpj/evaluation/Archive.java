@@ -1,6 +1,7 @@
 package evogpj.evaluation;
 
 
+import com.google.common.collect.ImmutableList;
 import evogpj.genotype.TreeNode;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface Archive {
      *                        each key is a subtree's output on the training
      *                        data, and each value is its syntax.
      */
-    void addGeneticMaterial(Map<List<Double>, TreeNode> geneticMaterial);
+    void addGeneticMaterial(Map<ImmutableList<Double>, TreeNode> geneticMaterial);
 
     /**
      * Get a subtree from the archive.
