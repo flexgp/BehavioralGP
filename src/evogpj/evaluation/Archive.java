@@ -13,10 +13,11 @@ public interface Archive {
 
     /**
      * Takes the genetic material, and combines it with the archive.
-     * @param geneticMaterial A list of subtrees, each represented as a map of
-     *                        its output of the training data to its syntax.
+     * @param geneticMaterial A map that represents a set of subtrees, where
+     *                        each key is a subtree's output on the training
+     *                        data, and each value is its syntax.
      */
-    void addGeneticMaterial(List<Map<List<Double>, TreeNode>> geneticMaterial);
+    void addGeneticMaterial(Map<List<Double>, TreeNode> geneticMaterial);
 
     /**
      * Get a subtree from the archive.
