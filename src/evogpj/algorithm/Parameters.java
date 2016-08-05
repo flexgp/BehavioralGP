@@ -57,6 +57,7 @@ public final class Parameters {
         public static final String REPRODUCE = "reproduce_op";
         public static final String SELECTION = "selection_op";
         public static final String FITNESS = "fitness_op";
+        public static final String ARCHIVE = "archive_op";
         public static final String FALSE_NEGATIVE_WEIGHT = "false_negative_weight";
         public static final String INITIALIZE = "initialize_op";
         public static final String EQUALIZER = "equalizer_op";
@@ -180,6 +181,9 @@ public final class Parameters {
 
         // REPRODUCE values
         public static final String ORDINARY_REPRODUCE = "operator.OrdinaryReproduce";
+
+        // ARCHIVE values
+        public static final String SIMPLE_ARCHIVE = "fitness.SimpleArchive";
     }
 
     /**
@@ -258,6 +262,9 @@ public final class Parameters {
         public static final String EQUALIZER = Operators.TREE_DYN_EQUAL;
         public static final String XOVER = Operators.SPU_XOVER;
         public static final String REPRODUCE = Operators.ORDINARY_REPRODUCE;
+
+        public static final String ARCHIVE = Operators.SIMPLE_ARCHIVE;
+
         /**
          * To handle support for multiple fitness functions, this field can be
          * filled with any number of comma-separated fitness operator class

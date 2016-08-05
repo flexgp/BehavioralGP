@@ -17,6 +17,8 @@
  */
 package evogpj.algorithm;
 
+import evogpj.evaluation.Archive;
+import evogpj.evaluation.SimpleArchive;
 import evogpj.evaluation.java.*;
 import evogpj.evaluation.FitnessFunction;
 import evogpj.genotype.Tree;
@@ -95,6 +97,8 @@ public class SymbRegMOO {
     protected String FRONT_RANK_METHOD = Parameters.Defaults.FRONT_RANK_METHOD;
     // DEFAULT REPRODUCE OPERATOR
     protected String REPRODUCE = Parameters.Defaults.REPRODUCE;
+    // DEFAULT ARCHIVE
+    protected String ARCHIVE = Parameters.Defaults.ARCHIVE;
     
     
     // ALL THE OPERATORS USED TO BUILD GP TREES
@@ -147,6 +151,8 @@ public class SymbRegMOO {
     protected Mutate mutate;
     // REPRODUCTION
     protected Reproduce reproduce;
+    // ARCHIVE
+    protected Archive archive;
 
     // FITNESS FUNCTIONS
     protected LinkedHashMap<String, FitnessFunction> fitnessFunctions;
@@ -294,6 +300,8 @@ public class SymbRegMOO {
                 FRONT_RANK_METHOD = props.getProperty(Parameters.Names.FRONT_RANK_METHOD);
         if (props.containsKey(Parameters.Names.REPRODUCE))
                 REPRODUCE = props.getProperty(Parameters.Names.REPRODUCE);
+        if (props.containsKey(Parameters.Names.ARCHIVE))
+                ARCHIVE = props.getProperty(Parameters.Names.ARCHIVE);
         
     }
 
@@ -431,6 +439,11 @@ public class SymbRegMOO {
         } else {
             System.err.format("Invalid reproduce function %s specified%n",REPRODUCE);
             System.exit(-1);
+        }
+
+        // Set up archive
+        if (ARCHIVE.equals(Parameters.Operators.SIMPLE_ARCHIVE)) {
+            archive = new SimpleArchive(rand);
         }
     }
 
