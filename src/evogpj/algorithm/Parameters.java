@@ -25,7 +25,7 @@ import evogpj.math.means.Mean;
 /**
  * Simple class to collect all default values and names, so they can be found in
  * one location and properly documented.
- * 
+ *
  * @author Owen Derby
  */
 public final class Parameters {
@@ -33,7 +33,7 @@ public final class Parameters {
      * Names used to identify properties in the properties file. Every key in
      * the properties file is matched against these strings by
      * {@link AlgorithmBase} to extract the new property value.
-     * 
+     *
      * @author Owen Derby
      */
     public final static class Names {
@@ -54,6 +54,7 @@ public final class Parameters {
         public static final String TERMINAL_SET = "terminal_set";
         public static final String MUTATE = "mutate_op";
         public static final String XOVER = "xover_op";
+        public static final String ARCHIVE_MUTATE = "archive_mutate_op";
         public static final String REPRODUCE = "reproduce_op";
         public static final String SELECTION = "selection_op";
         public static final String FITNESS = "fitness_op";
@@ -98,7 +99,7 @@ public final class Parameters {
         /**
          * For logging models
          */
-        public static final String MODELS_PATH = "models_path";	
+        public static final String MODELS_PATH = "models_path";
         /**
          * Enable population logging?
          */
@@ -117,7 +118,7 @@ public final class Parameters {
     /**
      * Names for specific operators, as understood by the library when reading
      * in values from the properties file.
-     * 
+     *
      * @author Owen Derby
      */
     public final static class Operators {
@@ -141,7 +142,7 @@ public final class Parameters {
         public static final String GPFUNCTION_CV_CPP = "fitness.GPFunctionCVFitness.Cpp";
         public static final String GPFUNCTION_CV_CUDA = "fitness.GPFunctionCVFitness.Cuda";
         public static final String GPFUNCTION_PRED_CUDA = "fitness.GPFunctionPredFitness.Cuda";
-        
+
         // GPFunction-KDE Classification
         public static final String GPFUNCTION_KDE_JAVA = "fitness.GPFunctionKDEFitness.Java";
         public static final String GPFUNCTION_KDE_CPP = "fitness.GPFunctionKDEFitness.Cpp";
@@ -151,7 +152,7 @@ public final class Parameters {
         public static final String RT_MO_JAVA_FITNESS = "fitness.RT_MO_Fitness.Java";
         public static final String RT_FP_JAVA_FITNESS = "fitness.RT_FP_Fitness.Java";
         public static final String RT_FN_JAVA_FITNESS = "fitness.RT_FN_Fitness.Java";
-        
+
         // Complexity
         public static final String SUBTREE_COMPLEXITY_FITNESS = "fitness.SubtreeComplexity";
 
@@ -179,6 +180,9 @@ public final class Parameters {
         // single point Koza crossover
         public static final String SPK_XOVER = "operator.SinglePointKozaCrossover";
 
+        // ARCHIVE_MUTATE values
+        public static final String ARCHIVE_MUTATE = "operator.ArchiveMutate";
+
         // REPRODUCE values
         public static final String ORDINARY_REPRODUCE = "operator.OrdinaryReproduce";
 
@@ -190,7 +194,7 @@ public final class Parameters {
      * All default values for running the library.
      * <p>
      * To specify other values, please use the properties file.
-     * 
+     *
      * @author Owen Derby
      */
     public final static class Defaults {
@@ -199,7 +203,7 @@ public final class Parameters {
          */
         public static final Boolean VERBOSE = false;
 
-        
+
         public static final int POP_SIZE = 100;
         public static final int NUM_GENS = 10000;
         public static final int TIME_OUT = 60;
@@ -219,7 +223,7 @@ public final class Parameters {
         /**
          * The power p to use in the power mean for computing the absolute
          * error.
-         * 
+         *
          * @see Mean
          */
         public static final int MEAN_POW = 2;
@@ -230,7 +234,7 @@ public final class Parameters {
         public static final int TREE_XOVER_TRIES = 10;
         public static final int TREE_MUTATE_MAX_DEPTH = 17;
         public static final int TOURNEY_SIZE = 7;
-        
+
 
         public static final int PROBLEM_SIZE = 3;
         public static final String PROBLEM_TYPE = "SRFunction";
@@ -244,7 +248,7 @@ public final class Parameters {
 
         public static final int EXTERNAL_THREADS = 4;
         public static final int TARGET_NUMBER = 1;
-        
+
         public static final double FALSE_NEGATIVE_WEIGHT = 0.5;
         /**
          * the initial seed to use for the rng in the algorithm.
@@ -264,6 +268,7 @@ public final class Parameters {
         public static final String REPRODUCE = Operators.ORDINARY_REPRODUCE;
 
         public static final String ARCHIVE = Operators.SIMPLE_ARCHIVE;
+        public static final String ARCHIVE_MUTATE = Operators.ARCHIVE_MUTATE;
 
         /**
          * To handle support for multiple fitness functions, this field can be
