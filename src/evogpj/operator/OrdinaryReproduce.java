@@ -19,15 +19,25 @@ public class OrdinaryReproduce implements Reproduce {
     protected final double XOVER_RATE;
     protected final int POP_SIZE;
 
-    public OrdinaryReproduce(ReproduceBuilder reproduceBuilder) {
-        rand = reproduceBuilder.getMersenneTwisterFast();
-        select = reproduceBuilder.getSelect();
-        mutate = reproduceBuilder.getMutate();
-        xover = reproduceBuilder.getCrossover();
+    public OrdinaryReproduce(
+            MersenneTwisterFast rand,
+            Select select,
+            Mutate mutate,
+            Crossover xover,
+            double mutationRate,
+            double xoverRate,
+            int popSize
+    ) {
 
-        MUTATION_RATE = reproduceBuilder.getMutationRate();
-        XOVER_RATE = reproduceBuilder.getCrossoverRate();
-        POP_SIZE = reproduceBuilder.getPopulationSize();
+        this.rand = rand;
+        this.select = select;
+        this.mutate = mutate;
+        this.xover = xover;
+
+        MUTATION_RATE = mutationRate;
+        XOVER_RATE = xoverRate;
+        POP_SIZE = popSize;
+
     }
 
     public void addChildren(Population childPop, Population pop) throws GPException {
