@@ -39,7 +39,7 @@ public class ArchiveMutate extends RandomOperator implements Mutate {
     }
 
     @Override
-    public Individual mutate(Individual i) throws GPException, EmptyArchiveException {
+    public Individual mutate(Individual i) throws GPException {
         if (!(i.getGenotype() instanceof Tree)) {
             throw new GPException("Attempting ArchiveMutate of genotype not of type Tree.");
         }
