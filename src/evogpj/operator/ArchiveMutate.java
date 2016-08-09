@@ -2,10 +2,15 @@ package evogpj.operator;
 
 import evogpj.algorithm.Parameters;
 import evogpj.evaluation.Archive;
+import evogpj.evaluation.EmptyArchiveException;
+import evogpj.genotype.Tree;
+import evogpj.genotype.TreeNode;
 import evogpj.gp.GPException;
 import evogpj.gp.Individual;
 import evogpj.gp.MersenneTwisterFast;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -34,7 +39,36 @@ public class ArchiveMutate extends RandomOperator implements Mutate {
     }
 
     @Override
-    public Individual mutate(Individual i) throws GPException {
-        return new Individual(i.getGenotype().copy());
+    public Individual mutate(Individual i) throws GPException, EmptyArchiveException {
+        if (!(i.getGenotype() instanceof Tree)) {
+            throw new GPException("Attempting ArchiveMutate of genotype not of type Tree.");
+        }
+        Tree copy;
+        int tries = 0;
+        do {
+            copy = (Tree) i.getGenotype().copy();
+            ArrayList<TreeNode> nodes = copy.getRoot().depthFirstTraversal();
+            TreeNode mutatePoint = nodes.get(rand.nextInt(nodes.size()));
+            int mutatePointIndexInChildren = mutatePoint.parent.children.indexOf(mutatePoint);
+            TreeNode replacementNode;
+            try {
+                replacementNode = archive.getSubtree();
+            } catch (EmptyArchiveException e) {
+                e.printStackTrace();
+                return new Individual(copy); // Perhaps revert to ordinary Crossover?
+            }
+            mutatePoint.parent.children.set(mutatePointIndexInChildren, replacementNode);
+            replacementNode.parent = mutatePoint.parent;
+            replacementNode.reset();
+            tries++;
+        } while (copy.getDepth() > TREE_XOVER_MAX_DEPTH && tries < TREE_XOVER_TRIES);
+
+        if (tries >= TREE_XOVER_TRIES) {
+            return i.copy();
+        } else {
+            Individual mutant = new Individual(copy);
+            mutant.reset();
+            return mutant;
+        }
     }
 }
