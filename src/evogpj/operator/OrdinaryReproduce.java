@@ -18,6 +18,16 @@ public class OrdinaryReproduce extends RandomOperator implements Reproduce {
     protected final double XOVER_RATE;
     protected final int POP_SIZE;
 
+    /**
+     * Ordinary Reproduce operator that performs Mutate and Crossover.
+     * @param rand
+     * @param select
+     * @param mutate
+     * @param xover
+     * @param mutationRate
+     * @param xoverRate
+     * @param popSize
+     */
     public OrdinaryReproduce(
             MersenneTwisterFast rand,
             Select select,
@@ -27,7 +37,6 @@ public class OrdinaryReproduce extends RandomOperator implements Reproduce {
             double xoverRate,
             int popSize
     ) {
-
         super(rand);
         this.select = select;
         this.mutate = mutate;
@@ -36,7 +45,6 @@ public class OrdinaryReproduce extends RandomOperator implements Reproduce {
         MUTATION_RATE = mutationRate;
         XOVER_RATE = xoverRate;
         POP_SIZE = popSize;
-
     }
 
     public void addChildren(Population childPop, Population pop) throws GPException {
