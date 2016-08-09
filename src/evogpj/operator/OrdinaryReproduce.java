@@ -8,9 +8,8 @@ import evogpj.gp.Population;
 /**
  * Created by stevenfine on 7/27/16.
  */
-public class OrdinaryReproduce implements Reproduce {
+public class OrdinaryReproduce extends RandomOperator implements Reproduce {
 
-    protected final MersenneTwisterFast rand;
     protected final Select select;
     protected final Mutate mutate;
     protected final Crossover xover;
@@ -29,7 +28,7 @@ public class OrdinaryReproduce implements Reproduce {
             int popSize
     ) {
 
-        this.rand = rand;
+        super(rand);
         this.select = select;
         this.mutate = mutate;
         this.xover = xover;
