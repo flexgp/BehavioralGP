@@ -99,6 +99,8 @@ public class SymbRegMOO {
     protected String REPRODUCE = Parameters.Defaults.REPRODUCE;
     // DEFAULT ARCHIVE
     protected String ARCHIVE = Parameters.Defaults.ARCHIVE;
+    // DEFAULT ARCHIVE MUTATE
+    protected String ARCHIVE_MUTATE = Parameters.Defaults.ARCHIVE_MUTATE;
     
     
     // ALL THE OPERATORS USED TO BUILD GP TREES
@@ -153,6 +155,8 @@ public class SymbRegMOO {
     protected Reproduce reproduce;
     // ARCHIVE
     protected Archive archive;
+    // ARCHIVE MUTATE
+    protected Mutate archiveMutate;
 
     // FITNESS FUNCTIONS
     protected LinkedHashMap<String, FitnessFunction> fitnessFunctions;
@@ -302,6 +306,8 @@ public class SymbRegMOO {
                 REPRODUCE = props.getProperty(Parameters.Names.REPRODUCE);
         if (props.containsKey(Parameters.Names.ARCHIVE))
                 ARCHIVE = props.getProperty(Parameters.Names.ARCHIVE);
+        if (props.containsKey(Parameters.Names.ARCHIVE_MUTATE))
+                ARCHIVE_MUTATE = props.getProperty(Parameters.Names.ARCHIVE_MUTATE);
         
     }
 
@@ -427,6 +433,16 @@ public class SymbRegMOO {
             CrowdingSort.computeCrowdingDistances(pop, fitnessFunctions);
         }
 
+        // Set up archive
+        if (ARCHIVE.equals(Parameters.Operators.SIMPLE_ARCHIVE)) {
+            archive = new SimpleArchive(rand);
+        }
+
+        // Set up archiveMutate
+        if (ARCHIVE_MUTATE.equals(Parameters.Operators.ARCHIVE_MUTATE)) {
+            archiveMutate = new ArchiveMutate(rand, props, archive);
+        }
+
         // Set up reproduction operator
         Reproduce.ReproduceBuilder reproduceBuilder = new Reproduce.ReproduceBuilder()
                 .setMersenneTwisterFast(rand)
@@ -441,10 +457,6 @@ public class SymbRegMOO {
             System.exit(-1);
         }
 
-        // Set up archive
-        if (ARCHIVE.equals(Parameters.Operators.SIMPLE_ARCHIVE)) {
-            archive = new SimpleArchive(rand);
-        }
     }
 
     /**
