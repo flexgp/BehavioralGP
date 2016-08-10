@@ -359,7 +359,7 @@ public class SymbRegMOO {
                 } else if (fitnessOperatorName.equals(Parameters.Operators.ORDINARY_GP_FITNESS)) {
                     fitnessFunction = new OrdinaryGP(data, MEAN_POW, COERCE_TO_INT, EXTERNAL_THREADS);
                 } else if (fitnessOperatorName.equals(Parameters.Operators.ARCHIVE_BUILDER_FITNESS)) {
-                    fitnessFunction = new ArchiveBuilder(data, MEAN_POW, COERCE_TO_INT, EXTERNAL_THREADS);
+                    fitnessFunction = new ArchiveBuilder(data, MEAN_POW, COERCE_TO_INT, EXTERNAL_THREADS, archive);
                 }
                 fitnessFunctions.put(fitnessOperatorName, fitnessFunction);
                 //modelScalerJava = new SRModelScalerJava(data);

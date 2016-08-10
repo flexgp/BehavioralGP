@@ -1,6 +1,7 @@
 package evogpj.evaluation.java;
 
 import evogpj.algorithm.Parameters;
+import evogpj.evaluation.Archive;
 import evogpj.evaluation.FitnessFunction;
 import evogpj.genotype.Tree;
 import evogpj.gp.Individual;
@@ -26,6 +27,7 @@ public class ArchiveBuilder extends FitnessFunction {
     public static String FITNESS_KEY = Parameters.Operators.ARCHIVE_BUILDER_FITNESS;
     public Boolean isMaximizingFunction = true;
     private int numThreads;
+    private Archive archive;
 
     /**
      *
@@ -35,11 +37,12 @@ public class ArchiveBuilder extends FitnessFunction {
         this(data, 2, false,1);
     }
 
-    public ArchiveBuilder(DataJava aData, int aPow, boolean is_int,int anumThreads) {
+    public ArchiveBuilder(DataJava aData, int aPow, boolean is_int,int anumThreads, Archive archive) {
         this.data = aData;
         pow = aPow;
         USE_INT = is_int;
         numThreads = anumThreads;
+        this.archive = archive;
     }
     /**
      * Should this fitness function be minimized (i.e. mean squared error) or
