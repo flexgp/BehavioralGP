@@ -10,7 +10,6 @@ import evogpj.gp.Individual;
 import evogpj.gp.MersenneTwisterFast;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 /**

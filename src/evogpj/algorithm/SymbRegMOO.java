@@ -156,7 +156,7 @@ public class SymbRegMOO {
     // ARCHIVE
     protected Archive archive;
     // ARCHIVE MUTATE
-    protected Mutate archiveMutate;
+    protected ArchiveMutate archiveMutate;
 
     // FITNESS FUNCTIONS
     protected LinkedHashMap<String, FitnessFunction> fitnessFunctions;
@@ -444,14 +444,26 @@ public class SymbRegMOO {
         }
 
         // Set up reproduction operator
-        Reproduce.ReproduceBuilder reproduceBuilder = new Reproduce.ReproduceBuilder()
-                .setMersenneTwisterFast(rand)
-                .setSelect(select)
-                .setMutate(mutate)
-                .setCrossover(xover)
-                .setProperties(props);
         if (REPRODUCE.equals(Parameters.Operators.ORDINARY_REPRODUCE)) {
-            reproduce = new OrdinaryReproduce(reproduceBuilder);
+            reproduce = new OrdinaryReproduce(
+                    rand,
+                    select,
+                    mutate,
+                    xover,
+                    MUTATION_RATE,
+                    XOVER_RATE,
+                    POP_SIZE
+            );
+        } else if (REPRODUCE.equals(Parameters.Operators.ARCHIVE_CROSSOVER_REPRODUCE)) {
+            reproduce = new ArchiveCrossoverReproduce(
+                    rand,
+                    select,
+                    mutate,
+                    archiveMutate,
+                    MUTATION_RATE,
+                    XOVER_RATE,
+                    POP_SIZE
+            );
         } else {
             System.err.format("Invalid reproduce function %s specified%n",REPRODUCE);
             System.exit(-1);

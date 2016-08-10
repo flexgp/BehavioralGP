@@ -8,9 +8,8 @@ import evogpj.gp.Population;
 /**
  * Created by stevenfine on 7/27/16.
  */
-public class OrdinaryReproduce implements Reproduce {
+public class OrdinaryReproduce extends RandomOperator implements Reproduce {
 
-    protected final MersenneTwisterFast rand;
     protected final Select select;
     protected final Mutate mutate;
     protected final Crossover xover;
@@ -19,15 +18,33 @@ public class OrdinaryReproduce implements Reproduce {
     protected final double XOVER_RATE;
     protected final int POP_SIZE;
 
-    public OrdinaryReproduce(ReproduceBuilder reproduceBuilder) {
-        rand = reproduceBuilder.getMersenneTwisterFast();
-        select = reproduceBuilder.getSelect();
-        mutate = reproduceBuilder.getMutate();
-        xover = reproduceBuilder.getCrossover();
+    /**
+     * Ordinary Reproduce operator that performs Mutate and Crossover.
+     * @param rand
+     * @param select
+     * @param mutate
+     * @param xover
+     * @param mutationRate
+     * @param xoverRate
+     * @param popSize
+     */
+    public OrdinaryReproduce(
+            MersenneTwisterFast rand,
+            Select select,
+            Mutate mutate,
+            Crossover xover,
+            double mutationRate,
+            double xoverRate,
+            int popSize
+    ) {
+        super(rand);
+        this.select = select;
+        this.mutate = mutate;
+        this.xover = xover;
 
-        MUTATION_RATE = reproduceBuilder.getMutationRate();
-        XOVER_RATE = reproduceBuilder.getCrossoverRate();
-        POP_SIZE = reproduceBuilder.getPopulationSize();
+        MUTATION_RATE = mutationRate;
+        XOVER_RATE = xoverRate;
+        POP_SIZE = popSize;
     }
 
     public void addChildren(Population childPop, Population pop) throws GPException {
