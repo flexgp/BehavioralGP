@@ -340,7 +340,9 @@ public class SymbRegMOO {
         rand = new MersenneTwisterFast(seed);
         fitnessFunctions = splitFitnessOperators(FITNESS);
         for (String fitnessOperatorName : fitnessFunctions.keySet()) {
-            if (fitnessOperatorName.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
+            if (fitnessOperatorName.equals(Parameters.Operators.SR_JAVA_FITNESS) ||
+                    fitnessOperatorName.equals(Parameters.Operators.ORDINARY_GP_FITNESS) ||
+                    fitnessOperatorName.equals(Parameters.Operators.ARCHIVE_BUILDER_FITNESS)) {
                 DataJava data = new CSVDataJava(PROBLEM);
                 minTarget = data.getTargetMin();
                 maxTarget = data.getTargetMax();
@@ -350,26 +352,19 @@ public class SymbRegMOO {
                     for (int i = 0; i < data.getNumberOfFeatures(); i++) TERM_SET.add("X" + (i + 1));
                     System.out.println(TERM_SET);
                 }
-                fitnessFunctions.put(fitnessOperatorName,new SRLARSJava(data, MEAN_POW, COERCE_TO_INT,EXTERNAL_THREADS));
-                //modelScalerJava = new SRModelScalerJava(data);
-            } else if (fitnessOperatorName.equals(Parameters.Operators.ORDINARY_GP_FITNESS)) {
-                DataJava data = new CSVDataJava(PROBLEM);
-                minTarget = data.getTargetMin();
-                maxTarget = data.getTargetMax();
 
-                if (TERM_SET == null) {
-                    TERM_SET = new ArrayList<String>();
-                    for (int i = 0; i < data.getNumberOfFeatures(); i++) {
-                        TERM_SET.add("X" + (i + 1));
-                    }
-                    System.out.println(TERM_SET);
+                FitnessFunction fitnessFunction = null;
+                if (fitnessOperatorName.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
+                    fitnessFunction = new SRLARSJava(data, MEAN_POW, COERCE_TO_INT, EXTERNAL_THREADS);
+                } else if (fitnessOperatorName.equals(Parameters.Operators.ORDINARY_GP_FITNESS)) {
+                    fitnessFunction = new OrdinaryGP(data, MEAN_POW, COERCE_TO_INT, EXTERNAL_THREADS);
+                } else if (fitnessOperatorName.equals(Parameters.Operators.ARCHIVE_BUILDER_FITNESS)) {
+                    fitnessFunction = new ArchiveBuilder(data, MEAN_POW, COERCE_TO_INT, EXTERNAL_THREADS);
                 }
-                fitnessFunctions.put(
-                        fitnessOperatorName,
-                        new OrdinaryGP(data, MEAN_POW, COERCE_TO_INT, EXTERNAL_THREADS)
-                );
+                fitnessFunctions.put(fitnessOperatorName, fitnessFunction);
+                //modelScalerJava = new SRModelScalerJava(data);
             } else if (fitnessOperatorName.equals(Parameters.Operators.SUBTREE_COMPLEXITY_FITNESS)) {
-                fitnessFunctions.put(fitnessOperatorName,new SubtreeComplexityFitness());
+                fitnessFunctions.put(fitnessOperatorName, new SubtreeComplexityFitness());
             } else {
                 System.err.format("Invalid fitness function %s specified for problem type %s%n",fitnessOperatorName);
                 System.exit(-1);
