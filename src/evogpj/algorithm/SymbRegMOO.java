@@ -156,7 +156,7 @@ public class SymbRegMOO {
     // ARCHIVE
     protected Archive archive;
     // ARCHIVE MUTATE
-    protected Mutate archiveMutate;
+    protected ArchiveMutate archiveMutate;
 
     // FITNESS FUNCTIONS
     protected LinkedHashMap<String, FitnessFunction> fitnessFunctions;
@@ -450,6 +450,16 @@ public class SymbRegMOO {
                     select,
                     mutate,
                     xover,
+                    MUTATION_RATE,
+                    XOVER_RATE,
+                    POP_SIZE
+            );
+        } else if (REPRODUCE.equals(Parameters.Operators.ARCHIVE_CROSSOVER_REPRODUCE)) {
+            reproduce = new ArchiveCrossoverReproduce(
+                    rand,
+                    select,
+                    mutate,
+                    archiveMutate,
                     MUTATION_RATE,
                     XOVER_RATE,
                     POP_SIZE
