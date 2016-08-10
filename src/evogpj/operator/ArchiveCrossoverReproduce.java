@@ -50,9 +50,9 @@ public class ArchiveCrossoverReproduce extends RandomOperator implements Reprodu
     public void addChildren(Population childPop, Population pop) throws GPException {
         Individual ind = select.select(pop);
         double prob = rand.nextDouble();
-        // Perform twice because Crossover produces two new offspring.
-        // Perhaps change doing this twice, or change ARCHIVE_MUTATION_RATE.
         if (prob < ARCHIVE_MUTATION_RATE) {
+            // Perform twice because Crossover produces two new offspring.
+            // Perhaps change doing this twice, or change ARCHIVE_MUTATION_RATE.
             for (int i = 0; i < 2; i++) {
                 Individual mutant = archiveMutate.mutate(ind);
                 if (!mutant.equals(ind) && childPop.size() < POP_SIZE) {
