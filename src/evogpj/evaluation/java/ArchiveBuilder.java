@@ -1,9 +1,11 @@
 package evogpj.evaluation.java;
 
+import com.google.common.collect.ImmutableList;
 import evogpj.algorithm.Parameters;
 import evogpj.evaluation.Archive;
 import evogpj.evaluation.FitnessFunction;
 import evogpj.genotype.Tree;
+import evogpj.genotype.TreeNode;
 import evogpj.gp.Individual;
 import evogpj.gp.Population;
 import evogpj.math.Function;
@@ -13,7 +15,9 @@ import evogpj.math.means.Mean;
 import evogpj.math.means.PowerMean;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,13 +33,6 @@ public class ArchiveBuilder extends FitnessFunction {
     private int numThreads;
     private Archive archive;
 
-    /**
-     *
-     * @param data
-     */
-    public ArchiveBuilder(DataJava data) {
-        this(data, 2, false,1);
-    }
 
     public ArchiveBuilder(DataJava aData, int aPow, boolean is_int,int anumThreads, Archive archive) {
         this.data = aData;
@@ -44,6 +41,7 @@ public class ArchiveBuilder extends FitnessFunction {
         numThreads = anumThreads;
         this.archive = archive;
     }
+
     /**
      * Should this fitness function be minimized (i.e. mean squared error) or
      * maximized?
@@ -79,28 +77,64 @@ public class ArchiveBuilder extends FitnessFunction {
      * @param ind
      * @see Function
      */
-    public void eval(Individual ind) throws Exception {
+    public Map<ImmutableList<Double>, TreeNode> eval(Individual ind) throws Exception {
 
         Tree genotype = (Tree) ind.getGenotype();
         Mean MEAN_FUNC = getMeanFromP(pow);
-        Function func = genotype.generate();
         List<Double> d;
         double[][] inputValuesAux = data.getInputValues();
         double[] targetAux = data.getTargetValues();
-
+        ArrayList<Double> outputValues;
+        ArrayList<TreeNode> treeNodes = null;
+        ArrayList<TreeNode> treeNodesTemp;
+        ArrayList<ArrayList<Double>> trace = new ArrayList<>();
+        for (int i = 0; i < genotype.getSize(); i++) {
+            trace.add(new ArrayList<>());
+        }
+        
         for (int i = 0; i < data.getNumberOfFitnessCases(); i++) {
-            d = new ArrayList<Double>();
+            d = new ArrayList<>();
             for (int j = 0; j < data.getNumberOfFeatures(); j++) {
                 d.add(j, inputValuesAux[i][j]);
             }
-            MEAN_FUNC.addValue(Math.abs(targetAux[i] - func.eval(d)));
+            outputValues = new ArrayList<>();
+            treeNodesTemp = new ArrayList<>();
+            Double output = genotype.getRoot().evalAndCollectGeneticMaterial(
+                    d,
+                    outputValues,
+                    treeNodesTemp
+            );
+            if (treeNodes == null) {
+                treeNodes = treeNodesTemp;
+            }
+            MEAN_FUNC.addValue(Math.abs(targetAux[i] - output));
+
+            for (int t = 0; t < treeNodes.size(); t++) {
+                trace.get(t).add(outputValues.get(t));
+            }
             d.clear();
+        }
+
+        Map<ImmutableList<Double>, TreeNode> geneticMaterial = new HashMap<>();
+        for (int i = 0; i < treeNodes.size(); i++) {
+            ImmutableList<Double> semantics = ImmutableList.copyOf(trace.get(i));
+            TreeNode syntax = treeNodes.get(i);
+            if (geneticMaterial.containsKey(semantics)) {
+                int oldComplexity = geneticMaterial.get(semantics).getSubtreeComplexity();
+                int newComplexity = syntax.getSubtreeComplexity();
+                if (newComplexity < oldComplexity) {
+                    geneticMaterial.put(semantics, syntax);
+                }
+            } else {
+                geneticMaterial.put(semantics, syntax);
+            }
         }
 
         Double error = MEAN_FUNC.getMean();
         double fitness = errorToFitness(error);
 
         ind.setFitness(OrdinaryGP.FITNESS_KEY, fitness);
+        return geneticMaterial;
     }
 
     /**
