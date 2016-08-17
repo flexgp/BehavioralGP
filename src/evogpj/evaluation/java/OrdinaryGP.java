@@ -90,7 +90,11 @@ public class OrdinaryGP extends FitnessFunction {
             for (int j = 0; j < data.getNumberOfFeatures(); j++) {
                 d.add(j, inputValuesAux[i][j]);
             }
-            MEAN_FUNC.addValue(Math.abs(targetAux[i] - func.eval(d)));
+            double output = func.eval(d);
+            if (USE_INT) {
+                output = Math.round(output);
+            }
+            MEAN_FUNC.addValue(Math.abs(targetAux[i] - output));
             d.clear();
         }
 
