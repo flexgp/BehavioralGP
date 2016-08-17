@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import evogpj.math.Function;
+import evogpj.math.Num;
 import evogpj.math.Var;
 
 /**
@@ -334,6 +335,63 @@ public class TreeNode implements Serializable {
             }
             return subtreeDepth;
 	}
+
+    /**
+     * Evaluates the function that this TreeNode represents, and stores the
+     * genetic material of its subtrees. A given value in |outputVals|
+     * corresponds to the TreeNode at the same index in |treeNodes|.
+     * @param inputVals The training case to evaluate.
+     * @param outputVals The output of each subtree.
+     * @param treeNodes The subtrees.
+     * @return The result of the function being evaluated.
+     * @throws GPException
+     */
+	public Double evalAndCollectGeneticMaterial(
+            List<Double> inputVals,
+            List<Double> outputVals,
+            List<TreeNode> treeNodes
+    ) throws GPException {
+        int arity = Function.getArityFromLabel(label);
+        if (arity == 0) {
+            Double output = this.generate().eval(inputVals);
+            outputVals.add(output);
+            treeNodes.add(this);
+            return output;
+        } else {
+            List<Double> params = new ArrayList<>();
+            for (TreeNode child : this.children) {
+                params.add(child.evalAndCollectGeneticMaterial(inputVals, outputVals, treeNodes));
+            }
+            Constructor<? extends Function> constructor;
+            Function func;
+            try {
+                constructor = Function.getConstructorFromLabel(label);
+                double param1 = params.get(0);
+                Function num1 = new Num(param1);
+                if (params.size() == 1) {
+                    func = constructor.newInstance(num1);
+                } else {
+                    double param2 = params.get(1);
+                    Function num2 = new Num(param2);
+                    func = constructor.newInstance(num1, num2);
+                }
+                double output = func.eval(inputVals);
+                outputVals.add(output);
+                treeNodes.add(this);
+                return output;
+
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+            throw new GPException("can't create function for node " + this.label);
+        }
+    }
 
 	/**
 	 * Prepare to be evaluated. Generate a {@link Function} for subtree rooted
