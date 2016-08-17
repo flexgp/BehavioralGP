@@ -91,7 +91,7 @@ public class ArchiveBuilder extends FitnessFunction {
         for (int i = 0; i < genotype.getSize(); i++) {
             trace.add(new ArrayList<>());
         }
-        
+
         for (int i = 0; i < data.getNumberOfFitnessCases(); i++) {
             d = new ArrayList<>();
             for (int j = 0; j < data.getNumberOfFeatures(); j++) {
@@ -119,15 +119,7 @@ public class ArchiveBuilder extends FitnessFunction {
         for (int i = 0; i < treeNodes.size(); i++) {
             ImmutableList<Double> semantics = ImmutableList.copyOf(trace.get(i));
             TreeNode syntax = treeNodes.get(i);
-            if (geneticMaterial.containsKey(semantics)) {
-                int oldComplexity = geneticMaterial.get(semantics).getSubtreeComplexity();
-                int newComplexity = syntax.getSubtreeComplexity();
-                if (newComplexity < oldComplexity) {
-                    geneticMaterial.put(semantics, syntax);
-                }
-            } else {
-                geneticMaterial.put(semantics, syntax);
-            }
+            combineGeneticMaterial(geneticMaterial, semantics, syntax);
         }
 
         Double error = MEAN_FUNC.getMean();
@@ -162,6 +154,9 @@ public class ArchiveBuilder extends FitnessFunction {
     @Override
     public void evalPop(Population pop) {
 
+        Map<ImmutableList<Double>, TreeNode> combinedGeneticMaterial = new HashMap<>();
+        Map<ImmutableList<Double>, TreeNode> threadGeneticMaterial = new HashMap<>();
+
         ArrayList<SRJavaThread> alThreads = new ArrayList<SRJavaThread>();
         for(int i=0;i<numThreads;i++){
             SRJavaThread threadAux = new SRJavaThread(i, pop,numThreads);
@@ -177,12 +172,43 @@ public class ArchiveBuilder extends FitnessFunction {
             SRJavaThread threadAux = alThreads.get(i);
             try {
                 threadAux.join();
+                threadGeneticMaterial = threadAux.getGeneticMaterial();
+                for (Map.Entry entry : threadGeneticMaterial.entrySet()) {
+                    ImmutableList<Double> semantics = (ImmutableList<Double>) entry.getKey();
+                    TreeNode syntax = (TreeNode) entry.getValue();
+                    combineGeneticMaterial(combinedGeneticMaterial, semantics, syntax);
+                }
             } catch (InterruptedException ex) {
-                Logger.getLogger(SRLARSJava.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ArchiveBuilder.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        archive.addGeneticMaterial(combinedGeneticMaterial);
+    }
 
-
+    /**
+     * Add semantics and syntax to geneticMaterial if either there is no key
+     * with those semantics, or the syntax tree is less complex than the one
+     * already in the geneticMaterial Map.
+     * @param geneticMaterial A map that represents a set of subtrees, where
+     *                        each key is a subtree's output on the training
+     *                        data, and each value is its syntax.
+     * @param semantics The key to geneticMaterial
+     * @param syntax The value to geneticMaterial
+     */
+    private void combineGeneticMaterial(
+            Map<ImmutableList<Double>, TreeNode> geneticMaterial,
+            ImmutableList<Double> semantics,
+            TreeNode syntax
+    ) {
+        if (geneticMaterial.containsKey(semantics)) {
+            int oldComplexity = geneticMaterial.get(semantics).getSubtreeComplexity();
+            int newComplexity = syntax.getSubtreeComplexity();
+            if (newComplexity < oldComplexity) {
+                geneticMaterial.put(semantics, syntax);
+            }
+        } else {
+            geneticMaterial.put(semantics, syntax);
+        }
     }
 
     /**
@@ -236,11 +262,16 @@ public class ArchiveBuilder extends FitnessFunction {
     public class SRJavaThread extends Thread{
         private int indexThread, totalThreads;
         private Population pop;
+        private Map<ImmutableList<Double>, TreeNode> geneticMaterial;
 
         public SRJavaThread(int anIndex, Population aPop,int aTotalThreads){
             indexThread = anIndex;
             pop = aPop;
             totalThreads = aTotalThreads;
+        }
+
+        public Map<ImmutableList<Double>, TreeNode> getGeneticMaterial() {
+            return geneticMaterial;
         }
 
         @Override
@@ -249,9 +280,9 @@ public class ArchiveBuilder extends FitnessFunction {
             for (Individual individual : pop) {
                 if(indexIndi%totalThreads==indexThread){
                     try {
-                        eval(individual);
+                        geneticMaterial = eval(individual);
                     } catch (Exception ex) {
-                        Logger.getLogger(SRLARSJava.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(ArchiveBuilder.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
                 indexIndi++;
