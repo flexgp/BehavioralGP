@@ -158,7 +158,7 @@ public class ArchiveBuilder extends FitnessFunction {
     public void evalPop(Population pop) {
 
         Map<ImmutableList<Double>, TreeNode> combinedGeneticMaterial = new HashMap<>();
-        Map<ImmutableList<Double>, TreeNode> threadGeneticMaterial = new HashMap<>();
+        Map<ImmutableList<Double>, TreeNode> threadGeneticMaterial;
 
         ArrayList<SRJavaThread> alThreads = new ArrayList<SRJavaThread>();
         for(int i=0;i<numThreads;i++){
