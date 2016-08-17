@@ -34,7 +34,7 @@ public class ArchiveBuilder extends FitnessFunction {
     private Archive archive;
 
 
-    public ArchiveBuilder(DataJava aData, int aPow, boolean is_int,int anumThreads, Archive archive) {
+    public ArchiveBuilder(DataJava aData, int aPow, boolean is_int, int anumThreads, Archive archive) {
         this.data = aData;
         pow = aPow;
         USE_INT = is_int;
@@ -125,7 +125,7 @@ public class ArchiveBuilder extends FitnessFunction {
         Double error = MEAN_FUNC.getMean();
         double fitness = errorToFitness(error);
 
-        ind.setFitness(OrdinaryGP.FITNESS_KEY, fitness);
+        ind.setFitness(ArchiveBuilder.FITNESS_KEY, fitness);
         return geneticMaterial;
     }
 
