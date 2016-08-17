@@ -99,13 +99,16 @@ public class ArchiveBuilder extends FitnessFunction {
             }
             outputValues = new ArrayList<>();
             treeNodesTemp = new ArrayList<>();
-            Double output = genotype.getRoot().evalAndCollectGeneticMaterial(
+            double output = genotype.getRoot().evalAndCollectGeneticMaterial(
                     d,
                     outputValues,
                     treeNodesTemp
             );
             if (treeNodes == null) {
                 treeNodes = treeNodesTemp;
+            }
+            if (USE_INT) {
+                output = Math.round(output);
             }
             MEAN_FUNC.addValue(Math.abs(targetAux[i] - output));
 
