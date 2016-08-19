@@ -337,8 +337,8 @@ public class TreeNode implements Serializable {
 	}
 
     /**
-     * Evaluates the function that this TreeNode represents, and stores the
-     * genetic material of its subtrees. A given value in |outputVals|
+     * Evaluates the function that this TreeNode represents, creates a copy of
+	 * the TreeNode, and stores it in |treeNodes|. A given value in |outputVals|
      * corresponds to the TreeNode at the same index in |treeNodes|.
      * @param inputVals The training case to evaluate.
      * @param outputVals The output of each subtree.
@@ -355,7 +355,7 @@ public class TreeNode implements Serializable {
         if (arity == 0) {
             Double output = this.generate().eval(inputVals);
             outputVals.add(output);
-            treeNodes.add(this);
+            treeNodes.add(TreeGenerator.generateTree(this.toStringAsTree()).getRoot());
             return output;
         } else {
             List<Double> params = new ArrayList<>();
@@ -377,7 +377,7 @@ public class TreeNode implements Serializable {
                 }
                 double output = func.eval(inputVals);
                 outputVals.add(output);
-                treeNodes.add(this);
+                treeNodes.add(TreeGenerator.generateTree(this.toStringAsTree()).getRoot());
                 return output;
 
             } catch (InstantiationException e) {
