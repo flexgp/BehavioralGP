@@ -338,6 +338,12 @@ public class SymbRegMOO {
     private void create_operators(Properties props, long seed) throws IOException {
         System.out.println("Running evogpj with seed: " + seed);
         rand = new MersenneTwisterFast(seed);
+
+        // Set up archive
+        if (ARCHIVE.equals(Parameters.Operators.SIMPLE_ARCHIVE)) {
+            archive = new SimpleArchive(rand);
+        }
+
         fitnessFunctions = splitFitnessOperators(FITNESS);
         for (String fitnessOperatorName : fitnessFunctions.keySet()) {
             if (fitnessOperatorName.equals(Parameters.Operators.SR_JAVA_FITNESS) ||
@@ -389,6 +395,11 @@ public class SymbRegMOO {
             System.exit(-1);
         }
 
+        // Set up archiveMutate
+        if (ARCHIVE_MUTATE.equals(Parameters.Operators.ARCHIVE_MUTATE)) {
+            archiveMutate = new ArchiveMutate(rand, props, archive);
+        }
+
         mutate = new SubtreeMutate(rand, props, treeGen);
         //mutate = new SubtreeMutateConstants(rand, props, treeGen);
 
@@ -398,6 +409,32 @@ public class SymbRegMOO {
             xover = new SinglePointKozaCrossover(rand, props);
         } else {
             System.err.format("Invalid crossover function %s specified%n",XOVER);
+            System.exit(-1);
+        }
+
+        // Set up reproduction operator
+        if (REPRODUCE.equals(Parameters.Operators.ORDINARY_REPRODUCE)) {
+            reproduce = new OrdinaryReproduce(
+                    rand,
+                    select,
+                    mutate,
+                    xover,
+                    MUTATION_RATE,
+                    XOVER_RATE,
+                    POP_SIZE
+            );
+        } else if (REPRODUCE.equals(Parameters.Operators.ARCHIVE_CROSSOVER_REPRODUCE)) {
+            reproduce = new ArchiveCrossoverReproduce(
+                    rand,
+                    select,
+                    mutate,
+                    archiveMutate,
+                    MUTATION_RATE,
+                    XOVER_RATE,
+                    POP_SIZE
+            );
+        } else {
+            System.err.format("Invalid reproduce function %s specified%n",REPRODUCE);
             System.exit(-1);
         }
 
@@ -427,43 +464,6 @@ public class SymbRegMOO {
         if (SELECT.equals(Parameters.Operators.CROWD_SELECT)) {
             CrowdingSort.computeCrowdingDistances(pop, fitnessFunctions);
         }
-
-        // Set up archive
-        if (ARCHIVE.equals(Parameters.Operators.SIMPLE_ARCHIVE)) {
-            archive = new SimpleArchive(rand);
-        }
-
-        // Set up archiveMutate
-        if (ARCHIVE_MUTATE.equals(Parameters.Operators.ARCHIVE_MUTATE)) {
-            archiveMutate = new ArchiveMutate(rand, props, archive);
-        }
-
-        // Set up reproduction operator
-        if (REPRODUCE.equals(Parameters.Operators.ORDINARY_REPRODUCE)) {
-            reproduce = new OrdinaryReproduce(
-                    rand,
-                    select,
-                    mutate,
-                    xover,
-                    MUTATION_RATE,
-                    XOVER_RATE,
-                    POP_SIZE
-            );
-        } else if (REPRODUCE.equals(Parameters.Operators.ARCHIVE_CROSSOVER_REPRODUCE)) {
-            reproduce = new ArchiveCrossoverReproduce(
-                    rand,
-                    select,
-                    mutate,
-                    archiveMutate,
-                    MUTATION_RATE,
-                    XOVER_RATE,
-                    POP_SIZE
-            );
-        } else {
-            System.err.format("Invalid reproduce function %s specified%n",REPRODUCE);
-            System.exit(-1);
-        }
-
     }
 
     /**
