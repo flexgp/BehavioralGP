@@ -35,6 +35,7 @@ public class REPTreeArchive extends RandomOperator implements Archive {
     }
 
     public void addGeneticMaterial(Map<ImmutableList<Double>, TreeNode> geneticMaterial) {
+        archive.clear();
         List<String> featureNamesList = new ArrayList<>();
         Map<String, ImmutableList<Double>> featureNamesMap = new HashMap<>();
         int counter = 0;
