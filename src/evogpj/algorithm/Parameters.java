@@ -190,6 +190,7 @@ public final class Parameters {
 
         // ARCHIVE values
         public static final String SIMPLE_ARCHIVE = "fitness.SimpleArchive";
+        public static final String REPTREE_ARCHIVE = "fitness.REPTreeArchive";
     }
 
     /**
