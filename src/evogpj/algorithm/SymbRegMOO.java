@@ -18,6 +18,7 @@
 package evogpj.algorithm;
 
 import evogpj.evaluation.Archive;
+import evogpj.evaluation.REPTreeArchive;
 import evogpj.evaluation.SimpleArchive;
 import evogpj.evaluation.java.*;
 import evogpj.evaluation.FitnessFunction;
@@ -342,6 +343,14 @@ public class SymbRegMOO {
         // Set up archive
         if (ARCHIVE.equals(Parameters.Operators.SIMPLE_ARCHIVE)) {
             archive = new SimpleArchive(rand);
+        } else if (ARCHIVE.equals(Parameters.Operators.REPTREE_ARCHIVE)) {
+            DataJava data = new CSVDataJava(PROBLEM);
+            double[] targetValuesArray = data.getTargetValues();
+            List<Double> targetValues = new ArrayList<>();
+            for (int i = 0; i < targetValuesArray.length; i++) {
+                targetValues.add(targetValuesArray[i]);
+            }
+            archive = new REPTreeArchive(rand, targetValues);
         }
 
         fitnessFunctions = splitFitnessOperators(FITNESS);
