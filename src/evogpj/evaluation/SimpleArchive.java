@@ -1,6 +1,7 @@
 package evogpj.evaluation;
 
 import com.google.common.collect.ImmutableList;
+import evogpj.genotype.TreeGenerator;
 import evogpj.genotype.TreeNode;
 
 import java.util.*;
@@ -36,7 +37,8 @@ public class SimpleArchive extends RandomOperator implements Archive {
             List<ImmutableList<Double>> keys = new ArrayList<>(archive.keySet());
             int index = rand.nextInt(keys.size());
             ImmutableList<Double> subtree = keys.get(index);
-            return archive.get(subtree);
+            TreeNode node = archive.get(subtree);
+            return TreeGenerator.generateTree(node.toStringAsTree()).getRoot();
         }
     }
 }
