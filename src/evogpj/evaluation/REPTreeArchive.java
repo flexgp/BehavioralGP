@@ -1,10 +1,8 @@
 package evogpj.evaluation;
 
 import com.google.common.collect.ImmutableList;
-import evogpj.genotype.TreeGenerator;
 import evogpj.genotype.TreeNode;
 import evogpj.gp.MersenneTwisterFast;
-import evogpj.operator.RandomOperator;
 import weka.classifiers.trees.REPTree;
 import weka.core.Attribute;
 import weka.core.FastVector;
@@ -19,10 +17,9 @@ import java.util.Map;
 /**
  * Created by stevenfine on 8/19/16.
  */
-public class REPTreeArchive extends RandomOperator implements Archive {
+public class REPTreeArchive extends UnweightedArchive {
 
     private ImmutableList<Double> targetValues;
-    private Map<ImmutableList<Double>, TreeNode> archive;
 
     /**
      * Construct an archive that uses the REPTree classifier to determine the
@@ -32,7 +29,6 @@ public class REPTreeArchive extends RandomOperator implements Archive {
     public REPTreeArchive(MersenneTwisterFast rand, List<Double> targetValues) {
         super(rand);
         this.targetValues = ImmutableList.copyOf(targetValues);
-        archive = new HashMap<>();
     }
 
     public void addGeneticMaterial(Map<ImmutableList<Double>, TreeNode> geneticMaterial) {
@@ -91,18 +87,6 @@ public class REPTreeArchive extends RandomOperator implements Archive {
                 TreeNode syntax = geneticMaterial.get(semantics);
                 archive.put(semantics, syntax);
             }
-        }
-    }
-
-    public TreeNode getSubtree() throws EmptyArchiveException {
-        if (archive.size() == 0) {
-            throw new EmptyArchiveException();
-        } else {
-            List<ImmutableList<Double>> keys = new ArrayList<>(archive.keySet());
-            int index = rand.nextInt(keys.size());
-            ImmutableList<Double> subtree = keys.get(index);
-            TreeNode node = archive.get(subtree);
-            return TreeGenerator.generateTree(node.toStringAsTree()).getRoot();
         }
     }
 }
