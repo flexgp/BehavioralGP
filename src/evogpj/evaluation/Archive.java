@@ -22,7 +22,7 @@ public interface Archive {
 
     /**
      * Get a subtree from the archive.
-     * @return The subtree that is retrieved from the archive.
+     * @return A deep copy of the subtree that is retrieved from the archive.
      */
     TreeNode getSubtree() throws EmptyArchiveException;
 }
