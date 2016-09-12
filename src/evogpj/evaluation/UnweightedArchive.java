@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public abstract class UnweightedArchive extends RandomOperator implements Archive {
 
-    private Map<ImmutableList<Double>, TreeNode> archive;
+    protected Map<ImmutableList<Double>, TreeNode> archive;
 
     /**
      * Abstract unweighted Archive
