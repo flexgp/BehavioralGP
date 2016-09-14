@@ -52,6 +52,21 @@ public abstract class Function {
         
 	public abstract Double evalIntermediate(List<Double> t, ArrayList<Double> interVals);
 
+    /**
+     * Evaluates this Function, and stores the corresponding TreeNode in
+     * |treeNodes|. A given value in |outputVals| corresponds to the TreeNode
+     * at the same index in |treeNodes|.
+     * @param inputVals The training case to evaluate.
+     * @param outputVals The output of each subtree.
+     * @param treeNodes The subtrees.
+     * @return The result of the function being evaluated.
+     */
+	public abstract Double evalAndCollectGeneticMaterial(
+            List<Double> inputVals,
+            List<Double> outputVals,
+            List<TreeNode> treeNodes
+    );
+
 	/**
 	 * Encapsulate the mapping from a textual label to a Function object's
 	 * class. To be used for introspectively determining how to generate a
