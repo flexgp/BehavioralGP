@@ -84,6 +84,7 @@ public class ArchiveBuilder extends FitnessFunction {
         List<Double> d;
         double[][] inputValuesAux = data.getInputValues();
         double[] targetAux = data.getTargetValues();
+        Function func = genotype.getRoot().generateWithReferenceToTreeNode();
         ArrayList<Double> outputValues;
         ArrayList<TreeNode> treeNodes = null;
         ArrayList<TreeNode> treeNodesTemp;
@@ -99,7 +100,7 @@ public class ArchiveBuilder extends FitnessFunction {
             }
             outputValues = new ArrayList<>();
             treeNodesTemp = new ArrayList<>();
-            double output = genotype.getRoot().evalAndCollectGeneticMaterial(
+            double output = func.evalAndCollectGeneticMaterial(
                     d,
                     outputValues,
                     treeNodesTemp
