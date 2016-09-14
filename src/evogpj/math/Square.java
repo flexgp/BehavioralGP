@@ -17,6 +17,8 @@
  */
 package evogpj.math;
 
+import evogpj.genotype.TreeNode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,11 @@ public class Square extends OneArgFunction {
 		super(a1);
 		// TODO Auto-generated constructor stub
 	}
+
+    public Square(Function a1, TreeNode treeNode) {
+        super(a1);
+        this.treeNode = treeNode;
+    }
 
     @Override
     public Double eval(List<Double> t) {

@@ -17,6 +17,8 @@
  */
 package evogpj.math;
 
+import evogpj.genotype.TreeNode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,11 @@ public class Exp extends OneArgFunction {
 	public Exp(Function a1) {
 		super(a1);
 	}
+
+    public Exp(Function a1, TreeNode treeNode) {
+        super(a1);
+        this.treeNode = treeNode;
+    }
 
     @Override
     public Double eval(List<Double> t) {

@@ -17,6 +17,8 @@
  */
 package evogpj.math;
 
+import evogpj.genotype.TreeNode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,11 @@ public class Cube extends OneArgFunction {
     public Cube(Function a1) {
             super(a1);
             // TODO Auto-generated constructor stub
+    }
+
+    public Cube(Function a1, TreeNode treeNode) {
+        super(a1);
+        this.treeNode = treeNode;
     }
 
     @Override

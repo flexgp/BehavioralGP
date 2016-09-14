@@ -1,5 +1,6 @@
 package evogpj.math;
 
+import evogpj.genotype.TreeNode;
 import evogpj.gp.GPException;
 
 import java.util.ArrayList;

@@ -17,6 +17,8 @@
  */
 package evogpj.math;
 
+import evogpj.genotype.TreeNode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,11 @@ public class Minus extends TwoArgFunction {
 	public Minus(Function a1, Function a2) {
 		super(a1, a2);
 	}
+
+    public Minus(Function a1, Function a2, TreeNode treeNode) {
+        super(a1, a2);
+        this.treeNode = treeNode;
+    }
 
     @Override
     public Double eval(List<Double> t) {
@@ -36,7 +43,7 @@ public class Minus extends TwoArgFunction {
         double result = arg1.evalIntermediate(t,interVals) - arg2.evalIntermediate(t,interVals);
         interVals.add(result);
         return result;
-    } 
+    }
     
     public String getInfixFormatString() {
         //return "(%s - %s)";
