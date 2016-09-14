@@ -25,4 +25,16 @@ public class Num extends ZeroArgFunction {
         interVals.add(coeff);
         return coeff;
     }
+
+    @Override
+    public Double evalAndCollectGeneticMaterial(
+            List<Double> inputVals,
+            List<Double> outputVals,
+            List<TreeNode> treeNodes
+    ) {
+        double result = coeff;
+        outputVals.add(result);
+        treeNodes.add(treeNode);
+        return result;
+    }
 }

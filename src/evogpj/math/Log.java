@@ -56,6 +56,24 @@ public class Log extends OneArgFunction {
         return result;
     }
 
+    @Override
+    public Double evalAndCollectGeneticMaterial(
+            List<Double> inputVals,
+            List<Double> outputVals,
+            List<TreeNode> treeNodes
+    ) {
+        double result;
+        double a = Math.abs(arg.evalAndCollectGeneticMaterial(inputVals, outputVals, treeNodes));
+        if (a < 1e-6) {
+            result = (double) 0; // cc Silva 2008 thesis
+        } else {
+            result = Math.log(a);
+        }
+        outputVals.add(result);
+        treeNodes.add(treeNode);
+        return result;
+    }
+
     public String getInfixFormatString() {
         //return "log(%s)";
         return "(log %s)";

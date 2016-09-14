@@ -67,6 +67,18 @@ public class Var extends ZeroArgFunction {
         interVals.add(result);
         return result;
     }
+
+    @Override
+    public Double evalAndCollectGeneticMaterial(
+            List<Double> inputVals,
+            List<Double> outputVals,
+            List<TreeNode> treeNodes
+    ) {
+        double result = inputVals.get(ind);
+        outputVals.add(result);
+        treeNodes.add(treeNode);
+        return result;
+    }
     
     public String getInfixFormatString() {
         return "%s";

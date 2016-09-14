@@ -46,6 +46,18 @@ public class Cube extends OneArgFunction {
         return result;
     }
 
+    @Override
+    public Double evalAndCollectGeneticMaterial(
+            List<Double> inputVals,
+            List<Double> outputVals,
+            List<TreeNode> treeNodes
+    ) {
+        double result = Math.pow(arg.evalAndCollectGeneticMaterial(inputVals, outputVals, treeNodes), 3);
+        outputVals.add(result);
+        treeNodes.add(treeNode);
+        return result;
+    }
+
     public String getInfixFormatString() {
         //return "(%s.^3)";
         return "(cube %s)";

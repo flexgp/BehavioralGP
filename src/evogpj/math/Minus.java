@@ -44,6 +44,20 @@ public class Minus extends TwoArgFunction {
         interVals.add(result);
         return result;
     }
+
+    @Override
+    public Double evalAndCollectGeneticMaterial(
+            List<Double> inputVals,
+            List<Double> outputVals,
+            List<TreeNode> treeNodes
+    ) {
+        double firstTerm = arg1.evalAndCollectGeneticMaterial(inputVals, outputVals, treeNodes);
+        double secondTerm = arg2.evalAndCollectGeneticMaterial(inputVals, outputVals, treeNodes);
+        double result = firstTerm - secondTerm;
+        outputVals.add(result);
+        treeNodes.add(treeNode);
+        return result;
+    }
     
     public String getInfixFormatString() {
         //return "(%s - %s)";

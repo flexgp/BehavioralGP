@@ -45,6 +45,18 @@ public class Cos extends OneArgFunction {
         return result;
     }
 
+    @Override
+    public Double evalAndCollectGeneticMaterial(
+            List<Double> inputVals,
+            List<Double> outputVals,
+            List<TreeNode> treeNodes
+    ) {
+        double result = Math.cos(arg.evalAndCollectGeneticMaterial(inputVals, outputVals, treeNodes));
+        outputVals.add(result);
+        treeNodes.add(treeNode);
+        return result;
+    }
+
     public String getInfixFormatString() {
         //return "cos(%s)";
         return "(cos %s)";

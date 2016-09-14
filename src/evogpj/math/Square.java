@@ -45,6 +45,18 @@ public class Square extends OneArgFunction {
         interVals.add(result);
         return result;
     }
+
+    @Override
+    public Double evalAndCollectGeneticMaterial(
+            List<Double> inputVals,
+            List<Double> outputVals,
+            List<TreeNode> treeNodes
+    ) {
+        double result = Math.pow(arg.evalAndCollectGeneticMaterial(inputVals, outputVals, treeNodes), 2);
+        outputVals.add(result);
+        treeNodes.add(treeNode);
+        return result;
+    }
     
     public String getInfixFormatString() {
         //return "(%s.^2)";

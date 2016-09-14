@@ -56,6 +56,25 @@ public class Divide extends TwoArgFunction {
         return result;
     }
 
+    @Override
+    public Double evalAndCollectGeneticMaterial(
+            List<Double> inputVals,
+            List<Double> outputVals,
+            List<TreeNode> treeNodes
+    ) {
+        double firstTerm = arg1.evalAndCollectGeneticMaterial(inputVals, outputVals, treeNodes);
+        double secondTerm = arg2.evalAndCollectGeneticMaterial(inputVals, outputVals, treeNodes);
+        double result;
+        if (Math.abs(secondTerm) < 1e-6) {
+            result = (double) 1; // cc Silva 2008 thesis
+        } else {
+            result = firstTerm / secondTerm;
+        }
+        outputVals.add(result);
+        treeNodes.add(treeNode);
+        return result;
+    }
+
     public String getInfixFormatString() {
         //return "mydivide(%s, %s)";
         return "(mydivide %s %s)";

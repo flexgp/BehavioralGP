@@ -44,6 +44,18 @@ public class Sqrt extends OneArgFunction {
         interVals.add(result);
         return result;
     }
+
+    @Override
+    public Double evalAndCollectGeneticMaterial(
+            List<Double> inputVals,
+            List<Double> outputVals,
+            List<TreeNode> treeNodes
+    ) {
+        double result = Math.sqrt(Math.abs(arg.evalAndCollectGeneticMaterial(inputVals, outputVals, treeNodes)));
+        outputVals.add(result);
+        treeNodes.add(treeNode);
+        return result;
+    }
     
     public String getInfixFormatString() {
         //return "mysqrt(%s)";
