@@ -17,6 +17,7 @@
  */
 package evogpj.math;
 
+import evogpj.genotype.TreeNode;
 import evogpj.gp.GPException;
 
 import java.util.ArrayList;
@@ -40,6 +41,21 @@ public class Var extends ZeroArgFunction {
 		}
 	}
 
+    public Var(String label,double acoeff, TreeNode treeNode) throws GPException {
+        super(label,acoeff);
+        this.treeNode = treeNode;
+        if (label.startsWith("X")) {
+            String numPart = label.substring(1);
+            ind = Integer.parseInt(numPart) - 1; // zero-index
+        } else if (label.equals("x")) {
+            ind = 0;
+        } else if (label.equals("y")) {
+            ind = 1;
+        } else {
+            throw new GPException("Unknonwn variable: " + label);
+        }
+    }
+
     @Override
     public Double eval(List<Double> t) {
         return (coeff * t.get(ind));    
@@ -49,6 +65,18 @@ public class Var extends ZeroArgFunction {
     public Double evalIntermediate(List<Double> t, ArrayList<Double> interVals) {
         double result = t.get(ind);
         interVals.add(result);
+        return result;
+    }
+
+    @Override
+    public Double evalAndCollectGeneticMaterial(
+            List<Double> inputVals,
+            List<Double> outputVals,
+            List<TreeNode> treeNodes
+    ) {
+        double result = inputVals.get(ind);
+        outputVals.add(result);
+        treeNodes.add(treeNode);
         return result;
     }
     

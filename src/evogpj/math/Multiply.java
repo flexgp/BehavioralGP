@@ -17,6 +17,8 @@
  */
 package evogpj.math;
 
+import evogpj.genotype.TreeNode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,11 @@ public class Multiply extends TwoArgFunction {
 	public Multiply(Function a1, Function a2) {
 		super(a1, a2);
 	}
+
+    public Multiply(Function a1, Function a2, TreeNode treeNode) {
+        super(a1, a2);
+        this.treeNode = treeNode;
+    }
 
     @Override
     public Double eval(List<Double> t) {
@@ -36,7 +43,21 @@ public class Multiply extends TwoArgFunction {
         double result = arg1.evalIntermediate(t,interVals) * arg2.evalIntermediate(t,interVals);
         interVals.add(result);
         return result;
-    }         
+    }
+
+    @Override
+    public Double evalAndCollectGeneticMaterial(
+            List<Double> inputVals,
+            List<Double> outputVals,
+            List<TreeNode> treeNodes
+    ) {
+        double firstTerm = arg1.evalAndCollectGeneticMaterial(inputVals, outputVals, treeNodes);
+        double secondTerm = arg2.evalAndCollectGeneticMaterial(inputVals, outputVals, treeNodes);
+        double result = firstTerm * secondTerm;
+        outputVals.add(result);
+        treeNodes.add(treeNode);
+        return result;
+    }
 
     public String getInfixFormatString() {
         //return "(%s .* %s)";

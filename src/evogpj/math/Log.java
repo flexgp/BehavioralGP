@@ -17,6 +17,8 @@
  */
 package evogpj.math;
 
+import evogpj.genotype.TreeNode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,11 @@ public class Log extends OneArgFunction {
 	public Log(Function a1) {
 		super(a1);
 	}
+
+    public Log(Function a1, TreeNode treeNode) {
+        super(a1);
+        this.treeNode = treeNode;
+    }
 
 	@Override
 	public Double eval(List<Double> t) {
@@ -47,7 +54,25 @@ public class Log extends OneArgFunction {
         }
         interVals.add(result);
         return result;
-    }        
+    }
+
+    @Override
+    public Double evalAndCollectGeneticMaterial(
+            List<Double> inputVals,
+            List<Double> outputVals,
+            List<TreeNode> treeNodes
+    ) {
+        double result;
+        double a = Math.abs(arg.evalAndCollectGeneticMaterial(inputVals, outputVals, treeNodes));
+        if (a < 1e-6) {
+            result = (double) 0; // cc Silva 2008 thesis
+        } else {
+            result = Math.log(a);
+        }
+        outputVals.add(result);
+        treeNodes.add(treeNode);
+        return result;
+    }
 
     public String getInfixFormatString() {
         //return "log(%s)";

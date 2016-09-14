@@ -17,6 +17,8 @@
  */
 package evogpj.math;
 
+import evogpj.genotype.TreeNode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,11 @@ public class Divide extends TwoArgFunction {
 	public Divide(Function a1, Function a2) {
 		super(a1, a2);
 	}
+
+    public Divide(Function a1, Function a2, TreeNode treeNode) {
+        super(a1, a2);
+        this.treeNode = treeNode;
+    }
 
     @Override
     public Double eval(List<Double> t) {
@@ -48,6 +55,26 @@ public class Divide extends TwoArgFunction {
         interVals.add(result);
         return result;
     }
+
+    @Override
+    public Double evalAndCollectGeneticMaterial(
+            List<Double> inputVals,
+            List<Double> outputVals,
+            List<TreeNode> treeNodes
+    ) {
+        double firstTerm = arg1.evalAndCollectGeneticMaterial(inputVals, outputVals, treeNodes);
+        double secondTerm = arg2.evalAndCollectGeneticMaterial(inputVals, outputVals, treeNodes);
+        double result;
+        if (Math.abs(secondTerm) < 1e-6) {
+            result = (double) 1; // cc Silva 2008 thesis
+        } else {
+            result = firstTerm / secondTerm;
+        }
+        outputVals.add(result);
+        treeNodes.add(treeNode);
+        return result;
+    }
+
     public String getInfixFormatString() {
         //return "mydivide(%s, %s)";
         return "(mydivide %s %s)";

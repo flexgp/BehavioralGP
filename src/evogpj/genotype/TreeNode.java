@@ -393,6 +393,42 @@ public class TreeNode implements Serializable {
         }
     }
 
+    /**
+     * Generate a {@Link Function} for subtree rooted at this node.  Give each
+     * Function that is generated a pointer to its {@Link TreeNode}.
+     * @return representation of subtree
+     * @throws GPException
+     */
+	public Function generateWithReferenceToTreeNode() throws GPException {
+		int arity = Function.getArityFromLabel(label);
+		Constructor<? extends Function> f;
+		try {
+			f = Function.getConstructorWithTreeNodeParamFromLabel(label);
+			if (arity == 0) {
+				return new Var(label, coeff, this);
+			}
+			Function c1 = children.get(0).generateWithReferenceToTreeNode();
+			if (arity == 1) {
+				return f.newInstance(c1, this);
+			} else if (arity == 2) {
+				return f.newInstance(c1, children.get(1).generateWithReferenceToTreeNode(), this);
+			}
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+		}
+		throw new GPException("Can't create function for node " + this.label);
+	}
+
 	/**
 	 * Prepare to be evaluated. Generate a {@link Function} for subtree rooted
 	 * at this node.

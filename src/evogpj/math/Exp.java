@@ -17,6 +17,8 @@
  */
 package evogpj.math;
 
+import evogpj.genotype.TreeNode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,11 @@ public class Exp extends OneArgFunction {
 	public Exp(Function a1) {
 		super(a1);
 	}
+
+    public Exp(Function a1, TreeNode treeNode) {
+        super(a1);
+        this.treeNode = treeNode;
+    }
 
     @Override
     public Double eval(List<Double> t) {
@@ -35,6 +42,18 @@ public class Exp extends OneArgFunction {
     public Double evalIntermediate(List<Double> t, ArrayList<Double> interVals) {
         double result = Math.exp(arg.evalIntermediate(t,interVals));
         interVals.add(result);
+        return result;
+    }
+
+    @Override
+    public Double evalAndCollectGeneticMaterial(
+            List<Double> inputVals,
+            List<Double> outputVals,
+            List<TreeNode> treeNodes
+    ) {
+        double result = Math.exp(arg.evalAndCollectGeneticMaterial(inputVals, outputVals, treeNodes));
+        outputVals.add(result);
+        treeNodes.add(treeNode);
         return result;
     }
     

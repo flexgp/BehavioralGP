@@ -17,6 +17,8 @@
  */
 package evogpj.math;
 
+import evogpj.genotype.TreeNode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,11 @@ public class Sqrt extends OneArgFunction {
 
     public Sqrt(Function a1) {
             super(a1);
+    }
+
+    public Sqrt(Function a1, TreeNode treeNode) {
+        super(a1);
+        this.treeNode = treeNode;
     }
 
     @Override
@@ -35,6 +42,18 @@ public class Sqrt extends OneArgFunction {
     public Double evalIntermediate(List<Double> t, ArrayList<Double> interVals) {
         double result = Math.sqrt(Math.abs(arg.evalIntermediate(t,interVals)));
         interVals.add(result);
+        return result;
+    }
+
+    @Override
+    public Double evalAndCollectGeneticMaterial(
+            List<Double> inputVals,
+            List<Double> outputVals,
+            List<TreeNode> treeNodes
+    ) {
+        double result = Math.sqrt(Math.abs(arg.evalAndCollectGeneticMaterial(inputVals, outputVals, treeNodes)));
+        outputVals.add(result);
+        treeNodes.add(treeNode);
         return result;
     }
     

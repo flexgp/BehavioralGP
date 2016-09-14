@@ -17,6 +17,8 @@
  */
 package evogpj.math;
 
+import evogpj.genotype.TreeNode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,11 @@ public class Quart extends OneArgFunction {
 		// TODO Auto-generated constructor stub
 	}
 
+    public Quart(Function a1, TreeNode treeNode) {
+        super(a1);
+        this.treeNode = treeNode;
+    }
+
     @Override
     public Double eval(List<Double> t) {
         return Math.pow(arg.eval(t), 4);
@@ -36,6 +43,18 @@ public class Quart extends OneArgFunction {
     public Double evalIntermediate(List<Double> t, ArrayList<Double> interVals) {
         double result = Math.pow(arg.evalIntermediate(t,interVals), 4);
         interVals.add(result);
+        return result;
+    }
+
+    @Override
+    public Double evalAndCollectGeneticMaterial(
+            List<Double> inputVals,
+            List<Double> outputVals,
+            List<TreeNode> treeNodes
+    ) {
+        double result = Math.pow(arg.evalAndCollectGeneticMaterial(inputVals, outputVals, treeNodes), 4);
+        outputVals.add(result);
+        treeNodes.add(treeNode);
         return result;
     }
     
