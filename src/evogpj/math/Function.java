@@ -17,6 +17,8 @@
  */
 package evogpj.math;
 
+import evogpj.genotype.TreeNode;
+
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,8 @@ import java.util.List;
  */
 public abstract class Function {
 
+	protected TreeNode treeNode;
+
 	/**
 	 * Given the set of assignments of features to values for a particular
 	 * training case, return the double result of evaluating this function on
@@ -46,7 +50,7 @@ public abstract class Function {
 	 */
 	public abstract Double eval(List<Double> t);
         
-        public abstract Double evalIntermediate(List<Double> t, ArrayList<Double> interVals);
+	public abstract Double evalIntermediate(List<Double> t, ArrayList<Double> interVals);
 
 	/**
 	 * Encapsulate the mapping from a textual label to a Function object's
@@ -110,6 +114,27 @@ public abstract class Function {
             //return f.getConstructor(String.class);
             return null;
 	}
+
+    /**
+     * Given a label, return the constructor for the class of the function which
+     * represents the label, and has a TreeNode parameter.
+     *
+     * @param label
+     * @return
+     * @throws SecurityException
+     * @throws NoSuchMethodException
+     */
+    public static Constructor<? extends Function> getConstructorWithTreeNodeParamFromLabel(String label) throws SecurityException, NoSuchMethodException {
+        Class<? extends Function> f = Function.getClassFromLabel(label);
+        int arity = Function.getArityFromLabel(label);
+        if (arity == 1) {
+            return f.getConstructor(Function.class, TreeNode.class);
+        } else if (arity == 2) {
+            return f.getConstructor(Function.class, Function.class, TreeNode.class);
+        }
+        //return f.getConstructor(String.class);
+        return null;
+    }
 
 	/**
 	 * Simple method for extracting the arity of the function (number of args
