@@ -187,6 +187,7 @@ public final class Parameters {
         // REPRODUCE values
         public static final String ORDINARY_REPRODUCE = "operator.OrdinaryReproduce";
         public static final String ARCHIVE_CROSSOVER_REPRODUCE = "operator.ArchiveCrossoverReproduce";
+        public static final String ARCHIVE_AUGMENTED_REPRODUCE = "operator.ArchiveAugmentedReproduce";
 
         // ARCHIVE values
         public static final String SIMPLE_ARCHIVE = "fitness.SimpleArchive";
