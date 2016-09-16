@@ -214,6 +214,7 @@ public final class Parameters {
         // Frequency for selecting each operator
         public static final double MUTATION_RATE = 0.1;
         public static final double XOVER_RATE = 0.5;
+        public static final double ARCHIVE_MUTATION_RATE = 0.4;
         // reproduction/replication frequency is implicitly defined as
         // (1 - XOVER_RATE - MUTATION_RATE)
 
