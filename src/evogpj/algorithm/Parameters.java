@@ -40,6 +40,7 @@ public final class Parameters {
 
         public static final String MUTATION_RATE = "mutation_rate";
         public static final String XOVER_RATE = "xover_rate";
+        public static final String ARCHIVE_MUTATION_RATE = "archive_mutation_rate";
         public static final String POP_SIZE = "pop_size";
         public static final String NUM_GENS = "num_gens";
         public static final String TIME_OUT = "timeout";
