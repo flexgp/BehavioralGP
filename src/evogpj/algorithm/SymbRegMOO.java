@@ -446,6 +446,18 @@ public class SymbRegMOO {
                     XOVER_RATE,
                     POP_SIZE
             );
+        } else if (REPRODUCE.equals(Parameters.Operators.ARCHIVE_AUGMENTED_REPRODUCE)) {
+            reproduce = new ArchiveAugmentedReproduce(
+                    rand,
+                    select,
+                    mutate,
+                    xover,
+                    archiveMutate,
+                    MUTATION_RATE,
+                    XOVER_RATE,
+                    ARCHIVE_MUTATION_RATE,
+                    POP_SIZE
+            );
         } else {
             System.err.format("Invalid reproduce function %s specified%n",REPRODUCE);
             System.exit(-1);
