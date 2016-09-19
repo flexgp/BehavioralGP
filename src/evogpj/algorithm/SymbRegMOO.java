@@ -80,6 +80,8 @@ public class SymbRegMOO {
     protected double MUTATION_RATE = Parameters.Defaults.MUTATION_RATE;
     // CROSSOVER RATE
     protected double XOVER_RATE = Parameters.Defaults.XOVER_RATE;
+    // ARCHIVE MUTATION RATE
+    protected double ARCHIVE_MUTATION_RATE = Parameters.Defaults.ARCHIVE_MUTATION_RATE;
     
     
     // DEFAULT MUTATION OPERATOR
@@ -259,6 +261,8 @@ public class SymbRegMOO {
             MUTATION_RATE = Double.valueOf(props.getProperty(Parameters.Names.MUTATION_RATE));
         if (props.containsKey(Parameters.Names.XOVER_RATE))
             XOVER_RATE = Double.valueOf(props.getProperty(Parameters.Names.XOVER_RATE));
+        if (props.containsKey(Parameters.Names.ARCHIVE_MUTATION_RATE))
+            ARCHIVE_MUTATION_RATE = Double.valueOf(props.getProperty(Parameters.Names.ARCHIVE_MUTATION_RATE));
         if (props.containsKey(Parameters.Names.POP_SIZE))
             POP_SIZE = Integer.valueOf(props.getProperty(Parameters.Names.POP_SIZE));
         if (props.containsKey(Parameters.Names.POP_DATA_PATH))
@@ -439,7 +443,19 @@ public class SymbRegMOO {
                     mutate,
                     archiveMutate,
                     MUTATION_RATE,
+                    ARCHIVE_MUTATION_RATE,
+                    POP_SIZE
+            );
+        } else if (REPRODUCE.equals(Parameters.Operators.ARCHIVE_AUGMENTED_REPRODUCE)) {
+            reproduce = new ArchiveAugmentedReproduce(
+                    rand,
+                    select,
+                    mutate,
+                    xover,
+                    archiveMutate,
+                    MUTATION_RATE,
                     XOVER_RATE,
+                    ARCHIVE_MUTATION_RATE,
                     POP_SIZE
             );
         } else {

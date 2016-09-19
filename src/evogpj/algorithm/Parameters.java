@@ -40,6 +40,7 @@ public final class Parameters {
 
         public static final String MUTATION_RATE = "mutation_rate";
         public static final String XOVER_RATE = "xover_rate";
+        public static final String ARCHIVE_MUTATION_RATE = "archive_mutation_rate";
         public static final String POP_SIZE = "pop_size";
         public static final String NUM_GENS = "num_gens";
         public static final String TIME_OUT = "timeout";
@@ -187,6 +188,7 @@ public final class Parameters {
         // REPRODUCE values
         public static final String ORDINARY_REPRODUCE = "operator.OrdinaryReproduce";
         public static final String ARCHIVE_CROSSOVER_REPRODUCE = "operator.ArchiveCrossoverReproduce";
+        public static final String ARCHIVE_AUGMENTED_REPRODUCE = "operator.ArchiveAugmentedReproduce";
 
         // ARCHIVE values
         public static final String SIMPLE_ARCHIVE = "fitness.SimpleArchive";
@@ -213,6 +215,7 @@ public final class Parameters {
         // Frequency for selecting each operator
         public static final double MUTATION_RATE = 0.1;
         public static final double XOVER_RATE = 0.5;
+        public static final double ARCHIVE_MUTATION_RATE = 0.4;
         // reproduction/replication frequency is implicitly defined as
         // (1 - XOVER_RATE - MUTATION_RATE)
 
