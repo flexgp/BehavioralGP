@@ -443,7 +443,7 @@ public class SymbRegMOO {
                     mutate,
                     archiveMutate,
                     MUTATION_RATE,
-                    XOVER_RATE,
+                    ARCHIVE_MUTATION_RATE,
                     POP_SIZE
             );
         } else if (REPRODUCE.equals(Parameters.Operators.ARCHIVE_AUGMENTED_REPRODUCE)) {
