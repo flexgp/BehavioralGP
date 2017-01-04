@@ -30,7 +30,7 @@ public abstract class UnweightedArchive extends RandomOperator implements Archiv
         } else {
             int index = rand.nextInt(archive.size());
             TreeNode node = archive.get(index);
-            return TreeGenerator.generateTree(node.toStringAsTree()).getRoot();
+            return node;
         }
     }
 }
