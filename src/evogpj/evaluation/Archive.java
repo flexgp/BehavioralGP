@@ -13,12 +13,15 @@ import java.util.Map;
 public interface Archive {
 
     /**
-     * Takes the genetic material, and combines it with the archive.
-     * @param geneticMaterial A map that represents a set of subtrees, where
-     *                        each key is a subtree's output on the training
-     *                        data, and each value is its syntax.
+     * Takes the genetic material, and combines it with the archive. A given
+     * index in each List corresponds to a single subtree.
+     * @param syntax The TreeNodes to be put in the Archive.
+     * @param semantics The output of the TreeNode on each training data point.
+     * @param weights The weight that the TreeNode should be given in the Archive.
      */
-    void addGeneticMaterial(Map<ImmutableList<Double>, TreeNode> geneticMaterial);
+    void addGeneticMaterial(List<TreeNode> syntax,
+                            List<ImmutableList<Double>> semantics,
+                            List<Double> weights);
 
     /**
      * Get a subtree from the archive.
