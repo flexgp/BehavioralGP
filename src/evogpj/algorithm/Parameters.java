@@ -273,6 +273,7 @@ public final class Parameters {
         public static final String XOVER = Operators.SPU_XOVER;
         public static final String REPRODUCE = Operators.ORDINARY_REPRODUCE;
 
+        public static final int ARCHIVE_CAPACITY = 50;
         public static final String ARCHIVE = Operators.SIMPLE_ARCHIVE;
         public static final String ARCHIVE_MUTATE = Operators.ARCHIVE_MUTATE;
 

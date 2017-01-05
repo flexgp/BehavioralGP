@@ -1,6 +1,7 @@
 package evogpj.evaluation;
 
 import com.google.common.collect.ImmutableList;
+import evogpj.genotype.TreeGenerator;
 import evogpj.genotype.TreeNode;
 
 import java.util.*;
@@ -21,7 +22,14 @@ public class SimpleArchive extends UnweightedArchive {
         super(rand);
     }
 
-    public void addGeneticMaterial(Map<ImmutableList<Double>, TreeNode> geneticMaterial) {
-        archive = geneticMaterial;
+    public void addGeneticMaterial(List<TreeNode> subtrees,
+                            List<ImmutableList<Double>> trace,
+                            List<Double> weights) {
+        archive.clear();
+        for (int i = 0; i < Archive.CAPACITY; i++) {
+            TreeNode node = subtrees.get(i);
+            TreeNode duplicateNode = TreeGenerator.generateTree(node.toStringAsTree()).getRoot();
+            archive.add(duplicateNode);
+        }
     }
 }
