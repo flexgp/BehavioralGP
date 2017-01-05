@@ -19,7 +19,7 @@ public abstract class SelectPtMutate extends RandomOperator implements Mutate {
     }
 
     /**
-     * Select point (node) uniformly in the given tree.
+     * Select point (node) in the given tree.
      *
      * @param t Tree to select from
      * @return Chosen node
