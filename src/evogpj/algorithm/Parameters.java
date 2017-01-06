@@ -175,6 +175,7 @@ public final class Parameters {
         // MUTATE values
         public static final String SUBTREE_MUTATE = "operator.SubtreeMutate";
 //        public static final String SUBTREE_MUTATE = "operator.SubtreeMutateConstants";
+        public static final String UD_MUTATE = "operator.UniformDepthMutate";
 
         // XOVER values
         public static final String BROOD_XOVER = "operator.BroodSelection";
@@ -182,9 +183,11 @@ public final class Parameters {
         public static final String SPU_XOVER = "operator.SinglePointUniformCrossover";
         // single point Koza crossover
         public static final String SPK_XOVER = "operator.SinglePointKozaCrossover";
+        public static final String UD_XOVER = "operator.UniformDepthCrossover";
 
         // ARCHIVE_MUTATE values
         public static final String ARCHIVE_MUTATE = "operator.ArchiveMutate";
+        public static final String UD_ARCHIVE_MUTATE = "operator.UniformDepthArchiveMutate";
 
         // REPRODUCE values
         public static final String ORDINARY_REPRODUCE = "operator.OrdinaryReproduce";
