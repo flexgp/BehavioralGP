@@ -173,8 +173,8 @@ public final class Parameters {
         public static final String DUMB_TREE_EQUAL = "operator.DummyTreeEqualizer";
 
         // MUTATE values
-        //public static final String SUBTREE_MUTATE = "operator.SubtreeMutate";
-        public static final String SUBTREE_MUTATE = "operator.SubtreeMutateConstants";
+        public static final String SUBTREE_MUTATE = "operator.SubtreeMutate";
+//        public static final String SUBTREE_MUTATE = "operator.SubtreeMutateConstants";
 
         // XOVER values
         public static final String BROOD_XOVER = "operator.BroodSelection";
