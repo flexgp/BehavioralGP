@@ -422,10 +422,13 @@ public class SymbRegMOO {
             mutate = new UniformDepthMutate(rand, props, treeGen);
         }
 
+        // Set up xover
         if (XOVER.equals(Parameters.Operators.SPU_XOVER)) {
             xover = new SinglePointUniformCrossover(rand, props);
         } else if (XOVER.equals(Parameters.Operators.SPK_XOVER)) {
             xover = new SinglePointKozaCrossover(rand, props);
+        } else if (XOVER.equals(Parameters.Operators.UD_XOVER)) {
+            xover = new UniformDepthCrossover(rand, props);
         } else {
             System.err.format("Invalid crossover function %s specified%n",XOVER);
             System.exit(-1);
