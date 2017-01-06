@@ -87,10 +87,7 @@ public class SubtreeMutate extends SelectPtMutate {
      */
     @Override
     protected TreeNode selectMutationPt(Tree t) {
-        List<TreeNode> nodes = t.getRoot().depthFirstTraversal();
-        int nodeCount = nodes.size();
-        int whichNode = rand.nextInt(nodeCount);
-        return nodes.get(whichNode);
+        return selectUniformNode(t);
     }
 
 }
