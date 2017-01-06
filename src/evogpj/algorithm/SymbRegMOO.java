@@ -411,15 +411,30 @@ public class SymbRegMOO {
         // Set up archiveMutate
         if (ARCHIVE_MUTATE.equals(Parameters.Operators.ARCHIVE_MUTATE)) {
             archiveMutate = new ArchiveMutate(rand, props, archive);
+        } else if (ARCHIVE_MUTATE.equals(Parameters.Operators.UD_ARCHIVE_MUTATE)) {
+            archiveMutate = new UniformDepthArchiveMutate(rand, props, archive);
+        } else {
+            System.err.format("Invalid archiveMutate function %s specified%n", ARCHIVE_MUTATE);
+            System.exit(-1);
         }
 
-        mutate = new SubtreeMutate(rand, props, treeGen);
-        //mutate = new SubtreeMutateConstants(rand, props, treeGen);
+        // Set up mutate
+        if (MUTATE.equals(Parameters.Operators.SUBTREE_MUTATE)) {
+            mutate = new SubtreeMutate(rand, props, treeGen);
+        } else if (MUTATE.equals(Parameters.Operators.UD_MUTATE)) {
+            mutate = new UniformDepthMutate(rand, props, treeGen);
+        } else {
+            System.err.format("Invalid mutate function %s specified%n", MUTATE);
+            System.exit(-1);
+        }
 
+        // Set up xover
         if (XOVER.equals(Parameters.Operators.SPU_XOVER)) {
             xover = new SinglePointUniformCrossover(rand, props);
         } else if (XOVER.equals(Parameters.Operators.SPK_XOVER)) {
             xover = new SinglePointKozaCrossover(rand, props);
+        } else if (XOVER.equals(Parameters.Operators.UD_XOVER)) {
+            xover = new UniformDepthCrossover(rand, props);
         } else {
             System.err.format("Invalid crossover function %s specified%n",XOVER);
             System.exit(-1);

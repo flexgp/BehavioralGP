@@ -15,7 +15,7 @@ import java.util.Properties;
 /**
  * Created by stevenfine on 8/8/16.
  */
-public class ArchiveMutate extends RandomOperator implements Mutate {
+public class ArchiveMutate extends SelectPtMutate {
 
     private final int TREE_XOVER_MAX_DEPTH;
     private final int TREE_XOVER_TRIES;
@@ -46,8 +46,7 @@ public class ArchiveMutate extends RandomOperator implements Mutate {
         int tries = 0;
         do {
             copy = (Tree) i.getGenotype().copy();
-            ArrayList<TreeNode> nodes = copy.getRoot().depthFirstTraversal();
-            TreeNode mutatePoint = nodes.get(rand.nextInt(nodes.size()));
+            TreeNode mutatePoint = selectMutationPt(copy);
             int mutatePointIndexInChildren = mutatePoint.parent.children.indexOf(mutatePoint);
             TreeNode replacementNode;
             try {
@@ -69,5 +68,10 @@ public class ArchiveMutate extends RandomOperator implements Mutate {
             mutant.reset();
             return mutant;
         }
+    }
+
+    @Override
+    protected TreeNode selectMutationPt(Tree t) {
+        return selectUniformNode(t);
     }
 }

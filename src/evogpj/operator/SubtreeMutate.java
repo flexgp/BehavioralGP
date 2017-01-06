@@ -25,6 +25,7 @@ import evogpj.gp.Individual;
 import evogpj.gp.MersenneTwisterFast;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import evogpj.algorithm.Parameters;
@@ -35,7 +36,7 @@ import evogpj.algorithm.Parameters;
  * 
  * @author Owen Derby
  */
-public class SubtreeMutate extends RandomOperator implements Mutate {
+public class SubtreeMutate extends SelectPtMutate {
 
 	private final int TREE_MUTATE_MAX_DEPTH;
 	private final TreeGenerator treeGen;
@@ -66,9 +67,7 @@ public class SubtreeMutate extends RandomOperator implements Mutate {
             throw new GPException("attempting SubtreeMutate of genotype not of type Tree");
         }
         Tree copy = (Tree) i.getGenotype().copy();
-        ArrayList<TreeNode> treeNodes = copy.getRoot().depthFirstTraversal();
-        int whichNode = rand.nextInt(treeNodes.size());
-        TreeNode n = treeNodes.get(whichNode);
+        TreeNode n = selectMutationPt(copy);
         // System.out.println("Node picked is: " + whichNode + "; " +
         // n.toString());
         int curDepth = n.getDepth();
@@ -78,6 +77,17 @@ public class SubtreeMutate extends RandomOperator implements Mutate {
         // System.out.println("New subtree there is: " + n.toStringAsTree());
 
         return new Individual(copy);
+    }
+
+    /**
+     * Select point (node) uniformly in the given tree.
+     *
+     * @param t Tree to select from
+     * @return Chosen node
+     */
+    @Override
+    protected TreeNode selectMutationPt(Tree t) {
+        return selectUniformNode(t);
     }
 
 }
