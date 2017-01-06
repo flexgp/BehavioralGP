@@ -411,6 +411,8 @@ public class SymbRegMOO {
         // Set up archiveMutate
         if (ARCHIVE_MUTATE.equals(Parameters.Operators.ARCHIVE_MUTATE)) {
             archiveMutate = new ArchiveMutate(rand, props, archive);
+        } else if (ARCHIVE_MUTATE.equals(Parameters.Operators.UD_ARCHIVE_MUTATE)) {
+            archiveMutate = new UniformDepthArchiveMutate(rand, props, archive);
         }
 
         mutate = new SubtreeMutate(rand, props, treeGen);
