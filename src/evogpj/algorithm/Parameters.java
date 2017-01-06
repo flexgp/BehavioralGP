@@ -79,6 +79,7 @@ public final class Parameters {
         public static final String TREE_XOVER_TRIES = "tree_xover_tries";
         public static final String TREE_MUTATE_MAX_DEPTH = "tree_mutate_max_depth";
         public static final String TOURNEY_SIZE = "tourney_size";
+        public static final String ARCHIVE_CAPACITY = "archive_capacity";
         /**
          * For multi-objective optimization
          */
