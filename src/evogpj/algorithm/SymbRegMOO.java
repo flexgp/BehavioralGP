@@ -415,8 +415,12 @@ public class SymbRegMOO {
             archiveMutate = new UniformDepthArchiveMutate(rand, props, archive);
         }
 
-        mutate = new SubtreeMutate(rand, props, treeGen);
-        //mutate = new SubtreeMutateConstants(rand, props, treeGen);
+        // Set up mutate
+        if (MUTATE.equals(Parameters.Operators.SUBTREE_MUTATE)) {
+            mutate = new SubtreeMutate(rand, props, treeGen);
+        } else if (MUTATE.equals(Parameters.Operators.UD_MUTATE)) {
+            mutate = new UniformDepthMutate(rand, props, treeGen);
+        }
 
         if (XOVER.equals(Parameters.Operators.SPU_XOVER)) {
             xover = new SinglePointUniformCrossover(rand, props);
