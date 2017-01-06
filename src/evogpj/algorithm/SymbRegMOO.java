@@ -413,6 +413,9 @@ public class SymbRegMOO {
             archiveMutate = new ArchiveMutate(rand, props, archive);
         } else if (ARCHIVE_MUTATE.equals(Parameters.Operators.UD_ARCHIVE_MUTATE)) {
             archiveMutate = new UniformDepthArchiveMutate(rand, props, archive);
+        } else {
+            System.err.format("Invalid archiveMutate function %s specified%n", ARCHIVE_MUTATE);
+            System.exit(-1);
         }
 
         // Set up mutate
@@ -420,6 +423,9 @@ public class SymbRegMOO {
             mutate = new SubtreeMutate(rand, props, treeGen);
         } else if (MUTATE.equals(Parameters.Operators.UD_MUTATE)) {
             mutate = new UniformDepthMutate(rand, props, treeGen);
+        } else {
+            System.err.format("Invalid mutate function %s specified%n", MUTATE);
+            System.exit(-1);
         }
 
         // Set up xover
