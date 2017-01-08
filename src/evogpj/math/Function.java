@@ -103,6 +103,8 @@ public abstract class Function {
 			return Cube.class;
 		} else if (label.equals("quart")) {
 			return Quart.class;
+		} else if (label.equals("negate")) {
+			return Negate.class;
 		}else{
                     return null;
                 }
