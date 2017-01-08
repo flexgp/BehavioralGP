@@ -56,7 +56,7 @@ public class Sin extends OneArgFunction {
         treeNodes.add(treeNode);
         return result;
     }
-    
+
     public String getInfixFormatString() {
         //return "sin(%s)";
         return "(sin %s)";

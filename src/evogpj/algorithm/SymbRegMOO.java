@@ -281,7 +281,8 @@ public class SymbRegMOO {
         UNARY_FUNC_SET = new ArrayList<String>();
         for(String func:FUNC_SET){
             if(func.equals("mylog") || func.equals("exp") || func.equals("sin") || func.equals("cos") || 
-                    func.equals("sqrt") || func.equals("square") || func.equals("cube") || func.equals("quart")){
+                    func.equals("sqrt") || func.equals("square") || func.equals("cube") ||
+                    func.equals("quart") || func.equals("negate")) {
                 UNARY_FUNC_SET.add(func);
             }
         }
