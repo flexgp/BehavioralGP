@@ -113,7 +113,7 @@ public class BenchmarkDataSet {
                 double current = low;
                 while (current <= high) {
                     List<Double> input = new ArrayList<>(prevInput);
-                    input.add(current);
+                    input.add(Math.round(current * 10000)/10000.0); // A little hacky but works for now
                     output.add(input);
                     current += step;
                 }
