@@ -16,6 +16,8 @@ import java.util.List;
  */
 public class BenchmarkDataSet {
 
+    private static final double PRECISION = 10000.0;
+
     private static List<List<Double>> constructDataSet(String name) {
         List<List<Double>> inputs;
         List<List<Double>> data;
@@ -113,7 +115,8 @@ public class BenchmarkDataSet {
                 double current = low;
                 while (current <= high) {
                     List<Double> input = new ArrayList<>(prevInput);
-                    input.add(Math.round(current * 10000)/10000.0); // A little hacky but works for now
+                    current = Math.round(current * BenchmarkDataSet.PRECISION)/BenchmarkDataSet.PRECISION;
+                    input.add(current);
                     output.add(input);
                     current += step;
                 }
