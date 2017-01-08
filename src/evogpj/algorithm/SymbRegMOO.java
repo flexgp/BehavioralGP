@@ -342,12 +342,12 @@ public class SymbRegMOO {
     private void create_operators(Properties props, long seed) throws IOException {
         System.out.println("Running evogpj with seed: " + seed);
         rand = new MersenneTwisterFast(seed);
+        DataJava data = new CSVDataJava(PROBLEM);
 
         // Set up archive
         if (ARCHIVE.equals(Parameters.Operators.SIMPLE_ARCHIVE)) {
             archive = new SimpleArchive(rand);
         } else if (ARCHIVE.equals(Parameters.Operators.REPTREE_ARCHIVE)) {
-            DataJava data = new CSVDataJava(PROBLEM);
             double[] targetValuesArray = data.getTargetValues();
             List<Double> targetValues = new ArrayList<>();
             for (int i = 0; i < targetValuesArray.length; i++) {
@@ -361,7 +361,6 @@ public class SymbRegMOO {
             if (fitnessOperatorName.equals(Parameters.Operators.SR_JAVA_FITNESS) ||
                     fitnessOperatorName.equals(Parameters.Operators.ORDINARY_GP_FITNESS) ||
                     fitnessOperatorName.equals(Parameters.Operators.ARCHIVE_BUILDER_FITNESS)) {
-                DataJava data = new CSVDataJava(PROBLEM);
                 minTarget = data.getTargetMin();
                 maxTarget = data.getTargetMax();
                 
