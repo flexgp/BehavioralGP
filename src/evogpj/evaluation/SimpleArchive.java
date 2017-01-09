@@ -22,14 +22,14 @@ public class SimpleArchive extends UnweightedArchive {
         super(rand);
     }
 
-    public void addGeneticMaterial(List<TreeNode> subtrees,
-                            List<ImmutableList<Double>> trace,
-                            List<Double> weights) {
+    public void addGeneticMaterial(Map<ImmutableList<Double>, TreeNode> geneticMaterial) {
         archive.clear();
-        for (int i = 0; i < Archive.CAPACITY; i++) {
-            TreeNode node = subtrees.get(i);
-            TreeNode duplicateNode = TreeGenerator.generateTree(node.toStringAsTree()).getRoot();
-            archive.add(duplicateNode);
+        for (ImmutableList<Double> semantics : geneticMaterial.keySet()) {
+            if (archive.size() < Archive.CAPACITY) {
+                TreeNode syntax = geneticMaterial.get(semantics);
+                TreeNode duplicate = TreeGenerator.generateTree(syntax.toStringAsTree()).getRoot();
+                archive.put(semantics, duplicate);
+            }
         }
     }
 }

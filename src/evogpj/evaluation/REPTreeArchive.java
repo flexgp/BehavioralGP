@@ -32,15 +32,14 @@ public class REPTreeArchive extends UnweightedArchive {
         this.targetValues = ImmutableList.copyOf(targetValues);
     }
 
-    public void addGeneticMaterial(List<TreeNode> subtrees,
-                              List<ImmutableList<Double>> trace,
-                              List<Double> weights) {
+    public void addGeneticMaterial(Map<ImmutableList<Double>, TreeNode> geneticMaterial) {
         archive.clear();
         List<String> featureNamesList = new ArrayList<>();
         Map<String, ImmutableList<Double>> featureNamesMap = new HashMap<>();
         int counter = 0;
         int numberOfFitnessCases = 0;
-        for (ImmutableList<Double> key : trace) {
+        for (Map.Entry entry : geneticMaterial.entrySet()) {
+            ImmutableList<Double> key = (ImmutableList<Double>) entry.getKey();
             String name = "TREE" + counter++;
             featureNamesList.add(name);
             featureNamesMap.put(name, key);
@@ -86,10 +85,9 @@ public class REPTreeArchive extends UnweightedArchive {
         for (String name : featureNamesList) {
             if (tree.contains(name) && archive.size() < Archive.CAPACITY) {
                 ImmutableList<Double> semantics = featureNamesMap.get(name);
-                int index = trace.indexOf(semantics);
-                TreeNode syntax = subtrees.get(index);
-                TreeNode duplicateNode = TreeGenerator.generateTree(syntax.toStringAsTree()).getRoot();
-                archive.add(duplicateNode);
+                TreeNode syntax = geneticMaterial.get(semantics);
+                TreeNode duplicate = TreeGenerator.generateTree(syntax.toStringAsTree()).getRoot();
+                archive.put(semantics, duplicate);
             }
         }
     }

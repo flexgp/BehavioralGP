@@ -6,6 +6,7 @@ import evogpj.algorithm.Parameters;
 import evogpj.genotype.TreeNode;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by stevenfine on 8/3/16.
@@ -15,15 +16,12 @@ public interface Archive {
     int CAPACITY = Parameters.Defaults.ARCHIVE_CAPACITY;
 
     /**
-     * Takes the genetic material, and combines it with the archive. A given
-     * index in each List corresponds to a single subtree.
-     * @param subtrees The TreeNodes to be put in the Archive.
-     * @param trace A List of the outputs of each TreeNode on each training data point.
-     * @param weights The weight that the TreeNode should be given in the Archive.
+     * Takes the genetic material, and combines it with the archive.
+     * @param geneticMaterial A map that represents a set of subtrees, where
+     *                        each key is a subtree's output on the training
+     *                        data, and each value is its syntax.
      */
-    void addGeneticMaterial(List<TreeNode> subtrees,
-                            List<ImmutableList<Double>> trace,
-                            List<Double> weights);
+    void addGeneticMaterial(Map<ImmutableList<Double>, TreeNode> geneticMaterial);
 
     /**
      * Get a subtree from the archive.
