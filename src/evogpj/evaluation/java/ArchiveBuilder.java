@@ -186,7 +186,7 @@ public class ArchiveBuilder extends FitnessFunction {
                 Logger.getLogger(ArchiveBuilder.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        archive.addGeneticMaterial(combinedGeneticMaterial);
+        archive.addGeneticMaterial(combinedGeneticMaterial, new HashMap<>());
     }
 
     /**
