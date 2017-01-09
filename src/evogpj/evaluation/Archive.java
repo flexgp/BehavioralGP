@@ -20,8 +20,14 @@ public interface Archive {
      * @param geneticMaterial A map that represents a set of subtrees, where
      *                        each key is a subtree's output on the training
      *                        data, and each value is its syntax.
+     * @param weights A map whose keys are the subtree's outputs as in the
+     *                geneticMaterial parameter, and whose values are the
+     *                weights that subtree should have in the Archive
      */
-    void addGeneticMaterial(Map<ImmutableList<Double>, TreeNode> geneticMaterial);
+    void addGeneticMaterial(
+            Map<ImmutableList<Double>, TreeNode> geneticMaterial,
+            Map<ImmutableList<Double>, Double> weights
+    );
 
     /**
      * Get a subtree from the archive.
