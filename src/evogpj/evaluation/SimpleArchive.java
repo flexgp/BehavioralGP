@@ -22,6 +22,11 @@ public class SimpleArchive extends UnweightedArchive {
     }
 
     public void addGeneticMaterial(Map<ImmutableList<Double>, TreeNode> geneticMaterial) {
-        archive = geneticMaterial;
+        archive.clear();
+        for (ImmutableList<Double> semantics : geneticMaterial.keySet()) {
+            if (archive.size() < Archive.CAPACITY) {
+                archive.put(semantics, geneticMaterial.get(semantics));
+            }
+        }
     }
 }
