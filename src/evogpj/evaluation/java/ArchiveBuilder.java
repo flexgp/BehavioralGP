@@ -186,16 +186,7 @@ public class ArchiveBuilder extends FitnessFunction {
                 Logger.getLogger(ArchiveBuilder.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        List<TreeNode> subtrees = new ArrayList<>();
-        List<ImmutableList<Double>> trace = new ArrayList<>();
-        for (Map.Entry entry : combinedGeneticMaterial.entrySet()) {
-            ImmutableList<Double> semantics = (ImmutableList<Double>) entry.getKey();
-            TreeNode syntax = combinedGeneticMaterial.get(semantics);
-            subtrees.add(syntax);
-            trace.add(semantics);
-        }
-        // ArchiveBuilder uses an UnweightedArchive so the weights list is empty.
-        archive.addGeneticMaterial(subtrees, trace, new ArrayList<>());
+        archive.addGeneticMaterial(combinedGeneticMaterial);
     }
 
     /**
