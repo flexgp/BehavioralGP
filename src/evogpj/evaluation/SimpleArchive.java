@@ -22,7 +22,10 @@ public class SimpleArchive extends UnweightedArchive {
         super(rand);
     }
 
-    public void addGeneticMaterial(Map<ImmutableList<Double>, TreeNode> geneticMaterial) {
+    public void addGeneticMaterial(
+            Map<ImmutableList<Double>, TreeNode> geneticMaterial,
+            Map<ImmutableList<Double>, Double> weights
+    ) {
         archive.clear();
         for (ImmutableList<Double> semantics : geneticMaterial.keySet()) {
             if (archive.size() < Archive.CAPACITY) {
