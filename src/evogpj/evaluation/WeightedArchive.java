@@ -13,8 +13,6 @@ import java.util.*;
  */
 public abstract class WeightedArchive extends RandomOperator implements Archive {
 
-    protected int MAX_SIZE;
-
     private Map<ImmutableList<Double>, TreeNode> archiveStorage;
     private NavigableMap<Double, ImmutableList<Double>> weights;
     private NavigableMap<Double, ImmutableList<Double>> cumulativeWeights;
@@ -68,7 +66,7 @@ public abstract class WeightedArchive extends RandomOperator implements Archive 
     protected void addSubtree(double weight, ImmutableList<Double> semantics, TreeNode syntax) {
         if (weight <= 0) {
             // Do nothing
-        } else if (archiveStorage.size() >= MAX_SIZE) {
+        } else if (archiveStorage.size() >= Archive.CAPACITY) {
             double smallestWeight = weights.firstKey();
             if (smallestWeight < weight) {
                 ImmutableList<Double> value = weights.get(smallestWeight);
