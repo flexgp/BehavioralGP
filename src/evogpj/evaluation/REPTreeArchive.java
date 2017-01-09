@@ -85,7 +85,9 @@ public class REPTreeArchive extends UnweightedArchive {
             if (tree.contains(name)) {
                 ImmutableList<Double> semantics = featureNamesMap.get(name);
                 TreeNode syntax = geneticMaterial.get(semantics);
-                archive.put(semantics, syntax);
+                if (archive.size() < Archive.CAPACITY) {
+                    archive.put(semantics, syntax);
+                }
             }
         }
     }
