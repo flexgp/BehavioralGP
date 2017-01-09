@@ -1,6 +1,7 @@
 package evogpj.evaluation;
 
 import com.google.common.collect.ImmutableList;
+import evogpj.genotype.TreeGenerator;
 import evogpj.genotype.TreeNode;
 
 import java.util.*;
@@ -25,7 +26,9 @@ public class SimpleArchive extends UnweightedArchive {
         archive.clear();
         for (ImmutableList<Double> semantics : geneticMaterial.keySet()) {
             if (archive.size() < Archive.CAPACITY) {
-                archive.put(semantics, geneticMaterial.get(semantics));
+                TreeNode syntax = geneticMaterial.get(semantics);
+                TreeNode duplicate = TreeGenerator.generateTree(syntax.toStringAsTree()).getRoot();
+                archive.put(semantics, duplicate);
             }
         }
     }
