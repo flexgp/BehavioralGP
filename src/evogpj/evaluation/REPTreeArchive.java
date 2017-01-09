@@ -1,6 +1,7 @@
 package evogpj.evaluation;
 
 import com.google.common.collect.ImmutableList;
+import evogpj.genotype.TreeGenerator;
 import evogpj.genotype.TreeNode;
 import evogpj.gp.MersenneTwisterFast;
 import weka.classifiers.trees.REPTree;
@@ -82,12 +83,11 @@ public class REPTreeArchive extends UnweightedArchive {
 
         String tree = repTree.toString();
         for (String name : featureNamesList) {
-            if (tree.contains(name)) {
+            if (tree.contains(name) && archive.size() < Archive.CAPACITY) {
                 ImmutableList<Double> semantics = featureNamesMap.get(name);
                 TreeNode syntax = geneticMaterial.get(semantics);
-                if (archive.size() < Archive.CAPACITY) {
-                    archive.put(semantics, syntax);
-                }
+                TreeNode duplicate = TreeGenerator.generateTree(syntax.toStringAsTree()).getRoot();
+                archive.put(semantics, duplicate);
             }
         }
     }
