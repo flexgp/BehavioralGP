@@ -1,7 +1,6 @@
 package evogpj.evaluation;
 
 import com.google.common.collect.ImmutableList;
-import evogpj.genotype.TreeGenerator;
 import evogpj.genotype.TreeNode;
 import evogpj.gp.MersenneTwisterFast;
 import evogpj.operator.RandomOperator;
@@ -13,12 +12,11 @@ import java.util.*;
  */
 public abstract class WeightedArchive extends RandomOperator implements Archive {
 
-    protected int MAX_SIZE;
-
-    private Map<ImmutableList<Double>, TreeNode> archiveStorage;
-    private NavigableMap<Double, ImmutableList<Double>> weights;
-    private NavigableMap<Double, ImmutableList<Double>> cumulativeWeights;
-    private double totalWeight;
+    private List<TreeNode> archiveStorage;
+    private List<Double> weights;
+    private NavigableMap<Double, Integer> cumulativeWeightsToIndex;
+    private double cumulativeWeight;
+    private int cumulativeIndex;
     private boolean reComputeCumulative;
 
     /**
@@ -27,10 +25,11 @@ public abstract class WeightedArchive extends RandomOperator implements Archive 
      */
     public WeightedArchive(MersenneTwisterFast rand) {
         super(rand);
-        archiveStorage = new HashMap<>();
-        weights = new TreeMap<>();
-        cumulativeWeights = new TreeMap<>();
-        totalWeight = 0;
+        archiveStorage = new ArrayList<>();
+        weights = new ArrayList<>();
+        cumulativeWeightsToIndex = new TreeMap<>();
+        cumulativeWeight = 0;
+        cumulativeIndex = -1;
         reComputeCumulative = false;
     }
 
@@ -39,20 +38,20 @@ public abstract class WeightedArchive extends RandomOperator implements Archive 
             throw new EmptyArchiveException();
         } else {
             if (reComputeCumulative) {
-                totalWeight = 0;
-                cumulativeWeights.clear();
-                for (Map.Entry entry : weights.entrySet()) {
-                    double weight = (double) entry.getKey();
-                    ImmutableList<Double> value = (ImmutableList<Double>) entry.getValue();
-                    totalWeight += weight;
-                    cumulativeWeights.put(totalWeight, value);
+                cumulativeWeight = 0;
+                cumulativeIndex = -1;
+                cumulativeWeightsToIndex.clear();
+                for (double weight : weights) {
+                    cumulativeWeight += weight;
+                    cumulativeIndex++;
+                    cumulativeWeightsToIndex.put(cumulativeWeight, cumulativeIndex);
                 }
                 reComputeCumulative = false;
             }
-            double cumulativeWeight = rand.nextDouble() * totalWeight;
-            ImmutableList<Double> semantics = cumulativeWeights.ceilingEntry(cumulativeWeight).getValue();
-            TreeNode subtree = archiveStorage.get(semantics);
-            return TreeGenerator.generateTree(subtree.toStringAsTree()).getRoot();
+            double chosenWeight = rand.nextDouble() * cumulativeWeight;
+            int index = cumulativeWeightsToIndex.ceilingEntry(chosenWeight).getValue();
+            TreeNode subtree = archiveStorage.get(index);
+            return subtree;
         }
     }
 
@@ -61,9 +60,10 @@ public abstract class WeightedArchive extends RandomOperator implements Archive 
      * less than weight parameter, remove subtree with smallest weight before
      * inserting new subtree. If Archive is full, and smallest weight is greater
      * than weight parameter, do nothing.
-     * @param weight The weight of the subtree to be inserted.
-     * @param semantics The output vector of the subtree on the training samples.
      * @param syntax The subtree to be inserted.
+     * @param semantics The output vector of the subtree on the training samples.
+     * @param weight The weight of the subtree to be inserted.
+
      */
     protected void addSubtree(double weight, ImmutableList<Double> semantics, TreeNode syntax) {
         if (weight <= 0) {
