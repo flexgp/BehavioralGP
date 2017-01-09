@@ -32,7 +32,10 @@ public class REPTreeArchive extends UnweightedArchive {
         this.targetValues = ImmutableList.copyOf(targetValues);
     }
 
-    public void addGeneticMaterial(Map<ImmutableList<Double>, TreeNode> geneticMaterial) {
+    public void addGeneticMaterial(
+            Map<ImmutableList<Double>, TreeNode> geneticMaterial,
+            Map<ImmutableList<Double>, Double> weights
+    ) {
         archive.clear();
         List<String> featureNamesList = new ArrayList<>();
         Map<String, ImmutableList<Double>> featureNamesMap = new HashMap<>();
