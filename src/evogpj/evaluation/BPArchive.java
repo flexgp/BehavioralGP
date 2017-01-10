@@ -96,24 +96,4 @@ public class BPArchive extends WeightedArchive {
             }
         }
     }
-
-    public static void main(String args[]) {
-        List<Double> l1 = new ArrayList<>();
-        l1.add(1.0);
-        l1.add(2.0);
-        List<Double> l2 = new ArrayList<>();
-        l2.add(2.0);
-        l2.add(2.0);
-        ImmutableList<Double> il1 = ImmutableList.copyOf(l1);
-        ImmutableList<Double> il2 = ImmutableList.copyOf(l2);
-        Map<ImmutableList<Double>, Double> m = new HashMap<>();
-        m.put(il1, 2.0);
-        m.put(il2, 2.0);
-        TreeMap<ImmutableList<Double>, Double> tm = new TreeMap<>(new WeightComparator(m));
-        tm.putAll(m);
-        System.out.println(tm.keySet());
-        for (ImmutableList<Double> l : tm.keySet()) {
-            System.out.println(l);
-        }
-    }
 }
