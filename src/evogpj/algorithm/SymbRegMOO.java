@@ -17,11 +17,8 @@
  */
 package evogpj.algorithm;
 
-import evogpj.evaluation.Archive;
-import evogpj.evaluation.REPTreeArchive;
-import evogpj.evaluation.SimpleArchive;
+import evogpj.evaluation.*;
 import evogpj.evaluation.java.*;
-import evogpj.evaluation.FitnessFunction;
 import evogpj.genotype.Tree;
 import evogpj.genotype.TreeGenerator;
 import evogpj.gp.GPException;
@@ -163,6 +160,7 @@ public class SymbRegMOO {
 
     // FITNESS FUNCTIONS
     protected LinkedHashMap<String, FitnessFunction> fitnessFunctions;
+    protected FitnessFunctionEvaluator fitnessFunctionEvaluator;
     
     
     /* CONTROL FOR END OF EVOLUTIONARY PROCESS*/
@@ -320,7 +318,7 @@ public class SymbRegMOO {
     /**
      * Handle parsing the FITNESS field (fitness_op), which could contain
      * multiple fitness operators
-     * 
+     *
      * @return a LinkedHashMap with properly ordered operators and null
      *         FitnessFunctions. This enforces the iteration order
      */
@@ -390,6 +388,7 @@ public class SymbRegMOO {
                 System.exit(-1);
             }
         }
+        fitnessFunctionEvaluator = new FitnessFunctionEvaluator(fitnessFunctions);
 
         TreeGenerator treeGen = new TreeGenerator(rand, FUNC_SET, TERM_SET);
         if (INITIALIZE.equals(Parameters.Operators.TREE_INITIALIZE)) {
@@ -486,8 +485,7 @@ public class SymbRegMOO {
         pop = initialize.initialize(POP_SIZE);
         pop.set(0,linearModelInd);
         // initialize totalPop to simply the initial population
-        for (FitnessFunction f : fitnessFunctions.values())
-            f.evalPop(pop);
+        fitnessFunctionEvaluator.evalPop(pop);
         // calculate domination counts of initial population for tournament selection
         try {
             DominatedCount.countDominated(pop, fitnessFunctions);
@@ -546,10 +544,7 @@ public class SymbRegMOO {
         }
 
         // evaluate all children
-        for (String fname : fitnessFunctions.keySet()) {
-            FitnessFunction f = fitnessFunctions.get(fname);
-            f.evalPop(childPop);
-        }
+        fitnessFunctionEvaluator.evalPop(childPop);
         // combine the children and parents for a total of 2*POP_SIZE
         totalPop = new Population(pop, childPop);
         try {
