@@ -13,11 +13,10 @@ import java.util.*;
  */
 public abstract class WeightedArchive extends RandomOperator implements Archive {
 
-    private Map<ImmutableList<Double>, TreeNode> archiveStorage;
-    private NavigableMap<Double, ImmutableList<Double>> weights;
-    private NavigableMap<Double, ImmutableList<Double>> cumulativeWeights;
-    private double totalWeight;
-    private boolean reComputeCumulative;
+    protected Map<ImmutableList<Double>, TreeNode> archiveStorage;
+    protected Map<ImmutableList<Double>, Double> weights;
+    protected NavigableMap<Double, ImmutableList<Double>> cumulativeWeights;
+    protected double totalWeight;
 
     /**
      * Abstract weighted Archive
@@ -26,62 +25,51 @@ public abstract class WeightedArchive extends RandomOperator implements Archive 
     public WeightedArchive(MersenneTwisterFast rand) {
         super(rand);
         archiveStorage = new HashMap<>();
-        weights = new TreeMap<>();
+        weights = new HashMap<>();
         cumulativeWeights = new TreeMap<>();
         totalWeight = 0;
-        reComputeCumulative = false;
     }
 
     public TreeNode getSubtree() throws EmptyArchiveException {
         if (archiveStorage.size() == 0) {
             throw new EmptyArchiveException();
         } else {
-            if (reComputeCumulative) {
-                totalWeight = 0;
-                cumulativeWeights.clear();
-                for (Map.Entry entry : weights.entrySet()) {
-                    double weight = (double) entry.getKey();
-                    ImmutableList<Double> value = (ImmutableList<Double>) entry.getValue();
-                    totalWeight += weight;
-                    cumulativeWeights.put(totalWeight, value);
-                }
-                reComputeCumulative = false;
-            }
             double cumulativeWeight = rand.nextDouble() * totalWeight;
             ImmutableList<Double> semantics = cumulativeWeights.ceilingEntry(cumulativeWeight).getValue();
-            TreeNode subtree = archiveStorage.get(semantics);
-            return TreeGenerator.generateTree(subtree.toStringAsTree()).getRoot();
+            TreeNode syntax = archiveStorage.get(semantics);
+            return TreeGenerator.generateTree(syntax.toStringAsTree()).getRoot();
         }
     }
 
     /**
-     * Insert subtree into Archive. If Archive is full, and smallest weight is
-     * less than weight parameter, remove subtree with smallest weight before
-     * inserting new subtree. If Archive is full, and smallest weight is greater
-     * than weight parameter, do nothing.
+     * Duplicate then insert subtree into Archive.
      * @param weight The weight of the subtree to be inserted.
      * @param semantics The output vector of the subtree on the training samples.
      * @param syntax The subtree to be inserted.
+     * @throws FullArchiveException when Archive is full.
      */
-    protected void addSubtree(double weight, ImmutableList<Double> semantics, TreeNode syntax) {
+    protected void addSubtree(double weight, ImmutableList<Double> semantics, TreeNode syntax) throws FullArchiveException {
         if (weight <= 0) {
             // Do nothing
         } else if (archiveStorage.size() >= Archive.CAPACITY) {
-            double smallestWeight = weights.firstKey();
-            if (smallestWeight < weight) {
-                ImmutableList<Double> value = weights.get(smallestWeight);
-                weights.remove(smallestWeight);
-                weights.put(weight, semantics);
-                archiveStorage.remove(value);
-                archiveStorage.put(semantics, syntax);
-                reComputeCumulative = true;
-            }
+            throw new FullArchiveException();
         } else {
-            weights.put(weight, semantics);
-            archiveStorage.put(semantics, syntax);
+            TreeNode duplicate = TreeGenerator.generateTree(syntax.toStringAsTree()).getRoot();
+            weights.put(semantics, weight);
+            archiveStorage.put(semantics, duplicate);
             totalWeight += weight;
             cumulativeWeights.put(totalWeight, semantics);
         }
+    }
+
+    /**
+     * Clear the Archive.
+     */
+    protected void clearArchive() {
+        archiveStorage = new HashMap<>();
+        weights = new HashMap<>();
+        cumulativeWeights = new TreeMap<>();
+        totalWeight = 0;
     }
 
 }
