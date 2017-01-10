@@ -14,7 +14,7 @@ import java.util.*;
 public abstract class WeightedArchive extends RandomOperator implements Archive {
 
     protected Map<ImmutableList<Double>, TreeNode> archiveStorage;
-    protected Map<ImmutableList<Double>, Double> weights;
+    protected Map<ImmutableList<Double>, Double> archiveWeights;
     protected NavigableMap<Double, ImmutableList<Double>> cumulativeWeights;
     protected double totalWeight;
 
@@ -25,7 +25,7 @@ public abstract class WeightedArchive extends RandomOperator implements Archive 
     public WeightedArchive(MersenneTwisterFast rand) {
         super(rand);
         archiveStorage = new HashMap<>();
-        weights = new HashMap<>();
+        archiveWeights = new HashMap<>();
         cumulativeWeights = new TreeMap<>();
         totalWeight = 0;
     }
@@ -43,19 +43,19 @@ public abstract class WeightedArchive extends RandomOperator implements Archive 
 
     /**
      * Duplicate then insert subtree into Archive.
-     * @param weight The weight of the subtree to be inserted.
      * @param semantics The output vector of the subtree on the training samples.
      * @param syntax The subtree to be inserted.
+     * @param weight The weight of the subtree to be inserted.
      * @throws FullArchiveException when Archive is full.
      */
-    protected void addSubtree(double weight, ImmutableList<Double> semantics, TreeNode syntax) throws FullArchiveException {
+    protected void addSubtree(ImmutableList<Double> semantics, TreeNode syntax, double weight) throws FullArchiveException {
         if (weight <= 0) {
             // Do nothing
         } else if (archiveStorage.size() >= Archive.CAPACITY) {
             throw new FullArchiveException();
         } else {
             TreeNode duplicate = TreeGenerator.generateTree(syntax.toStringAsTree()).getRoot();
-            weights.put(semantics, weight);
+            archiveWeights.put(semantics, weight);
             archiveStorage.put(semantics, duplicate);
             totalWeight += weight;
             cumulativeWeights.put(totalWeight, semantics);
@@ -67,7 +67,7 @@ public abstract class WeightedArchive extends RandomOperator implements Archive 
      */
     protected void clearArchive() {
         archiveStorage = new HashMap<>();
-        weights = new HashMap<>();
+        archiveWeights = new HashMap<>();
         cumulativeWeights = new TreeMap<>();
         totalWeight = 0;
     }
