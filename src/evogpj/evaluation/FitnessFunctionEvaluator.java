@@ -10,5 +10,9 @@ import java.util.Set;
  */
 public interface FitnessFunctionEvaluator {
 
+    /**
+     * Evaluate the Population.
+     * @param pop
+     */
     void evalPop(Population pop);
 }
