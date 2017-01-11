@@ -2,6 +2,7 @@ package evogpj.evaluation;
 
 import com.google.common.collect.ImmutableList;
 import evogpj.genotype.TreeNode;
+import evogpj.gp.Individual;
 
 import java.util.List;
 import java.util.Map;
@@ -31,12 +32,14 @@ public interface BPModel {
     Map<ImmutableList<Double>, Double> getWeights();
 
     /**
-     * @return The model error.
+     * @param individual
+     * @return The model error for the specified Individual.
      */
-    double getModelError();
+    double getModelError(Individual individual);
 
     /**
-     * @return The model complexity.
+     * @param individual
+     * @return The model complexity for the specified Individual.
      */
-    double getModelComplexity();
+    double getModelComplexity(Individual individual);
 }
