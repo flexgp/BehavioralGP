@@ -35,6 +35,9 @@ public class BPArchive extends WeightedArchive {
                     allSubtrees.put(semantics, syntax);
                     allWeights.put(semantics, weight);
                 }
+            } else {
+                allSubtrees.put(semantics, syntax);
+                allWeights.put(semantics, weight);
             }
         }
 
