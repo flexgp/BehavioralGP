@@ -10,12 +10,12 @@ public abstract class ModelFitnessFunction extends FitnessFunction {
 
     protected BPModel model;
 
+    public ModelFitnessFunction(BPModel model) {
+        this.model = model;
+    }
+
     @Override
     public Boolean requiresModel() {
         return true;
-    }
-
-    public void setModel(BPModel model) {
-        this.model = model;
     }
 }
