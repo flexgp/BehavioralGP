@@ -54,4 +54,8 @@ public abstract class FitnessFunction {
 
 	public abstract Boolean isMaximizingFunction();
 
+	public Boolean requiresModel() {
+		return false;
+	}
+
 }
