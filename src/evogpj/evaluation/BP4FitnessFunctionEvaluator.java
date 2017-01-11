@@ -1,13 +1,10 @@
 package evogpj.evaluation;
 
-import com.google.common.collect.ImmutableList;
-import evogpj.genotype.TreeNode;
 import evogpj.gp.Population;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by stevenfine on 1/11/17.
