@@ -388,7 +388,7 @@ public class SymbRegMOO {
                 System.exit(-1);
             }
         }
-        fitnessFunctionEvaluator = new FitnessFunctionEvaluator(fitnessFunctions);
+        fitnessFunctionEvaluator = new OrdinaryFitnessFunctionEvaluator(fitnessFunctions);
 
         TreeGenerator treeGen = new TreeGenerator(rand, FUNC_SET, TERM_SET);
         if (INITIALIZE.equals(Parameters.Operators.TREE_INITIALIZE)) {
