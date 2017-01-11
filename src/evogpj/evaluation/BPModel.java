@@ -3,6 +3,7 @@ package evogpj.evaluation;
 import com.google.common.collect.ImmutableList;
 import evogpj.genotype.TreeNode;
 import evogpj.gp.Individual;
+import evogpj.gp.Population;
 
 import java.util.List;
 import java.util.Map;
@@ -16,9 +17,9 @@ public interface BPModel {
      * Take in the Population's genetic material and build an ML model to
      * determine what should go in the Archive and to create additional fitness
      * measures.
-     * @param popGeneticMaterial The Population's genetic material.
+     * @param pop The Population from which to build the model.
      */
-    void buildModel(List<Map<ImmutableList<Double>, TreeNode>> popGeneticMaterial);
+    void buildModel(Population pop);
 
     /**
      * @return The genetic material that should be put in the Archive.
