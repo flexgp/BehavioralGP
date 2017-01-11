@@ -23,7 +23,6 @@ public class ProgramErrorFitness extends FitnessFunction {
 
     public static final String FITNESS_KEY = Parameters.Operators.PROGRAM_ERROR_FITNESS;
     public Boolean isMaximizingFunction = false;
-    private List<Map<ImmutableList<Double>, TreeNode>> popGeneticMaterial = new ArrayList<>();
     private final DataJava data;
     private int numThreads;
     private double pow;
@@ -43,7 +42,7 @@ public class ProgramErrorFitness extends FitnessFunction {
         return this.isMaximizingFunction;
     }
 
-    private Map<ImmutableList<Double>, TreeNode> eval(Individual ind) throws Exception {
+    private void eval(Individual ind) throws Exception {
 
         Tree genotype = (Tree) ind.getGenotype();
         double[][] inputValuesAux = data.getInputValues();
@@ -95,7 +94,7 @@ public class ProgramErrorFitness extends FitnessFunction {
 
         double fitness = 1.0 - 1.0/(1.0 + error);
         ind.setFitness(ProgramErrorFitness.FITNESS_KEY, fitness);
-        return geneticMaterial;
+        ind.setGeneticMaterial(geneticMaterial);
     }
 
     /**
@@ -127,9 +126,6 @@ public class ProgramErrorFitness extends FitnessFunction {
     @Override
     public void evalPop(Population pop) {
 
-        popGeneticMaterial = new ArrayList<>();
-        List<Map<ImmutableList<Double>, TreeNode>> threadGeneticMaterial;
-
         ArrayList<SRJavaThread> alThreads = new ArrayList<>();
         for(int i = 0; i < numThreads; i++){
             SRJavaThread threadAux = new SRJavaThread(i, pop, numThreads);
@@ -145,33 +141,21 @@ public class ProgramErrorFitness extends FitnessFunction {
             SRJavaThread threadAux = alThreads.get(i);
             try {
                 threadAux.join();
-                threadGeneticMaterial = threadAux.getGeneticMaterial();
-                popGeneticMaterial.addAll(threadGeneticMaterial);
             } catch (InterruptedException ex) {
                 Logger.getLogger(ProgramErrorFitness.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    public List<Map<ImmutableList<Double>, TreeNode>> getGeneticMaterial() {
-        return this.popGeneticMaterial;
-    }
-
     public class SRJavaThread extends Thread{
         private int indexThread;
         private int totalThreads;
         private Population pop;
-        private List<Map<ImmutableList<Double>, TreeNode>> threadGeneticMaterial;
 
         public SRJavaThread(int anIndex, Population aPop, int aTotalThreads){
             indexThread = anIndex;
             pop = aPop;
             totalThreads = aTotalThreads;
-            threadGeneticMaterial = new ArrayList<>();
-        }
-
-        public List<Map<ImmutableList<Double>, TreeNode>> getGeneticMaterial() {
-            return threadGeneticMaterial;
         }
 
         @Override
@@ -180,8 +164,7 @@ public class ProgramErrorFitness extends FitnessFunction {
             for (Individual individual : pop) {
                 if(indexIndi % totalThreads == indexThread){
                     try {
-                        Map<ImmutableList<Double>, TreeNode> individualGeneticMaterial = eval(individual);
-                        threadGeneticMaterial.add(individualGeneticMaterial);
+                        eval(individual);
                     } catch (Exception ex) {
                         Logger.getLogger(ProgramErrorFitness.class.getName()).log(Level.SEVERE, null, ex);
                     }
