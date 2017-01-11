@@ -17,14 +17,17 @@
  */
 package evogpj.gp;
 
+import com.google.common.collect.ImmutableList;
 import evogpj.evaluation.FitnessComparisonStandardizer;
 import evogpj.evaluation.FitnessFunction;
 import evogpj.genotype.Genotype;
 import evogpj.genotype.Tree;
+import evogpj.genotype.TreeNode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -61,6 +64,9 @@ public class Individual implements Serializable {
     private ArrayList<Double> estimatedDensPos, estimatedDensNeg;
     ArrayList<String> weights;
     String lassoIntercept;
+
+    private Map<ImmutableList<Double>, TreeNode> geneticMaterial;
+
     /**
      * Create an individual with the given genotype. The new individuals
      * phenotype and fitness are left unspecified.
@@ -368,5 +374,13 @@ public class Individual implements Serializable {
     
     public void setLassoIntercept(String aLassoIntercept){
         lassoIntercept = aLassoIntercept;
+    }
+
+    public Map<ImmutableList<Double>, TreeNode> getGeneticMaterial() {
+        return this.geneticMaterial;
+    }
+
+    public void setGeneticMaterial(Map<ImmutableList<Double>, TreeNode> geneticMaterial) {
+        this.geneticMaterial = geneticMaterial;
     }
 }
