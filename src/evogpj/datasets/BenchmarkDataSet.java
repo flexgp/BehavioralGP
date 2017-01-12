@@ -1,8 +1,5 @@
 package evogpj.datasets;
 
-import evogpj.gp.MersenneTwister;
-import evogpj.gp.MersenneTwisterFast;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,77 +13,89 @@ import java.util.List;
  */
 public class BenchmarkDataSet {
 
-    private static final double PRECISION = 10000.0;
+    private static final double PRECISION = 100000.0;
 
     private static List<List<Double>> constructDataSet(String name) {
         List<List<Double>> inputs;
         List<List<Double>> data;
         switch (name) {
             case "Keijzer1":
-                inputs = getInputs(-1, 1, 0.1, 1);
+                inputs = getInputs(-1, 1, 19, 1);
                 data = getData(inputs, new K1());
                 break;
             case "Keijzer4":
-                inputs = getInputs(0, 10, 0.5, 1);
+                inputs = getInputs(0, 10, 19, 1);
                 data = getData(inputs, new K4());
                 break;
             case "Keijzer5":
-                inputs = getInputs(-1, 1, 0.66, 3);
+                inputs = new ArrayList<>();
+                List<List<Double>> firstTwoInputs = getInputs(-1, 1, 3, 2);
+                List<List<Double>> lastInput = getInputs(1, 2, 3, 1);
+                for (List<Double> firstTwoInput : firstTwoInputs) {
+                    for (List<Double> input : lastInput) {
+                        List<Double> allThreeInputs = new ArrayList<>(firstTwoInput);
+                        allThreeInputs.add(input.get(0));
+                        inputs.add(allThreeInputs);
+                    }
+                }
                 data = getData(inputs, new K5());
                 break;
             case "Keijzer11":
-                inputs = getInputs(-2, 2, 1, 2);
+                inputs = getInputs(-3, 3, 4, 2);
                 data = getData(inputs, new K11());
                 break;
             case "Keijzer12":
-                inputs = getInputs(-2, 2, 1, 2);
+                inputs = getInputs(-3, 3, 4, 2);
                 data = getData(inputs, new K12());
                 break;
             case "Keijzer13":
-                inputs = getInputs(-2, 2, 1, 2);
+                inputs = getInputs(-3, 3, 4, 2);
                 data = getData(inputs, new K13());
                 break;
             case "Keijzer14":
-                inputs = getInputs(-2, 2, 1, 2);
+                inputs = getInputs(-3, 3, 4, 2);
                 data = getData(inputs, new K14());
                 break;
             case "Keijzer15":
-                inputs = getInputs(-2, 2, 1, 2);
+                inputs = getInputs(-3, 3, 4, 2);
                 data = getData(inputs, new K15());
                 break;
             case "Nguyen3":
-                inputs = getInputs(-1, 1, 0.1, 1);
+                inputs = getInputs(-1, 1, 19, 1);
                 data = getData(inputs, new N3());
                 break;
             case "Nguyen4":
-                inputs = getInputs(-1, 1, 0.1, 1);
+                inputs = getInputs(-1, 1, 19, 1);
                 data = getData(inputs, new N4());
                 break;
             case "Nguyen5":
-                inputs = getInputs(-1, 1, 0.1, 1);
+                inputs = getInputs(-1, 1, 19, 1);
                 data = getData(inputs, new N5());
                 break;
             case "Nguyen6":
-                inputs = getInputs(-1, 1, 0.1, 1);
+                inputs = getInputs(-1, 1, 19, 1);
                 data = getData(inputs, new N6());
                 break;
             case "Nguyen7":
-                inputs = getInputs(-1, 1, 0.1, 1);
+                inputs = getInputs(0, 2, 19, 1);
                 data = getData(inputs, new N7());
                 break;
             case "Nguyen9":
-                inputs = getInputs(-2, 2, 1, 2);
+                inputs = getInputs(0, 1, 4, 2);
                 data = getData(inputs, new N9());
                 break;
             case "Nguyen10":
-                inputs = getInputs(-2, 2, 1, 2);
+                inputs = getInputs(0, 1, 4, 2);
                 data = getData(inputs, new N10());
                 break;
             case "Nguyen12":
-                inputs = getInputs(-2, 2, 1, 2);
+                inputs = getInputs(0, 1, 4, 2);
                 data = getData(inputs, new N12());
                 break;
             case "Sext":
+                inputs =  getInputs(-1, 1, 19, 1);
+                data = getData(inputs, new S());
+                break;
             default:
                 data = null;
         }
@@ -100,25 +109,29 @@ public class BenchmarkDataSet {
             double output = f.call(input);
             data.get(i).add(output);
         }
+        for (List<Double> point : data) {
+            for (int i = 0; i < point.size(); i++) {
+                point.set(i, Math.round(point.get(i) * BenchmarkDataSet.PRECISION)/BenchmarkDataSet.PRECISION);
+            }
+        }
         return data;
     }
 
-    private static List<List<Double>> getInputs(double low, double high, double step, int numVars) {
+    private static List<List<Double>> getInputs(double low, double high, int numSteps, int numVars) {
         if (numVars == 0) {
             List<List<Double>> output = new ArrayList<>();
             output.add(new ArrayList<>());
             return output;
         } else {
-            List<List<Double>> prevInputs = getInputs(low, high, step, numVars - 1);
+            List<List<Double>> prevInputs = getInputs(low, high, numSteps, numVars - 1);
             List<List<Double>> output = new ArrayList<>();
             for (List<Double> prevInput : prevInputs) {
                 double current = low;
                 while (current <= high) {
                     List<Double> input = new ArrayList<>(prevInput);
-                    current = Math.round(current * BenchmarkDataSet.PRECISION)/BenchmarkDataSet.PRECISION;
                     input.add(current);
                     output.add(input);
-                    current += step;
+                    current += (high - low)/((double) numSteps);
                 }
             }
             return output;
@@ -375,6 +388,19 @@ public class BenchmarkDataSet {
                 double x = input.get(0);
                 double y = input.get(1);
                 return Math.pow(x, 4) - Math.pow(x, 3) + Math.pow(y, 2)/2 - y;
+            } else {
+                return null;
+            }
+        }
+    }
+
+    private static class S implements BenchmarkFunction {
+
+        @Override
+        public Double call(List<Double> input) {
+            if (input.size() == 1) {
+                double x = input.get(0);
+                return Math.pow(x, 6) - 2*Math.pow(x, 4) + Math.pow(x, 2);
             } else {
                 return null;
             }
