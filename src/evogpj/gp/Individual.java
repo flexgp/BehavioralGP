@@ -66,6 +66,8 @@ public class Individual implements Serializable {
     String lassoIntercept;
 
     private Map<ImmutableList<Double>, TreeNode> geneticMaterial;
+    private double modelError;
+    private double modelComplexity;
 
     /**
      * Create an individual with the given genotype. The new individuals
@@ -382,5 +384,21 @@ public class Individual implements Serializable {
 
     public void setGeneticMaterial(Map<ImmutableList<Double>, TreeNode> geneticMaterial) {
         this.geneticMaterial = geneticMaterial;
+    }
+
+    public double getModelError() {
+        return this.modelError;
+    }
+
+    public void setModelError(double modelError) {
+        this.modelError = modelError;
+    }
+
+    public double getModelComplexity() {
+        return this.modelComplexity;
+    }
+
+    public void setModelComplexity(double modelComplexity) {
+        this.modelComplexity = modelComplexity;
     }
 }
