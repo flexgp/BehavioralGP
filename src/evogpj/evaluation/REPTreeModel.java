@@ -61,50 +61,7 @@ public class REPTreeModel implements BPModel {
     public double getModelComplexity(Individual individual) {
         return individual.getModelComplexity();
     }
-
-    public static void main(String args[]) {
-        List<Double> l1 = new ArrayList<>();
-        List<Double> l2 = new ArrayList<>();
-        l1.add(0.9);
-        l1.add(0.9);
-        l1.add(2.0);
-        l1.add(2.0);
-        l1.add(2.0);
-        l1.add(2.0);
-        l1.add(2.0);
-        l2.add(1.0);
-        l2.add(1.0);
-        l2.add(1.0);
-        l2.add(1.0);
-        l2.add(1.0);
-        l2.add(1.0);
-        l2.add(1.0);
-        ImmutableList<Double> il1 = ImmutableList.copyOf(l1);
-        ImmutableList<Double> il2 = ImmutableList.copyOf(l2);
-
-        Individual ind = new Individual(null);
-        Map<ImmutableList<Double>, TreeNode> geneticMaterial = new HashMap<>();
-        geneticMaterial.put(il1, new TreeNode(null, "a"));
-        geneticMaterial.put(il2, new TreeNode(null, "b"));
-        ind.setGeneticMaterial(geneticMaterial);
-
-        List<Double> targetVals = new ArrayList<>();
-        targetVals.add(0.0);
-        targetVals.add(0.0);
-        targetVals.add(100.0);
-        targetVals.add(100.0);
-        targetVals.add(100.0);
-        targetVals.add(100.0);
-        targetVals.add(101.0);
-        REPTreeModel model = new REPTreeModel(targetVals);
-
-        try {
-            model.buildModelFromIndividual(ind);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+    
     private void buildModelFromIndividual(Individual individual) throws Exception {
         Map<ImmutableList<Double>, TreeNode> geneticMaterial = individual.getGeneticMaterial();
 
