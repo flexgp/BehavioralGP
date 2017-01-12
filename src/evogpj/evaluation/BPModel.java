@@ -17,9 +17,9 @@ public interface BPModel {
      * Take in the Population's genetic material and build an ML model to
      * determine what should go in the Archive and to create additional fitness
      * measures.
-     * @param pop The Population from which to build the model.
+     * @param population The Population from which to build the model.
      */
-    void buildModel(Population pop);
+    void buildModel(Population population);
 
     /**
      * @return The genetic material that should be put in the Archive.
@@ -35,12 +35,14 @@ public interface BPModel {
     /**
      * @param individual
      * @return The model error for the specified Individual.
+     * @throws IndividualModelValueNotDefinedException
      */
-    double getModelError(Individual individual);
+    double getModelError(Individual individual) throws IndividualModelValueNotDefinedException;
 
     /**
      * @param individual
      * @return The model complexity for the specified Individual.
+     * @throws IndividualModelValueNotDefinedException
      */
-    double getModelComplexity(Individual individual);
+    double getModelComplexity(Individual individual) throws IndividualModelValueNotDefinedException;
 }
