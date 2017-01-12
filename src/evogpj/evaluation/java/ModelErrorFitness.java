@@ -2,6 +2,7 @@ package evogpj.evaluation.java;
 
 import evogpj.algorithm.Parameters;
 import evogpj.evaluation.BPModel;
+import evogpj.evaluation.IndividualModelValueNotDefinedException;
 import evogpj.gp.Individual;
 import evogpj.gp.Population;
 
@@ -23,7 +24,12 @@ public class ModelErrorFitness extends ModelFitnessFunction {
     }
 
     private void eval(Individual ind) {
-        double fitness = model.getModelError(ind);
+        double fitness = 1.0;
+        try {
+            fitness = model.getModelError(ind);
+        } catch (IndividualModelValueNotDefinedException e) {
+            e.printStackTrace();
+        }
         ind.setFitness(ModelErrorFitness.FITNESS_KEY, fitness);
     }
 
