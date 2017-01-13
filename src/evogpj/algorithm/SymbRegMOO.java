@@ -406,6 +406,10 @@ public class SymbRegMOO {
                 fitnessFunctions.put(fitnessOperatorName, new SubtreeComplexityFitness());
             } else if (fitnessOperatorName.equals(Parameters.Operators.PROGRAM_SIZE_FITNESS)) {
                 fitnessFunctions.put(fitnessOperatorName, new ProgramSizeFitness());
+            } else if (fitnessOperatorName.equals(Parameters.Operators.MODEL_ERROR_FITNESS)) {
+                fitnessFunctions.put(fitnessOperatorName, new ModelErrorFitness(model));
+            } else if (fitnessOperatorName.equals(Parameters.Operators.MODEL_COMPLEXITY_FITNESS)) {
+                fitnessFunctions.put(fitnessOperatorName, new ModelComplexityFitness(model));
             } else {
                 System.err.format("Invalid fitness function %s specified for problem type %s%n",fitnessOperatorName);
                 System.exit(-1);
