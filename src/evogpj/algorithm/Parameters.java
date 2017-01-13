@@ -70,7 +70,8 @@ public final class Parameters {
         public static final String TREE_INIT_MAX_DEPTH = "tree_initial_max_depth";
         public static final String MEAN_POW = "fitness_mean_pow";
         public static final String MODEL = "model";
-        
+        public static final String FITNESS_FUNCTION_EVALUATOR = "fitness_function_evaluator";
+
         /**
          * Is the output variable for our problem integer-valued, such that we
          * can "cheat" and force our models to output integer values?
@@ -210,6 +211,12 @@ public final class Parameters {
 
         // MODEL values
         public static final String REPTREE_MODEL = "fitness.REPTreeModel";
+
+        // FITNESS_FUNCTION_EVALUATOR values
+        public static final String ORDINARY_FITNESS_FUNCTION_EVALUATOR = "fitness.OrdinaryFitnessFunctionEvaluator";
+        public static final String BP2A_FITNESS_FUNCTION_EVALUATOR = "fitness.BP2AFitnessFunctionEvaluator";
+        public static final String BP4A_FITNESS_FUNCTION_EVALUATOR = "fitness.BP4AFitnessFunctionEvaluator";
+        public static final String BP4_FITNESS_FUNCTION_EVALUATOR = "fitness.BP4FitnessFunctionEvaluator";
     }
 
     /**
@@ -294,6 +301,7 @@ public final class Parameters {
         public static final String ARCHIVE = Operators.BP_ARCHIVE;
         public static final String ARCHIVE_MUTATE = Operators.ARCHIVE_MUTATE;
         public static final String MODEL = Operators.REPTREE_MODEL;
+        public static final String FITNESS_FUNCTION_EVALUATOR = Operators.ORDINARY_FITNESS_FUNCTION_EVALUATOR;
 
         /**
          * To handle support for multiple fitness functions, this field can be
