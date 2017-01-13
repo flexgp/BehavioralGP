@@ -103,6 +103,8 @@ public class SymbRegMOO {
     protected String ARCHIVE_MUTATE = Parameters.Defaults.ARCHIVE_MUTATE;
     // DEFAULT MODEL
     protected String MODEL = Parameters.Defaults.MODEL;
+    // DEFAULT FITNESS FUNCTION EVALUATOR
+    protected String FITNESS_FUNCTION_EVALUATOR = Parameters.Defaults.FITNESS_FUNCTION_EVALUATOR;
     
     
     // ALL THE OPERATORS USED TO BUILD GP TREES
@@ -164,6 +166,7 @@ public class SymbRegMOO {
 
     // FITNESS FUNCTIONS
     protected LinkedHashMap<String, FitnessFunction> fitnessFunctions;
+    // FITNESS FUNCTION EVALUATOR
     protected FitnessFunctionEvaluator fitnessFunctionEvaluator;
     
     
@@ -318,6 +321,8 @@ public class SymbRegMOO {
                 ARCHIVE_MUTATE = props.getProperty(Parameters.Names.ARCHIVE_MUTATE);
         if (props.containsKey(Parameters.Names.MODEL))
                 MODEL = props.getProperty(Parameters.Names.MODEL);
+        if (props.containsKey(Parameters.Names.FITNESS_FUNCTION_EVALUATOR))
+                FITNESS_FUNCTION_EVALUATOR = props.getProperty(Parameters.Names.FITNESS_FUNCTION_EVALUATOR);
         
     }
 
@@ -415,7 +420,16 @@ public class SymbRegMOO {
                 System.exit(-1);
             }
         }
-        fitnessFunctionEvaluator = new OrdinaryFitnessFunctionEvaluator(fitnessFunctions);
+
+        if (FITNESS_FUNCTION_EVALUATOR.equals(Parameters.Operators.ORDINARY_FITNESS_FUNCTION_EVALUATOR)) {
+            fitnessFunctionEvaluator = new OrdinaryFitnessFunctionEvaluator(fitnessFunctions);
+        } else if (FITNESS_FUNCTION_EVALUATOR.equals(Parameters.Operators.BP2A_FITNESS_FUNCTION_EVALUATOR)) {
+            fitnessFunctionEvaluator = new BP2AFitnessFunctionEvaluator(fitnessFunctions, model, archive);
+        } else if (FITNESS_FUNCTION_EVALUATOR.equals(Parameters.Operators.BP4A_FITNESS_FUNCTION_EVALUATOR)) {
+            fitnessFunctionEvaluator = new BP4AFitnessFunctionEvaluator(fitnessFunctions, model, archive);
+        } else if (FITNESS_FUNCTION_EVALUATOR.equals(Parameters.Operators.BP4_FITNESS_FUNCTION_EVALUATOR)) {
+            fitnessFunctionEvaluator = new BP4FitnessFunctionEvaluator(fitnessFunctions, model);
+        }
 
         TreeGenerator treeGen = new TreeGenerator(rand, FUNC_SET, TERM_SET);
         if (INITIALIZE.equals(Parameters.Operators.TREE_INITIALIZE)) {
