@@ -101,6 +101,8 @@ public class SymbRegMOO {
     protected String ARCHIVE = Parameters.Defaults.ARCHIVE;
     // DEFAULT ARCHIVE MUTATE
     protected String ARCHIVE_MUTATE = Parameters.Defaults.ARCHIVE_MUTATE;
+    // DEFAULT MODEL
+    protected String MODEL = Parameters.Defaults.MODEL;
     
     
     // ALL THE OPERATORS USED TO BUILD GP TREES
@@ -157,6 +159,8 @@ public class SymbRegMOO {
     protected Archive archive;
     // ARCHIVE MUTATE
     protected ArchiveMutate archiveMutate;
+    // MODEL
+    protected Model model;
 
     // FITNESS FUNCTIONS
     protected LinkedHashMap<String, FitnessFunction> fitnessFunctions;
@@ -312,6 +316,8 @@ public class SymbRegMOO {
                 ARCHIVE = props.getProperty(Parameters.Names.ARCHIVE);
         if (props.containsKey(Parameters.Names.ARCHIVE_MUTATE))
                 ARCHIVE_MUTATE = props.getProperty(Parameters.Names.ARCHIVE_MUTATE);
+        if (props.containsKey(Parameters.Names.MODEL))
+                MODEL = props.getProperty(Parameters.Names.MODEL);
         
     }
 
@@ -344,15 +350,23 @@ public class SymbRegMOO {
         rand = new MersenneTwisterFast(seed);
         DataJava data = new CSVDataJava(PROBLEM);
 
+        double[] targetValuesArray = data.getTargetValues();
+        List<Double> targetValues = new ArrayList<>();
+        for (int i = 0; i < targetValuesArray.length; i++) {
+            targetValues.add(targetValuesArray[i]);
+        }
+
+        if (MODEL.equals(Parameters.Operators.REPTREE_MODEL)) {
+            model = new REPTreeModel(targetValues);
+        } else {
+            System.err.format("Invalid Model %s specified for problem type %s%n", MODEL);
+            System.exit(-1);
+        }
+
         // Set up archive
         if (ARCHIVE.equals(Parameters.Operators.SIMPLE_ARCHIVE)) {
             archive = new SimpleArchive(rand);
         } else if (ARCHIVE.equals(Parameters.Operators.REPTREE_ARCHIVE)) {
-            double[] targetValuesArray = data.getTargetValues();
-            List<Double> targetValues = new ArrayList<>();
-            for (int i = 0; i < targetValuesArray.length; i++) {
-                targetValues.add(targetValuesArray[i]);
-            }
             archive = new REPTreeArchive(rand, targetValues);
         } else if (ARCHIVE.equals(Parameters.Operators.BP_ARCHIVE)) {
             archive = new BPArchive(rand);
