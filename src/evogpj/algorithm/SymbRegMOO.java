@@ -101,6 +101,10 @@ public class SymbRegMOO {
     protected String ARCHIVE = Parameters.Defaults.ARCHIVE;
     // DEFAULT ARCHIVE MUTATE
     protected String ARCHIVE_MUTATE = Parameters.Defaults.ARCHIVE_MUTATE;
+    // DEFAULT MODEL
+    protected String MODEL = Parameters.Defaults.MODEL;
+    // DEFAULT FITNESS FUNCTION EVALUATOR
+    protected String FITNESS_FUNCTION_EVALUATOR = Parameters.Defaults.FITNESS_FUNCTION_EVALUATOR;
     
     
     // ALL THE OPERATORS USED TO BUILD GP TREES
@@ -157,9 +161,12 @@ public class SymbRegMOO {
     protected Archive archive;
     // ARCHIVE MUTATE
     protected ArchiveMutate archiveMutate;
+    // MODEL
+    protected Model model;
 
     // FITNESS FUNCTIONS
     protected LinkedHashMap<String, FitnessFunction> fitnessFunctions;
+    // FITNESS FUNCTION EVALUATOR
     protected FitnessFunctionEvaluator fitnessFunctionEvaluator;
     
     
@@ -312,6 +319,10 @@ public class SymbRegMOO {
                 ARCHIVE = props.getProperty(Parameters.Names.ARCHIVE);
         if (props.containsKey(Parameters.Names.ARCHIVE_MUTATE))
                 ARCHIVE_MUTATE = props.getProperty(Parameters.Names.ARCHIVE_MUTATE);
+        if (props.containsKey(Parameters.Names.MODEL))
+                MODEL = props.getProperty(Parameters.Names.MODEL);
+        if (props.containsKey(Parameters.Names.FITNESS_FUNCTION_EVALUATOR))
+                FITNESS_FUNCTION_EVALUATOR = props.getProperty(Parameters.Names.FITNESS_FUNCTION_EVALUATOR);
         
     }
 
@@ -344,23 +355,37 @@ public class SymbRegMOO {
         rand = new MersenneTwisterFast(seed);
         DataJava data = new CSVDataJava(PROBLEM);
 
+        double[] targetValuesArray = data.getTargetValues();
+        List<Double> targetValues = new ArrayList<>();
+        for (int i = 0; i < targetValuesArray.length; i++) {
+            targetValues.add(targetValuesArray[i]);
+        }
+
+        if (MODEL.equals(Parameters.Operators.REPTREE_MODEL)) {
+            model = new REPTreeModel(targetValues);
+        } else {
+            System.err.format("Invalid Model %s specified for problem type %s%n", MODEL);
+            System.exit(-1);
+        }
+
         // Set up archive
         if (ARCHIVE.equals(Parameters.Operators.SIMPLE_ARCHIVE)) {
             archive = new SimpleArchive(rand);
         } else if (ARCHIVE.equals(Parameters.Operators.REPTREE_ARCHIVE)) {
-            double[] targetValuesArray = data.getTargetValues();
-            List<Double> targetValues = new ArrayList<>();
-            for (int i = 0; i < targetValuesArray.length; i++) {
-                targetValues.add(targetValuesArray[i]);
-            }
             archive = new REPTreeArchive(rand, targetValues);
+        } else if (ARCHIVE.equals(Parameters.Operators.BP_ARCHIVE)) {
+            archive = new BPArchive(rand);
+        } else {
+            System.err.format("Invalid Archive %s specified for problem type %s%n", ARCHIVE);
+            System.exit(-1);
         }
 
         fitnessFunctions = splitFitnessOperators(FITNESS);
         for (String fitnessOperatorName : fitnessFunctions.keySet()) {
             if (fitnessOperatorName.equals(Parameters.Operators.SR_JAVA_FITNESS) ||
                     fitnessOperatorName.equals(Parameters.Operators.ORDINARY_GP_FITNESS) ||
-                    fitnessOperatorName.equals(Parameters.Operators.ARCHIVE_BUILDER_FITNESS)) {
+                    fitnessOperatorName.equals(Parameters.Operators.ARCHIVE_BUILDER_FITNESS) ||
+                    fitnessOperatorName.equals(Parameters.Operators.PROGRAM_ERROR_FITNESS)) {
                 minTarget = data.getTargetMin();
                 maxTarget = data.getTargetMax();
                 
@@ -377,17 +402,37 @@ public class SymbRegMOO {
                     fitnessFunction = new OrdinaryGP(data, MEAN_POW, COERCE_TO_INT, EXTERNAL_THREADS);
                 } else if (fitnessOperatorName.equals(Parameters.Operators.ARCHIVE_BUILDER_FITNESS)) {
                     fitnessFunction = new ArchiveBuilder(data, MEAN_POW, COERCE_TO_INT, EXTERNAL_THREADS, archive);
+                } else if (fitnessOperatorName.equals(Parameters.Operators.PROGRAM_ERROR_FITNESS)) {
+                    fitnessFunction = new ProgramErrorFitness(data, EXTERNAL_THREADS);
                 }
                 fitnessFunctions.put(fitnessOperatorName, fitnessFunction);
                 //modelScalerJava = new SRModelScalerJava(data);
             } else if (fitnessOperatorName.equals(Parameters.Operators.SUBTREE_COMPLEXITY_FITNESS)) {
                 fitnessFunctions.put(fitnessOperatorName, new SubtreeComplexityFitness());
+            } else if (fitnessOperatorName.equals(Parameters.Operators.PROGRAM_SIZE_FITNESS)) {
+                fitnessFunctions.put(fitnessOperatorName, new ProgramSizeFitness());
+            } else if (fitnessOperatorName.equals(Parameters.Operators.MODEL_ERROR_FITNESS)) {
+                fitnessFunctions.put(fitnessOperatorName, new ModelErrorFitness(model));
+            } else if (fitnessOperatorName.equals(Parameters.Operators.MODEL_COMPLEXITY_FITNESS)) {
+                fitnessFunctions.put(fitnessOperatorName, new ModelComplexityFitness(model));
             } else {
                 System.err.format("Invalid fitness function %s specified for problem type %s%n",fitnessOperatorName);
                 System.exit(-1);
             }
         }
-        fitnessFunctionEvaluator = new OrdinaryFitnessFunctionEvaluator(fitnessFunctions);
+
+        if (FITNESS_FUNCTION_EVALUATOR.equals(Parameters.Operators.ORDINARY_FITNESS_FUNCTION_EVALUATOR)) {
+            fitnessFunctionEvaluator = new OrdinaryFitnessFunctionEvaluator(fitnessFunctions);
+        } else if (FITNESS_FUNCTION_EVALUATOR.equals(Parameters.Operators.BP2A_FITNESS_FUNCTION_EVALUATOR)) {
+            fitnessFunctionEvaluator = new BP2AFitnessFunctionEvaluator(fitnessFunctions, model, archive);
+        } else if (FITNESS_FUNCTION_EVALUATOR.equals(Parameters.Operators.BP4A_FITNESS_FUNCTION_EVALUATOR)) {
+            fitnessFunctionEvaluator = new BP4AFitnessFunctionEvaluator(fitnessFunctions, model, archive);
+        } else if (FITNESS_FUNCTION_EVALUATOR.equals(Parameters.Operators.BP4_FITNESS_FUNCTION_EVALUATOR)) {
+            fitnessFunctionEvaluator = new BP4FitnessFunctionEvaluator(fitnessFunctions, model);
+        } else {
+            System.err.format("Invalid fitness function evaluator %s specified%n", FITNESS_FUNCTION_EVALUATOR);
+            System.exit(-1);
+        }
 
         TreeGenerator treeGen = new TreeGenerator(rand, FUNC_SET, TERM_SET);
         if (INITIALIZE.equals(Parameters.Operators.TREE_INITIALIZE)) {

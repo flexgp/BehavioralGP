@@ -33,6 +33,10 @@ public class ProgramErrorFitness extends FitnessFunction {
         this.numThreads = numThreads;
     }
 
+    public ProgramErrorFitness(DataJava data, int numThreads) {
+        this(data, 1.0, numThreads);
+    }
+
     public ProgramErrorFitness(DataJava data) {
         this(data, 1.0, Parameters.Defaults.EXTERNAL_THREADS);
     }
