@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import evogpj.math.means.Mean;
+import evogpj.operator.Operator;
 
 /**
  * Simple class to collect all default values and names, so they can be found in
@@ -204,6 +205,9 @@ public final class Parameters {
         public static final String SIMPLE_ARCHIVE = "fitness.SimpleArchive";
         public static final String REPTREE_ARCHIVE = "fitness.REPTreeArchive";
         public static final String BP_ARCHIVE = "fitness.BPArchive";
+
+        // MODEL values
+        public static final String REPTREE_MODEL = "fitness.REPTreeModel";
     }
 
     /**
@@ -287,6 +291,7 @@ public final class Parameters {
         public static final int ARCHIVE_CAPACITY = 50;
         public static final String ARCHIVE = Operators.BP_ARCHIVE;
         public static final String ARCHIVE_MUTATE = Operators.ARCHIVE_MUTATE;
+        public static final String MODEL = Operators.REPTREE_MODEL;
 
         /**
          * To handle support for multiple fitness functions, this field can be
