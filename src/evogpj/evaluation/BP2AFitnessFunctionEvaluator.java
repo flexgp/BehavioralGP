@@ -15,12 +15,12 @@ import java.util.Map;
 public class BP2AFitnessFunctionEvaluator implements FitnessFunctionEvaluator {
 
     protected List<FitnessFunction> noModelFitnessFunctions = new ArrayList<>();
-    protected BPModel model;
+    protected Model model;
     protected Archive archive;
 
     public BP2AFitnessFunctionEvaluator(
             LinkedHashMap<String, FitnessFunction> fitnessFunctions,
-            BPModel model,
+            Model model,
             Archive archive
     ) {
         this.model = model;

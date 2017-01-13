@@ -1,6 +1,6 @@
 package evogpj.evaluation.java;
 
-import evogpj.evaluation.BPModel;
+import evogpj.evaluation.Model;
 import evogpj.evaluation.FitnessFunction;
 
 /**
@@ -8,9 +8,9 @@ import evogpj.evaluation.FitnessFunction;
  */
 public abstract class ModelFitnessFunction extends FitnessFunction {
 
-    protected BPModel model;
+    protected Model model;
 
-    public ModelFitnessFunction(BPModel model) {
+    public ModelFitnessFunction(Model model) {
         this.model = model;
     }
 

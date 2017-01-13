@@ -13,11 +13,11 @@ public class BP4FitnessFunctionEvaluator implements FitnessFunctionEvaluator {
 
     protected List<FitnessFunction> noModelFitnessFunctions = new ArrayList<>();
     protected List<FitnessFunction> modelFitnessFunctions = new ArrayList<>();
-    protected BPModel model;
+    protected Model model;
 
     public BP4FitnessFunctionEvaluator(
             LinkedHashMap<String, FitnessFunction> fitnessFunctions,
-            BPModel model
+            Model model
     ) {
         this.model = model;
         for (String name : fitnessFunctions.keySet()) {
