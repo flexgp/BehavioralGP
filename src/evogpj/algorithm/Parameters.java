@@ -203,6 +203,7 @@ public final class Parameters {
         // ARCHIVE values
         public static final String SIMPLE_ARCHIVE = "fitness.SimpleArchive";
         public static final String REPTREE_ARCHIVE = "fitness.REPTreeArchive";
+        public static final String BP_ARCHIVE = "fitness.BPArchive";
     }
 
     /**
@@ -284,7 +285,7 @@ public final class Parameters {
         public static final String REPRODUCE = Operators.ORDINARY_REPRODUCE;
 
         public static final int ARCHIVE_CAPACITY = 50;
-        public static final String ARCHIVE = Operators.SIMPLE_ARCHIVE;
+        public static final String ARCHIVE = Operators.BP_ARCHIVE;
         public static final String ARCHIVE_MUTATE = Operators.ARCHIVE_MUTATE;
 
         /**
