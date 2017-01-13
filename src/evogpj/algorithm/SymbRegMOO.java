@@ -429,6 +429,9 @@ public class SymbRegMOO {
             fitnessFunctionEvaluator = new BP4AFitnessFunctionEvaluator(fitnessFunctions, model, archive);
         } else if (FITNESS_FUNCTION_EVALUATOR.equals(Parameters.Operators.BP4_FITNESS_FUNCTION_EVALUATOR)) {
             fitnessFunctionEvaluator = new BP4FitnessFunctionEvaluator(fitnessFunctions, model);
+        } else {
+            System.err.format("Invalid fitness function evaluator %s specified%n", FITNESS_FUNCTION_EVALUATOR);
+            System.exit(-1);
         }
 
         TreeGenerator treeGen = new TreeGenerator(rand, FUNC_SET, TERM_SET);
