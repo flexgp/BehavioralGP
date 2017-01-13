@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Created by stevenfine on 1/11/17.
  */
-public interface BPModel {
+public interface Model {
 
     /**
      * Take in the Population's genetic material and build an ML model to

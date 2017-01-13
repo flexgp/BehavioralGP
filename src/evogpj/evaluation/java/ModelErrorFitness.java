@@ -1,7 +1,7 @@
 package evogpj.evaluation.java;
 
 import evogpj.algorithm.Parameters;
-import evogpj.evaluation.BPModel;
+import evogpj.evaluation.Model;
 import evogpj.evaluation.IndividualModelValueNotDefinedException;
 import evogpj.gp.Individual;
 import evogpj.gp.Population;
@@ -14,7 +14,7 @@ public class ModelErrorFitness extends ModelFitnessFunction {
     public static final String FITNESS_KEY = Parameters.Operators.MODEL_ERROR_FITNESS;
     public final Boolean isMaximizingFunction = false;
 
-    public ModelErrorFitness(BPModel model) {
+    public ModelErrorFitness(Model model) {
         super(model);
     }
 

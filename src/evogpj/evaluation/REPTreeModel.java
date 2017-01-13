@@ -16,7 +16,7 @@ import java.util.*;
 /**
  * Created by stevenfine on 1/12/17.
  */
-public class REPTreeModel implements BPModel {
+public class REPTreeModel implements Model {
 
     protected List<Double> targetValues;
     protected Map<ImmutableList<Double>, TreeNode> processedGeneticMaterial;
