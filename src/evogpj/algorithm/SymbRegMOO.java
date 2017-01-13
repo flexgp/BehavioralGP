@@ -354,6 +354,11 @@ public class SymbRegMOO {
                 targetValues.add(targetValuesArray[i]);
             }
             archive = new REPTreeArchive(rand, targetValues);
+        } else if (ARCHIVE.equals(Parameters.Operators.BP_ARCHIVE)) {
+            archive = new BPArchive(rand);
+        } else {
+            System.err.format("Invalid Archive %s specified for problem type %s%n", ARCHIVE);
+            System.exit(-1);
         }
 
         fitnessFunctions = splitFitnessOperators(FITNESS);
