@@ -69,6 +69,8 @@ public final class Parameters {
         public static final String SEED = "rng_seed";
         public static final String TREE_INIT_MAX_DEPTH = "tree_initial_max_depth";
         public static final String MEAN_POW = "fitness_mean_pow";
+        public static final String MODEL = "model";
+        
         /**
          * Is the output variable for our problem integer-valued, such that we
          * can "cheat" and force our models to output integer values?
