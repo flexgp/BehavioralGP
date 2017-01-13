@@ -1,6 +1,7 @@
 package evogpj.evaluation.java;
 
 import evogpj.algorithm.Parameters;
+import evogpj.evaluation.FitnessFunction;
 import evogpj.evaluation.Model;
 import evogpj.evaluation.IndividualModelValueNotDefinedException;
 import evogpj.gp.Individual;
@@ -29,6 +30,9 @@ public class ModelErrorFitness extends ModelFitnessFunction {
             fitness = model.getModelError(ind);
         } catch (IndividualModelValueNotDefinedException e) {
             e.printStackTrace();
+        }
+        if (fitness < FitnessFunction.PRECISION) {
+            fitness = 0;
         }
         ind.setFitness(ModelErrorFitness.FITNESS_KEY, fitness);
     }

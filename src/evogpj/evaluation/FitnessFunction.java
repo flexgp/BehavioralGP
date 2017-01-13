@@ -29,6 +29,8 @@ import evogpj.gp.Population;
  */
 public abstract class FitnessFunction {
 
+	protected static final double PRECISION = Math.pow(10, -15);
+
 	// used to access this fitness function's position in the
 	// gp.Individual.fitnesses HashMap. Each subclass must
 	// define this value

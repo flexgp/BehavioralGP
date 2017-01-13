@@ -22,7 +22,10 @@ public class ProgramSizeFitness extends FitnessFunction {
     private void eval(Individual ind) {
         Tree t = (Tree) ind.getGenotype();
         Double size = (double) t.getSize();
-        Double fitness = 1.0 - 1.0/size;
+        double fitness = 1.0 - 1.0/size;
+        if (fitness < FitnessFunction.PRECISION) {
+            fitness = 0;
+        }
         ind.setFitness(ProgramSizeFitness.FITNESS_KEY, fitness);
     }
 
