@@ -33,11 +33,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 import evogpj.operator.*;
 import evogpj.sort.CrowdingSort;
@@ -688,7 +684,9 @@ public class SymbRegMOO {
             
         }
 
-        String firstFitnessFunction = fitnessFunctions.keySet().iterator().next();
+        Iterator<String> fitnessFunctionIterator = fitnessFunctions.keySet().iterator();
+        String firstFitnessFunction = fitnessFunctionIterator.next();
+        String secondFitnessFunction = fitnessFunctionIterator.next();
         this.saveText(MODELS_PATH, "", false);
         for(Individual ind:bestPop){
             if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
@@ -709,7 +707,7 @@ public class SymbRegMOO {
             if(ind.getFitness(firstFitnessFunction) > acc.getFitness(firstFitnessFunction)){
                 acc = ind;
             }
-            if(ind.getFitness(Parameters.Operators.SUBTREE_COMPLEXITY_FITNESS) < comp.getFitness(Parameters.Operators.SUBTREE_COMPLEXITY_FITNESS)){
+            if(ind.getFitness(secondFitnessFunction) < comp.getFitness(secondFitnessFunction)){
                 comp = ind;
             }
             if(ind.getEuclideanDistance()<knee.getEuclideanDistance()){
