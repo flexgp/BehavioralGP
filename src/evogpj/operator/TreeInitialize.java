@@ -60,17 +60,19 @@ public class TreeInitialize extends RandomOperator implements Initialize {
 	@Override
 	public Population initialize(int popSize) {
 		Population ret = new Population();
-		// number of individuals to generate per depth, per type (grow or full)
-		int inds_per_d = popSize / 2 / TREE_INITIAL_MAX_DEPTH;
 
-		for (int depth = 1; depth <= TREE_INITIAL_MAX_DEPTH; depth++) {
-			for (int i = 0; i < inds_per_d; i++) {
-                            Tree t = treeGen.generateTree(depth, true);
-                            Individual ind = new Individual(t);
-                            ret.add(ind);
-                            //ret.add(new Individual(treeGen.generateTree(depth, true)));
-                            ret.add(new Individual(treeGen.generateTree(depth, false)));
-			}
+		// If popSize is not divisible by TREE_INITIAL_MAX_DEPTH will generate more trees with smaller depths.
+		for (int i = 0; i < popSize/2; i++) {
+			int depth = (i % TREE_INITIAL_MAX_DEPTH) + 1;
+			Individual ind1 = new Individual(treeGen.generateTree(depth, true));
+			Individual ind2 = new Individual(treeGen.generateTree(depth, false));
+			ret.add(ind1);
+			ret.add(ind2);
+		}
+		if (ret.size() < popSize) {
+			int depth = ((popSize/2) % TREE_INITIAL_MAX_DEPTH) + 1;
+			Individual ind = new Individual(treeGen.generateTree(depth, true));
+			ret.add(ind);
 		}
 		return ret;
 	}
