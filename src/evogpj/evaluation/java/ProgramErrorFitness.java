@@ -99,6 +99,8 @@ public class ProgramErrorFitness extends FitnessFunction {
         double fitness = 1.0 - 1.0/(1.0 + error);
         if (fitness < FitnessFunction.PRECISION) {
             fitness = 0;
+        } else if (Double.isNaN(fitness)) {
+            fitness = 1.0;
         }
         ind.setFitness(ProgramErrorFitness.FITNESS_KEY, fitness);
         ind.setGeneticMaterial(geneticMaterial);
