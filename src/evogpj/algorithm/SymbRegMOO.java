@@ -703,11 +703,15 @@ public class SymbRegMOO {
         Individual knee = paretoFront.get(0);
         paretoFront.calculateEuclideanDistances(fitnessFunctions);
         this.saveText(PARETO_PATH, "", false);
+        FitnessFunction firstFitness = fitnessFunctions.get(firstFitnessFunction);
+        FitnessFunction secondFitness = fitnessFunctions.get(secondFitnessFunction);
         for(Individual ind:paretoFront){
-            if(ind.getFitness(firstFitnessFunction) > acc.getFitness(firstFitnessFunction)){
+            if((firstFitness.isMaximizingFunction() && ind.getFitness(firstFitnessFunction) > acc.getFitness(firstFitnessFunction)) ||
+                    (!firstFitness.isMaximizingFunction() && ind.getFitness(firstFitnessFunction) < acc.getFitness(firstFitnessFunction))){
                 acc = ind;
             }
-            if(ind.getFitness(secondFitnessFunction) < comp.getFitness(secondFitnessFunction)){
+            if((secondFitness.isMaximizingFunction() && ind.getFitness(secondFitnessFunction) > comp.getFitness(secondFitnessFunction)) ||
+                    (!secondFitness.isMaximizingFunction() && ind.getFitness(secondFitnessFunction) < comp.getFitness(secondFitnessFunction))){
                 comp = ind;
             }
             if(ind.getEuclideanDistance()<knee.getEuclideanDistance()){
