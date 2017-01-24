@@ -326,14 +326,15 @@ public class TreeNode implements Serializable {
 	 *         terminals of the subtree.
 	 */
 	public int getSubtreeDepth() {
-            if (subtreeDepth == -1) {
-                    subtreeDepth = 0;
-                    for (TreeNode child : children) {
-                            if (child.getSubtreeDepth() > subtreeDepth)
-                                    subtreeDepth = child.getSubtreeDepth();
-                    }
-            }
-            return subtreeDepth;
+		if (subtreeDepth == -1) {
+			subtreeDepth = 0;
+			for (TreeNode child : children) {
+				int potentialDepth = child.getSubtreeDepth() + 1;
+				if (potentialDepth > subtreeDepth)
+					subtreeDepth = potentialDepth;
+			}
+		}
+		return subtreeDepth;
 	}
 
     /**
