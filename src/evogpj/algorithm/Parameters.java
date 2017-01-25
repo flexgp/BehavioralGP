@@ -213,6 +213,7 @@ public final class Parameters {
         // MODEL values
         public static final String REPTREE_MODEL = "fitness.REPTreeModel";
         public static final String PYTHON_MODEL = "fitness.PythonModel";
+        public static final String RANDOM_MODEL = "fitness.RandomModel";
 
         // FITNESS_FUNCTION_EVALUATOR values
         public static final String ORDINARY_FITNESS_FUNCTION_EVALUATOR = "fitness.OrdinaryFitnessFunctionEvaluator";
