@@ -19,6 +19,7 @@ package main;
 
 import evogpj.algorithm.Parameters;
 import evogpj.algorithm.SymbRegMOO;
+import evogpj.genotype.Tree;
 import evogpj.gp.Individual;
 import evogpj.test.TestModels;
 import java.io.File;
@@ -50,6 +51,49 @@ public class SRLearnerMenuManager {
         System.err.println("or");
         System.err.println("java -jar sr.jar -test path_to_data -integer true -scaled path_to_scaled_models");
         System.err.println();
+    }
+
+    public void parseSymbolicRegressionRun(String args[]) throws IOException {
+        String dataPath;
+        int numMinutes = 0;
+        SymbRegMOO srEvoGPj;
+        if (args.length==8) {
+            dataPath = args[1];
+            if (args[2].equals("-minutes")) {
+                numMinutes = Integer.valueOf(args[3]);
+                if(args[4].equals("-properties")){ // JAVA WITH PROPERTIES
+                    String propsFile = args[5];
+                    if (args[6].equals("-runs")) {
+                        int numRuns = Integer.parseInt(args[7]);
+                        double totalFitness = 0;
+                        double totalSize = 0;
+                        Properties props = new Properties();
+                        for (int i = 0; i < numRuns; i++) {
+                            props.clear();
+                            props.put(Parameters.Names.PROBLEM, dataPath);
+                            props.put(Parameters.Names.SEED, String.valueOf(System.currentTimeMillis()));
+                            srEvoGPj = new SymbRegMOO(props,propsFile,numMinutes*60);
+                            Individual bestIndi = srEvoGPj.run_population();
+                            totalFitness += bestIndi.getFitness();
+                            totalSize += ((Tree) bestIndi.getGenotype()).getSize();
+                        }
+                        double averageFitness = totalFitness/(double) numRuns;
+                        double averageSize = totalSize/(double) numRuns;
+                        System.out.format("Average fitness: %s; Average size: %s", averageFitness, averageSize);
+                    }
+                    // run evogpj with properties file and modified properties
+                }else{
+                    printUsage();
+                    System.exit(-1);
+                }
+            }else{
+                printUsage();
+                System.exit(-1);
+            }
+        } else {
+            printUsage();
+            System.exit(-1);
+        }
     }
     
     public void parseSymbolicRegressionTrain(String args[]) throws IOException{
@@ -212,6 +256,9 @@ public class SRLearnerMenuManager {
             System.exit(-1);
         }else{
             switch (args[0]) {
+                case "-run":
+                    m.parseSymbolicRegressionRun(args);
+                    break;
                 case "-train":
                     m.parseSymbolicRegressionTrain(args);
                     break;
