@@ -689,7 +689,7 @@ public class SymbRegMOO {
         bestPop = new Population();
         // get the best individual
         best = pop.get(0);
-        System.out.println(best.getFitnesses());
+//        System.out.println(best.getFitnesses());
         // record the best individual in models.txt
         bestPop.add(best);
         long timeStamp = (System.currentTimeMillis() - startTime) / 1000;
@@ -704,11 +704,11 @@ public class SymbRegMOO {
             }
             // print information about this generation
             //System.out.format("Statistics: %d " + calculateStats() + "%n", generation);
-            System.out.format("Best individual for generation %d:%n", generation);
+//            System.out.format("Best individual for generation %d:%n", generation);
             double MSE = best.getFitness();
             MSE = ((1-MSE) / (MSE + 1));
-            System.out.println(best.getFitnesses());
-            System.out.println(MSE);
+//            System.out.println(best.getFitnesses());
+//            System.out.println(MSE);
             System.out.flush();
             bestPop.add(best);
             timeStamp = (System.currentTimeMillis() - startTime) / 1000;
