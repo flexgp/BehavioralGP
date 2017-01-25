@@ -71,7 +71,7 @@ public class SRLearnerMenuManager {
                         for (int i = 0; i < numRuns; i++) {
                             props.clear();
                             props.put(Parameters.Names.PROBLEM, dataPath);
-                            props.put(Parameters.Names.SEED, String.valueOf(System.currentTimeMillis()));
+                            props.put(Parameters.Names.SEED, String.valueOf(System.currentTimeMillis() + i));
                             srEvoGPj = new SymbRegMOO(props,propsFile,numMinutes*60);
                             Individual bestIndi = srEvoGPj.run_population();
                             totalFitness += bestIndi.getFitness();
