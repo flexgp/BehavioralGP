@@ -656,7 +656,6 @@ public class SymbRegMOO {
     * @return the best individual found.
     */
     public Individual run_population() throws IOException {
-        Individual bestOnCrossVal = null;
         bestPop = new Population();
         // get the best individual
         best = pop.get(0);
@@ -768,7 +767,7 @@ public class SymbRegMOO {
             this.saveText(KNEE_PATH, knee.getLassoIntercept() + ",", true);
         }
         this.saveText(KNEE_PATH, knee.toString() + "\n", true);
-        return bestOnCrossVal;
+        return acc;
     }
     
     public boolean stopCriteria(){
