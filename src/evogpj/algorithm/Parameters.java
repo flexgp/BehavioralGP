@@ -77,6 +77,7 @@ public final class Parameters {
          * can "cheat" and force our models to output integer values?
          */
         public static final String COERCE_TO_INT = "integer_fitness";
+        public static final String ALLOW_DUPLICATE_TREES = "allow_duplicate_trees";
         public static final String BROOD_SIZE = "brood_size";
         public static final String KOZA_FUNC_RATE = "koza_function_rate";
         public static final String TREE_XOVER_MAX_DEPTH = "tree_xover_max_depth";
@@ -289,6 +290,7 @@ public final class Parameters {
          * regression over Integers. Set this to true to do so.
          */
         public static final boolean COERCE_TO_INT = false;
+        public static final boolean ALLOW_DUPLICATE_TREES = true;
 
         public static final String INITIALIZE = Operators.TREE_INITIALIZE;
         public static final String SELECT = Operators.CROWD_SELECT;
