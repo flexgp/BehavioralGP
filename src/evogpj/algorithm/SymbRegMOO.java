@@ -56,6 +56,8 @@ public class SymbRegMOO {
     // INTEGER TARGETS
     protected boolean COERCE_TO_INT = Parameters.Defaults.COERCE_TO_INT;
     protected int TARGET_NUMBER = 1;
+    // ALLOW DUPLICATE TREES
+    protected boolean ALLOW_DUPLICATE_TREES = Parameters.Defaults.ALLOW_DUPLICATE_TREES;
     // FEATURES
     protected List<String> TERM_SET;    
     
@@ -274,6 +276,8 @@ public class SymbRegMOO {
             MEAN_POW = Integer.valueOf(props.getProperty(Parameters.Names.MEAN_POW));
         if (props.containsKey(Parameters.Names.COERCE_TO_INT))
             COERCE_TO_INT = Boolean.parseBoolean(props.getProperty(Parameters.Names.COERCE_TO_INT));
+        if (props.containsKey(Parameters.Names.ALLOW_DUPLICATE_TREES))
+            ALLOW_DUPLICATE_TREES = Boolean.parseBoolean(props.getProperty(Parameters.Names.ALLOW_DUPLICATE_TREES));
         if (props.containsKey(Parameters.Names.FUNCTION_SET)) {
             String funcs[] = props.getProperty(Parameters.Names.FUNCTION_SET).split(" ");
             FUNC_SET = new ArrayList<String>();
@@ -511,7 +515,8 @@ public class SymbRegMOO {
                     MUTATION_RATE,
                     XOVER_RATE,
                     ARCHIVE_MUTATION_RATE,
-                    POP_SIZE
+                    POP_SIZE,
+                    ALLOW_DUPLICATE_TREES
             );
         } else {
             System.err.format("Invalid reproduce function %s specified%n",REPRODUCE);

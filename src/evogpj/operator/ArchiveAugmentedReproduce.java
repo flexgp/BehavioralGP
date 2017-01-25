@@ -5,6 +5,9 @@ import evogpj.gp.Individual;
 import evogpj.gp.MersenneTwisterFast;
 import evogpj.gp.Population;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by stevenfine on 9/16/16.
  */
@@ -20,6 +23,10 @@ public class ArchiveAugmentedReproduce extends RandomOperator implements Reprodu
     protected final double ARCHIVE_MUTATION_RATE;
     protected final int POP_SIZE;
 
+    protected final boolean allowDuplicateTrees;
+    protected final Set<String> existingTrees = new HashSet<>();
+    protected boolean resetExistingTreesIfChildPopIsEmpty = true;
+
     /**
      * Reproduce operator that in addition to performing Mutate and Crossover
      * performs ArchiveMutate
@@ -32,6 +39,7 @@ public class ArchiveAugmentedReproduce extends RandomOperator implements Reprodu
      * @param xoverRate
      * @param archiveMutationRate
      * @param popSize
+     * @param allowDuplicateTrees
      */
     public ArchiveAugmentedReproduce(
             MersenneTwisterFast rand,
@@ -42,13 +50,15 @@ public class ArchiveAugmentedReproduce extends RandomOperator implements Reprodu
             double mutationRate,
             double xoverRate,
             double archiveMutationRate,
-            int popSize
+            int popSize,
+            boolean allowDuplicateTrees
     ) {
         super(rand);
         this.select = select;
         this.ordinaryMutate = ordinaryMutate;
         this.xover = xover;
         this.archiveMutate = archiveMutate;
+        this.allowDuplicateTrees = allowDuplicateTrees;
 
         MUTATION_RATE = mutationRate;
         XOVER_RATE = xoverRate;
@@ -57,6 +67,14 @@ public class ArchiveAugmentedReproduce extends RandomOperator implements Reprodu
     }
 
     public void addChildren(Population childPop, Population pop) throws GPException {
+        if (!allowDuplicateTrees && resetExistingTreesIfChildPopIsEmpty && childPop.size() == 0) {
+            resetExistingTreesIfChildPopIsEmpty = false;
+            existingTrees.clear();
+            for (Individual ind : pop) {
+                existingTrees.add(ind.toString());
+            }
+        }
+
         Individual p1 = select.select(pop);
         double prob = rand.nextDouble();
         // Select exactly one operator to use
@@ -64,19 +82,28 @@ public class ArchiveAugmentedReproduce extends RandomOperator implements Reprodu
             Individual p2 = select.select(pop);
             Population children = xover.crossOver(p1, p2);
             for (Individual ind : children) {
-                if (!ind.equals(p1) && !ind.equals(p2) && (childPop.size() < POP_SIZE)) {
+                if (allowDuplicateTrees && !ind.equals(p1) && !ind.equals(p2) && (childPop.size() < POP_SIZE)) {
                     childPop.add(ind);
+                } else if (!allowDuplicateTrees && !existingTrees.contains(ind.toString())) {
+                    childPop.add(ind);
+                    resetExistingTreesIfChildPopIsEmpty = true;
                 }
             }
         } else if (prob < MUTATION_RATE + XOVER_RATE) {
             Individual ind = ordinaryMutate.mutate(p1);
-            if (!ind.equals(p1) && childPop.size() < POP_SIZE) {
+            if (allowDuplicateTrees && !ind.equals(p1) && childPop.size() < POP_SIZE) {
                 childPop.add(ind);
+            } else if (!allowDuplicateTrees && !existingTrees.contains(ind.toString())) {
+                childPop.add(ind);
+                resetExistingTreesIfChildPopIsEmpty = true;
             }
         } else if (prob < ARCHIVE_MUTATION_RATE + MUTATION_RATE + XOVER_RATE) {
             Individual ind = archiveMutate.mutate(p1);
-            if (!ind.equals(p1) && childPop.size() < POP_SIZE) {
+            if (allowDuplicateTrees && !ind.equals(p1) && childPop.size() < POP_SIZE) {
                 childPop.add(ind);
+            } else if (!allowDuplicateTrees && !existingTrees.contains(ind.toString())) {
+                childPop.add(ind);
+                resetExistingTreesIfChildPopIsEmpty = true;
             }
         }
     }
