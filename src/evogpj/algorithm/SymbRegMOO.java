@@ -363,6 +363,8 @@ public class SymbRegMOO {
 
         if (MODEL.equals(Parameters.Operators.REPTREE_MODEL)) {
             model = new REPTreeModel(targetValues);
+        } else if (MODEL.equals(Parameters.Operators.FULL_POP_REPTREE_MODEL)) {
+            model = new FullPopulationREPTreeModel(targetValues);
         } else if (MODEL.equals(Parameters.Operators.PYTHON_MODEL)) {
             model = new PythonModel(targetValues, EXTERNAL_THREADS);
         } else if (MODEL.equals(Parameters.Operators.RANDOM_MODEL)) {
