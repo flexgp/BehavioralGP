@@ -369,6 +369,8 @@ public class SymbRegMOO {
             model = new PythonModel(targetValues, EXTERNAL_THREADS);
         } else if (MODEL.equals(Parameters.Operators.RANDOM_MODEL)) {
             model = new RandomModel(targetValues, rand);
+        } else if (MODEL.equals(Parameters.Operators.LASSO_MODEL)) {
+            model = new LASSOModel(targetValues);
         } else {
             System.err.format("Invalid Model %s specified for problem type %s%n", MODEL);
             System.exit(-1);
