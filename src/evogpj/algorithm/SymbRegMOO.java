@@ -363,6 +363,8 @@ public class SymbRegMOO {
 
         if (MODEL.equals(Parameters.Operators.REPTREE_MODEL)) {
             model = new REPTreeModel(targetValues);
+        } else if (MODEL.equals(Parameters.Operators.PYTHON_MODEL)) {
+            model = new PythonModel(targetValues, EXTERNAL_THREADS);
         } else {
             System.err.format("Invalid Model %s specified for problem type %s%n", MODEL);
             System.exit(-1);
