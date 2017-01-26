@@ -5,10 +5,7 @@ import evogpj.genotype.TreeGenerator;
 import evogpj.genotype.TreeNode;
 import evogpj.gp.MersenneTwisterFast;
 import weka.classifiers.trees.REPTree;
-import weka.core.Attribute;
-import weka.core.FastVector;
-import weka.core.Instance;
-import weka.core.Instances;
+import weka.core.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,25 +49,25 @@ public class REPTreeArchive extends UnweightedArchive {
         }
 
         // Build REPTree classifier.
-        FastVector fvWekaAttributes = new FastVector(featureNamesList.size() + 1);
+        ArrayList<Attribute> fvWekaAttributes = new ArrayList<>(featureNamesList.size() + 1);
         for (String name : featureNamesList) {
-            fvWekaAttributes.addElement(new Attribute(name));
+            fvWekaAttributes.add(new Attribute(name));
         }
-        fvWekaAttributes.addElement(new Attribute("OUTPUT"));
+        fvWekaAttributes.add(new Attribute("OUTPUT"));
 
         Instances trainingData = new Instances("Rel", fvWekaAttributes, numberOfFitnessCases);
         trainingData.setClassIndex(trainingData.numAttributes() - 1);
         for (int i = 0; i < numberOfFitnessCases; i++) {
-            Instance dataPoint = new Instance(featureNamesList.size() + 1);
+            Instance dataPoint = new DenseInstance(featureNamesList.size() + 1);
             for (int j = 0; j < featureNamesList.size(); j++) {
                 String name = featureNamesList.get(j);
                 dataPoint.setValue(
-                        (Attribute) fvWekaAttributes.elementAt(j),
+                        fvWekaAttributes.get(j),
                         featureNamesMap.get(name).get(i)
                 );
             }
             dataPoint.setValue(
-                    (Attribute) fvWekaAttributes.elementAt(featureNamesList.size()),
+                    fvWekaAttributes.get(featureNamesList.size()),
                     targetValues.get(i)
             );
             trainingData.add(dataPoint);
