@@ -46,6 +46,9 @@ public class CrowdingSort {
 		// comparator, use it to access the population when making comparisons
 		// get difference between first and last individual for normalization
 		// then for each individual, update the crowding distance with the distance between neighbors, divided by max-min
+		for (Individual i : p) {
+			i.setCrowdingDistance(1.0);
+		}
 		for (String fitnessFuncName : f.keySet()) {
 			IntegerComparator ic = new IntegerComparator(p, fitnessFuncName);
 			ArrayList<Integer> indices = getRange(0, p.size());
