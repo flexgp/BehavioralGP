@@ -22,8 +22,8 @@ import evogpj.algorithm.SymbRegMOO;
 import evogpj.genotype.Tree;
 import evogpj.gp.Individual;
 import evogpj.test.TestModels;
-import java.io.File;
-import java.io.IOException;
+
+import java.io.*;
 import java.util.Properties;
 
 /**
@@ -57,16 +57,22 @@ public class SRLearnerMenuManager {
         String dataPath;
         int numMinutes = 0;
         SymbRegMOO srEvoGPj;
-        if (args.length==8) {
+        if (args.length==10) {
             dataPath = args[1];
             if (args[2].equals("-minutes")) {
                 numMinutes = Integer.valueOf(args[3]);
                 if(args[4].equals("-properties")){ // JAVA WITH PROPERTIES
                     String propsFile = args[5];
-                    if (args[6].equals("-runs")) {
+                    if (args[6].equals("-runs") && args[8].equals("-filename")) {
                         int numRuns = Integer.parseInt(args[7]);
+                        String filename = args[9];
                         double totalFitness = 0;
                         double totalSize = 0;
+                        long totalTime = 0;
+                        long currentTime = System.currentTimeMillis();
+                        saveText(filename, "", false);
+                        System.out.format("Running %s\n", filename);
+                        System.out.flush();
                         Properties props = new Properties();
                         for (int i = 0; i < numRuns; i++) {
                             props.clear();
@@ -74,12 +80,21 @@ public class SRLearnerMenuManager {
                             props.put(Parameters.Names.SEED, String.valueOf(System.currentTimeMillis() + i));
                             srEvoGPj = new SymbRegMOO(props,propsFile,numMinutes*60);
                             Individual bestIndi = srEvoGPj.run_population();
-                            totalFitness += bestIndi.getFitness();
-                            totalSize += ((Tree) bestIndi.getGenotype()).getSize();
+                            double fitness = bestIndi.getFitness();
+                            int size = ((Tree) bestIndi.getGenotype()).getSize();
+                            long time = System.currentTimeMillis() - currentTime;
+                            totalFitness += fitness;
+                            totalSize += (double) size;
+                            totalTime += time;
+                            saveText(filename, Double.toString(fitness) + "," + Integer.toString(size) + "," + Long.toString(time) + "\n", true);
+                            currentTime = System.currentTimeMillis();
                         }
                         double averageFitness = totalFitness/(double) numRuns;
                         double averageSize = totalSize/(double) numRuns;
-                        System.out.format("Average fitness: %s; Average size: %s", averageFitness, averageSize);
+                        double averageTime = (double) totalTime/(double) numRuns;
+//                        System.out.format("Average fitness: %s; Average size: %s", averageFitness, averageSize);
+                        saveText(filename, "Average:", true);
+                        saveText(filename, Double.toString(averageFitness) + "," + Double.toString(averageSize) + "," + Double.toString(averageTime) + "\n", true);
                     }
                     // run evogpj with properties file and modified properties
                 }else{
@@ -274,6 +289,24 @@ public class SRLearnerMenuManager {
                     System.exit(-1);
                     break;
             }
+        }
+    }
+
+    /**
+     * Save text to a filepath
+     * @param filepath
+     * @param text
+     * @param append
+     */
+    protected void saveText(String filepath, String text, Boolean append) {
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(filepath,append));
+            PrintWriter printWriter = new PrintWriter(bw);
+            printWriter.write(text);
+            printWriter.flush();
+            printWriter.close();
+        } catch (IOException e) {
+            System.exit(-1);
         }
     }
 }
