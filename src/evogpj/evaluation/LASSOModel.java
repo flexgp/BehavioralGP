@@ -65,9 +65,13 @@ public class LASSOModel implements Model {
         int numberOfFitnessCases = targetValues.size();
 
         Map<Integer, ImmutableList<Double>> indexToSemantics = new HashMap<>();
+        Map<ImmutableList<Double>, Integer> semanticsToIndex = new HashMap<>();
         int index = 0;
         for (Map.Entry entry : geneticMaterial.entrySet()) {
-            indexToSemantics.put(index++, (ImmutableList<Double>) entry.getKey());
+            ImmutableList<Double> semantics = (ImmutableList<Double>) entry.getKey();
+            indexToSemantics.put(index, semantics);
+            semanticsToIndex.put(semantics, index);
+            index++;
         }
 
         float[][] trace = new float[numberOfFitnessCases][numberOfSubtrees];
@@ -130,9 +134,9 @@ public class LASSOModel implements Model {
 
         // Place geneticMaterial in processedGeneticMaterial
         if (!usefulSubtrees.isEmpty()) {
-            double weight = 1.0 / ((1.0 + error) * usefulSubtrees.size());
             for (ImmutableList<Double> semantics : usefulSubtrees) {
                 TreeNode syntax = geneticMaterial.get(semantics);
+                double weight = Math.abs(lassoWeights[semanticsToIndex.get(semantics)]);
                 if (processedGeneticMaterial.containsKey(semantics)) {
                     int oldSize = processedGeneticMaterial.get(semantics).getSubtreeSize();
                     int newSize = syntax.getSubtreeSize();
