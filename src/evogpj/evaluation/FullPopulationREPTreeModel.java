@@ -6,10 +6,7 @@ import evogpj.gp.Individual;
 import evogpj.gp.Population;
 import weka.classifiers.Evaluation;
 import weka.classifiers.trees.REPTree;
-import weka.core.Attribute;
-import weka.core.FastVector;
-import weka.core.Instance;
-import weka.core.Instances;
+import weka.core.*;
 
 import java.util.*;
 
@@ -92,7 +89,7 @@ public class FullPopulationREPTreeModel implements Model {
         Instances trainingData = new Instances("Rel", fvWekaAttributes, numberOfFitnessCases);
         trainingData.setClassIndex(trainingData.numAttributes() - 1);
         for (int i = 0; i < numberOfFitnessCases; i++) {
-            Instance dataPoint = new Instance(featureNamesList.size() + 1);
+            Instance dataPoint = new DenseInstance(featureNamesList.size() + 1);
             for (int j = 0; j < featureNamesList.size(); j++) {
                 String name = featureNamesList.get(j);
                 dataPoint.setValue(
