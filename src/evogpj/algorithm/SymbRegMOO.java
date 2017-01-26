@@ -359,7 +359,7 @@ public class SymbRegMOO {
      * 
      */
     private void create_operators(Properties props, long seed) throws IOException {
-        System.out.println("Running evogpj with seed: " + seed);
+//        System.out.println("Running evogpj with seed: " + seed);
         rand = new MersenneTwisterFast(seed);
         DataJava data = new CSVDataJava(PROBLEM);
 
@@ -419,7 +419,7 @@ public class SymbRegMOO {
                 if (TERM_SET == null) {
                     TERM_SET = new ArrayList<String>();
                     for (int i = 0; i < data.getNumberOfFeatures(); i++) TERM_SET.add("X" + (i + 1));
-                    System.out.println(TERM_SET);
+//                    System.out.println(TERM_SET);
                 }
 
                 FitnessFunction fitnessFunction = null;
@@ -693,10 +693,10 @@ public class SymbRegMOO {
         // record the best individual in models.txt
         bestPop.add(best);
         long timeStamp = (System.currentTimeMillis() - startTime) / 1000;
-        System.out.println("ELAPSED TIME: " + timeStamp);
+//        System.out.println("ELAPSED TIME: " + timeStamp);
         while ((generation <= NUM_GENS) && (!finished)) {
-            System.out.format("Generation %d\n", generation);
-            System.out.flush();
+//            System.out.format("Generation %d\n", generation);
+//            System.out.flush();
             try {
                 step();
             } catch (GPException e) {
@@ -709,10 +709,10 @@ public class SymbRegMOO {
             MSE = ((1-MSE) / (MSE + 1));
 //            System.out.println(best.getFitnesses());
 //            System.out.println(MSE);
-            System.out.flush();
+//            System.out.flush();
             bestPop.add(best);
             timeStamp = (System.currentTimeMillis() - startTime) / 1000;
-            System.out.println("ELAPSED TIME: " + timeStamp);
+//            System.out.println("ELAPSED TIME: " + timeStamp);
             generation++;
             finished = stopCriteria();
             
@@ -821,7 +821,7 @@ public class SymbRegMOO {
             props.load(f);
         } catch (IOException e) {
         }
-        System.out.println(props.toString());
+//        System.out.println(props.toString());
         return props;
     }
        
