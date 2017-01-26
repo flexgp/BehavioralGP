@@ -11,8 +11,8 @@ import java.util.*;
  */
 public class BPArchive extends WeightedArchive {
 
-    public BPArchive(MersenneTwisterFast rand) {
-        super(rand);
+    public BPArchive(MersenneTwisterFast rand, int capacity) {
+        super(rand, capacity);
     }
 
     public void addGeneticMaterial(
@@ -43,7 +43,7 @@ public class BPArchive extends WeightedArchive {
 
         this.clearArchive();
 
-        if (allSubtrees.size() <= Archive.CAPACITY) {
+        if (allSubtrees.size() <= CAPACITY) {
             for (Map.Entry entry : allSubtrees.entrySet()) {
                 ImmutableList<Double> semantics = (ImmutableList<Double>) entry.getKey();
                 TreeNode syntax = allSubtrees.get(semantics);
