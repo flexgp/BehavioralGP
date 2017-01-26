@@ -86,7 +86,7 @@ public class REPTreeArchive extends UnweightedArchive {
 
         String tree = repTree.toString();
         for (String name : featureNamesList) {
-            if (tree.contains(name) && archive.size() < Archive.CAPACITY) {
+            if (tree.contains(name)) {
                 ImmutableList<Double> semantics = featureNamesMap.get(name);
                 TreeNode syntax = geneticMaterial.get(semantics);
                 TreeNode duplicate = TreeGenerator.generateTree(syntax.toStringAsTree()).getRoot();

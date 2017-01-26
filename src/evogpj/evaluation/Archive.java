@@ -13,8 +13,6 @@ import java.util.Map;
  */
 public interface Archive {
 
-    int CAPACITY = Parameters.Defaults.ARCHIVE_CAPACITY;
-
     /**
      * Takes the genetic material, and combines it with the archive.
      * @param geneticMaterial A map that represents a set of subtrees, where

@@ -13,6 +13,7 @@ import java.util.*;
  */
 public abstract class WeightedArchive extends RandomOperator implements Archive {
 
+    protected final int CAPACITY;
     protected Map<ImmutableList<Double>, TreeNode> archiveStorage;
     protected Map<ImmutableList<Double>, Double> archiveWeights;
     protected NavigableMap<Double, ImmutableList<Double>> cumulativeWeights;
@@ -21,9 +22,11 @@ public abstract class WeightedArchive extends RandomOperator implements Archive 
     /**
      * Abstract weighted Archive
      * @param rand random number generator
+     * @param capacity maximum capacity of the Archive
      */
-    public WeightedArchive(MersenneTwisterFast rand) {
+    public WeightedArchive(MersenneTwisterFast rand, int capacity) {
         super(rand);
+        CAPACITY = capacity;
         archiveStorage = new HashMap<>();
         archiveWeights = new HashMap<>();
         cumulativeWeights = new TreeMap<>();
@@ -51,7 +54,7 @@ public abstract class WeightedArchive extends RandomOperator implements Archive 
     protected void addSubtree(ImmutableList<Double> semantics, TreeNode syntax, double weight) throws FullArchiveException {
         if (weight <= 0) {
             // Do nothing
-        } else if (archiveStorage.size() >= Archive.CAPACITY) {
+        } else if (archiveStorage.size() >= CAPACITY) {
             throw new FullArchiveException();
         } else {
             TreeNode duplicate = TreeGenerator.generateTree(syntax.toStringAsTree()).getRoot();

@@ -77,6 +77,8 @@ public class SymbRegMOO {
     protected double XOVER_RATE = Parameters.Defaults.XOVER_RATE;
     // ARCHIVE MUTATION RATE
     protected double ARCHIVE_MUTATION_RATE = Parameters.Defaults.ARCHIVE_MUTATION_RATE;
+    // DEFAULT ARCHIVE CAPACITY
+    protected int ARCHIVE_CAPACITY = Parameters.Defaults.ARCHIVE_CAPACITY;
     
     
     // DEFAULT MUTATION OPERATOR
@@ -266,6 +268,8 @@ public class SymbRegMOO {
             XOVER_RATE = Double.valueOf(props.getProperty(Parameters.Names.XOVER_RATE));
         if (props.containsKey(Parameters.Names.ARCHIVE_MUTATION_RATE))
             ARCHIVE_MUTATION_RATE = Double.valueOf(props.getProperty(Parameters.Names.ARCHIVE_MUTATION_RATE));
+        if (props.containsKey(Parameters.Names.ARCHIVE_CAPACITY))
+            ARCHIVE_CAPACITY = Integer.valueOf(props.getProperty(Parameters.Names.ARCHIVE_CAPACITY));
         if (props.containsKey(Parameters.Names.POP_SIZE))
             POP_SIZE = Integer.valueOf(props.getProperty(Parameters.Names.POP_SIZE));
         if (props.containsKey(Parameters.Names.POP_DATA_PATH))
@@ -382,7 +386,7 @@ public class SymbRegMOO {
         } else if (ARCHIVE.equals(Parameters.Operators.REPTREE_ARCHIVE)) {
             archive = new REPTreeArchive(rand, targetValues);
         } else if (ARCHIVE.equals(Parameters.Operators.BP_ARCHIVE)) {
-            archive = new BPArchive(rand);
+            archive = new BPArchive(rand, ARCHIVE_CAPACITY);
         } else {
             System.err.format("Invalid Archive %s specified for problem type %s%n", ARCHIVE);
             System.exit(-1);
