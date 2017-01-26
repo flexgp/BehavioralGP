@@ -28,11 +28,9 @@ public class SimpleArchive extends UnweightedArchive {
     ) {
         archive.clear();
         for (ImmutableList<Double> semantics : geneticMaterial.keySet()) {
-            if (archive.size() < Archive.CAPACITY) {
-                TreeNode syntax = geneticMaterial.get(semantics);
-                TreeNode duplicate = TreeGenerator.generateTree(syntax.toStringAsTree()).getRoot();
-                archive.put(semantics, duplicate);
-            }
+            TreeNode syntax = geneticMaterial.get(semantics);
+            TreeNode duplicate = TreeGenerator.generateTree(syntax.toStringAsTree()).getRoot();
+            archive.put(semantics, duplicate);
         }
     }
 }
