@@ -86,6 +86,7 @@ public class ArchiveAugmentedReproduce extends RandomOperator implements Reprodu
                     childPop.add(ind);
                 } else if (!allowDuplicateTrees && !existingTrees.contains(ind.toString())) {
                     childPop.add(ind);
+                    existingTrees.add(ind.toString());
                     resetExistingTreesIfChildPopIsEmpty = true;
                 }
             }
@@ -95,6 +96,7 @@ public class ArchiveAugmentedReproduce extends RandomOperator implements Reprodu
                 childPop.add(ind);
             } else if (!allowDuplicateTrees && !existingTrees.contains(ind.toString())) {
                 childPop.add(ind);
+                existingTrees.add(ind.toString());
                 resetExistingTreesIfChildPopIsEmpty = true;
             }
         } else if (prob < ARCHIVE_MUTATION_RATE + MUTATION_RATE + XOVER_RATE) {
@@ -103,6 +105,7 @@ public class ArchiveAugmentedReproduce extends RandomOperator implements Reprodu
                 childPop.add(ind);
             } else if (!allowDuplicateTrees && !existingTrees.contains(ind.toString())) {
                 childPop.add(ind);
+                existingTrees.add(ind.toString());
                 resetExistingTreesIfChildPopIsEmpty = true;
             }
         }
