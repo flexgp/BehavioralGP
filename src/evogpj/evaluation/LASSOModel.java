@@ -65,19 +65,21 @@ public class LASSOModel implements Model {
         int numberOfFitnessCases = targetValues.size();
 
         Map<Integer, ImmutableList<Double>> indexToSemantics = new HashMap<>();
+        Map<ImmutableList<Double>, Integer> semanticsToIndex = new HashMap<>();
         int index = 0;
         for (Map.Entry entry : geneticMaterial.entrySet()) {
-            indexToSemantics.put(index++, (ImmutableList<Double>) entry.getKey());
+            ImmutableList<Double> semantics = (ImmutableList<Double>) entry.getKey();
+            indexToSemantics.put(index, semantics);
+            semanticsToIndex.put(semantics, index);
+            index++;
         }
 
         float[][] trace = new float[numberOfFitnessCases][numberOfSubtrees];
         for (int i = 0; i < indexToSemantics.size(); i++) {
             ImmutableList<Double> semantics = indexToSemantics.get(i);
-//            System.out.println(semantics);
             for (int j = 0; j < numberOfFitnessCases; j++) {
                 BigDecimal number = new BigDecimal(semantics.get(j));
                 trace[j][i] = number.floatValue();
-//                System.out.println(semantics.get());
             }
         }
 
@@ -86,28 +88,17 @@ public class LASSOModel implements Model {
 
         for (int i = 0; i < numberOfFitnessCases; i++) {
             fitGenerator.setObservationValues(i, trace[i]);
-            for (int k = 0; k < trace[i].length; k++) {
-//                System.out.println(trace[i][k]);
-            }
-//            System.out.println("break");
             fitGenerator.setTarget(i, targetValues.get(i));
         }
 
         LassoFit fit = fitGenerator.fit(-1);
-//        System.out.println(numberOfSubtrees);
-//        double[] l = fit.getWeights(3);
-//        for (int i = 0; i < l.length; i++) {
-//            System.out.println(l[i]);
-//        }
 
         int indexWeights = 0;
         int numFeaturesUsed = 0;
         for (int i = 0; i < fit.lambdas.length; i++) {
-            if (fit.nonZeroWeights[i] > numberOfSubtrees/2) {
+            if (fit.nonZeroWeights[i] > numFeaturesUsed) {
                 numFeaturesUsed = fit.nonZeroWeights[i];
-//                System.out.println(numFeaturesUsed);
                 indexWeights = i;
-                break;
             }
         }
 
@@ -120,7 +111,6 @@ public class LASSOModel implements Model {
                 prediction += trace[i][j]*lassoWeights[j];
             }
             prediction += lassoIntercept;
-            //phenotype_tmp.addNewDataValue(prediction);
             error += Math.abs(targetValues.get(i) - prediction);
         }
 
@@ -131,8 +121,6 @@ public class LASSOModel implements Model {
             error = 1;
         }
 
-
-//        System.out.println(numFeaturesUsed);
         individual.setModelError(error);
         individual.setModelComplexity(complexity);
 
@@ -146,9 +134,9 @@ public class LASSOModel implements Model {
 
         // Place geneticMaterial in processedGeneticMaterial
         if (!usefulSubtrees.isEmpty()) {
-            double weight = 1.0 / ((1.0 + error) * usefulSubtrees.size());
             for (ImmutableList<Double> semantics : usefulSubtrees) {
                 TreeNode syntax = geneticMaterial.get(semantics);
+                double weight = Math.abs(lassoWeights[semanticsToIndex.get(semantics)]);
                 if (processedGeneticMaterial.containsKey(semantics)) {
                     int oldSize = processedGeneticMaterial.get(semantics).getSubtreeSize();
                     int newSize = syntax.getSubtreeSize();
