@@ -12,67 +12,14 @@ import java.util.logging.Logger;
 /**
  * Created by stevenfine on 1/25/17.
  */
-public class PythonModel implements Model {
-    protected List<Double> targetValues;
-    protected Map<ImmutableList<Double>, TreeNode> processedGeneticMaterial;
-    protected Map<ImmutableList<Double>, Double> weights;
-    protected int numThreads;
+public class PythonModel extends MultiThreadedModel {
 
     public PythonModel(List<Double> targetValues, int numThreads) {
-        this.targetValues = targetValues;
-        processedGeneticMaterial = new HashMap<>();
-        weights = new HashMap<>();
-        this.numThreads = numThreads;
+        super(targetValues, numThreads);
     }
 
     @Override
-    public void buildModel(Population population) {
-
-        processedGeneticMaterial.clear();
-        weights.clear();
-
-        ArrayList<SRJavaThread> alThreads = new ArrayList<>();
-        for(int i = 0; i < numThreads; i++){
-            SRJavaThread threadAux = new SRJavaThread(i, population, numThreads);
-            alThreads.add(threadAux);
-        }
-
-        for(int i = 0; i < numThreads; i++){
-            SRJavaThread threadAux = alThreads.get(i);
-            threadAux.start();
-        }
-
-        for(int i=0;i<numThreads;i++){
-            SRJavaThread threadAux = alThreads.get(i);
-            try {
-                threadAux.join();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(PythonModel.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-
-    @Override
-    public Map<ImmutableList<Double>, TreeNode> getProcessedGeneticMaterial() {
-        return processedGeneticMaterial;
-    }
-
-    @Override
-    public Map<ImmutableList<Double>, Double> getWeights() {
-        return weights;
-    }
-
-    @Override
-    public double getModelError(Individual individual) {
-        return individual.getModelError();
-    }
-
-    @Override
-    public double getModelComplexity(Individual individual) {
-        return individual.getModelComplexity();
-    }
-
-    private void buildModelFromIndividual(Individual individual) throws Exception {
+    protected void buildModelFromIndividual(Individual individual) throws Exception {
         Map<ImmutableList<Double>, TreeNode> geneticMaterial = individual.getGeneticMaterial();
 
         List<String> featureNamesList = new ArrayList<>();
@@ -121,51 +68,18 @@ public class PythonModel implements Model {
             }
         }
 
-        // Place geneticMaterial in processedGeneticMaterial
+        // Set processedGeneticMaterial
+        Map<ImmutableList<Double>, TreeNode> individualProcessedGeneticMaterial = new HashMap<>();
+        Map<ImmutableList<Double>, Double> individualProcessedWeights = new HashMap<>();
         if (!usefulSubtrees.isEmpty()) {
             double weight = 1.0 / ((1.0 + error) * usefulSubtrees.size());
             for (ImmutableList<Double> semantics : usefulSubtrees) {
                 TreeNode syntax = geneticMaterial.get(semantics);
-                if (processedGeneticMaterial.containsKey(semantics)) {
-                    int oldSize = processedGeneticMaterial.get(semantics).getSubtreeSize();
-                    int newSize = syntax.getSubtreeSize();
-                    if (newSize < oldSize) {
-                        processedGeneticMaterial.put(semantics, syntax);
-                        weights.put(semantics, weight);
-                    }
-                } else {
-                    processedGeneticMaterial.put(semantics, syntax);
-                    weights.put(semantics, weight);
-                }
+                individualProcessedGeneticMaterial.put(semantics, syntax);
+                individualProcessedWeights.put(semantics, weight);
             }
         }
-    }
-
-    public class SRJavaThread extends Thread{
-        private int indexThread;
-        private int totalThreads;
-        private Population pop;
-
-        public SRJavaThread(int anIndex, Population aPop, int aTotalThreads){
-            indexThread = anIndex;
-            pop = aPop;
-            totalThreads = aTotalThreads;
-        }
-
-        @Override
-        public void run(){
-            int indexIndi = 0;
-            for (Individual individual : pop) {
-                if(indexIndi % totalThreads == indexThread){
-                    try {
-                        buildModelFromIndividual(individual);
-                    } catch (Exception e) {
-                        individual.setModelError(1.0);
-                        individual.setModelComplexity(1.0);
-                    }
-                }
-                indexIndi++;
-            }
-        }
+        individual.setProcessedGeneticMaterial(individualProcessedGeneticMaterial);
+        individual.setProcessedWeights(individualProcessedWeights);
     }
 }
