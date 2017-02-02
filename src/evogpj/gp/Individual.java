@@ -202,7 +202,7 @@ public class Individual implements Serializable {
      * @param localCrowdingDistance
      */
     public void updateCrowdingDistance(Double localCrowdingDistance) {
-        crowdingDistance *= localCrowdingDistance;
+        crowdingDistance += localCrowdingDistance;
     }
 
     public Integer getDominationCount() {

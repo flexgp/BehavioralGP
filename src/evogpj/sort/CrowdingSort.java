@@ -46,9 +46,6 @@ public class CrowdingSort {
 		// comparator, use it to access the population when making comparisons
 		// get difference between first and last individual for normalization
 		// then for each individual, update the crowding distance with the distance between neighbors, divided by max-min
-		for (Individual i : p) {
-			i.setCrowdingDistance(1.0);
-		}
 		for (String fitnessFuncName : f.keySet()) {
 			IntegerComparator ic = new IntegerComparator(p, fitnessFuncName);
 			ArrayList<Integer> indices = getRange(0, p.size());
@@ -60,9 +57,9 @@ public class CrowdingSort {
 				if ((previousMetaIndex < 0) || (nextMetaIndex >= p.size()))
 					localCrowdingDistance = CrowdingSort.BOUNDARY_DISTANCE;
 				else {
-                                    Individual prev = p.get(indices.get(previousMetaIndex));
-                                    Individual next = p.get(indices.get(nextMetaIndex));
-                                    localCrowdingDistance = Math.abs(next.getFitness(fitnessFuncName) - prev.getFitness(fitnessFuncName));
+					Individual prev = p.get(indices.get(previousMetaIndex));
+					Individual next = p.get(indices.get(nextMetaIndex));
+					localCrowdingDistance = Math.abs(next.getFitness(fitnessFuncName) - prev.getFitness(fitnessFuncName));
 				}
 				// update the crowding distance for this individual
 				Individual current = p.get(indices.get(metaIndex));
