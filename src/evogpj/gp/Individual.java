@@ -66,6 +66,8 @@ public class Individual implements Serializable {
     String lassoIntercept;
 
     private Map<ImmutableList<Double>, TreeNode> geneticMaterial;
+    private Map<ImmutableList<Double>, TreeNode> processedGeneticMaterial;
+    private Map<ImmutableList<Double>, Double> processedWeights;
     private double modelError;
     private double modelComplexity;
 
@@ -384,6 +386,22 @@ public class Individual implements Serializable {
 
     public void setGeneticMaterial(Map<ImmutableList<Double>, TreeNode> geneticMaterial) {
         this.geneticMaterial = geneticMaterial;
+    }
+
+    public Map<ImmutableList<Double>, TreeNode> getProcessedGeneticMaterial() {
+        return this.processedGeneticMaterial;
+    }
+
+    public void setProcessedGeneticMaterial(Map<ImmutableList<Double>, TreeNode> processedGeneticMaterial) {
+        this.processedGeneticMaterial = processedGeneticMaterial;
+    }
+
+    public Map<ImmutableList<Double>, Double> getProcessedWeights() {
+        return this.processedWeights;
+    }
+
+    public void setProcessedWeights(Map<ImmutableList<Double>, Double> processedWeights) {
+        this.processedWeights = processedWeights;
     }
 
     public double getModelError() {
