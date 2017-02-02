@@ -1,0 +1,210 @@
+\chapter{Run Configurations}
+\label{appendix:configuration_parameters}
+
+\section{Key}
+\begin{itemize}[noitemsep]
+\item $\mu$: mutation rate
+\item $\chi$: crossover rate
+\item $\alpha$: archive-based crossover rate
+\item $f$: program error fitness function
+\item $s$: program size fitness function
+\item $c$: model complexity fitness function
+\item $e$: model error fitness function
+%\item $C$: archive capacity
+%\item $I$: model run on the trace of each program in the population
+%\item $P$: model run on the combined traces of all of the programs in the population
+\end{itemize}
+
+\section{Configurations}
+\begin{enumerate}
+
+\item \textbf{GP}: 
+\begin{itemize}[noitemsep]
+\item Rates: $\mu = 0.1; \chi = 0.9; \alpha = 0.0$
+\item Fitness Functions: $\{f, s\}$
+\item Archive Capacity: No Archive
+\item Model: No Model
+\end{itemize}
+
+\item \textbf{BP2A - REPTree}: 
+\begin{itemize}[noitemsep]
+\item Rates: $\mu = 0.1; \chi = 0.0; \alpha = 0.9$
+\item Fitness Functions: $\{f, s\}$
+\item Archive Capacity: $50$
+\item Model: REPTree run on the trace of each program in the population
+\end{itemize}
+
+\item \textbf{BP2A - Full Pop}: 
+\begin{itemize}[noitemsep]
+\item Rates: $\mu = 0.1; \chi = 0.0; \alpha = 0.9$
+\item Fitness Functions: $\{f, s\}$
+\item Archive Capacity: $50$
+\item Model: REPTree run on the combined traces of all of the programs in the population
+\end{itemize}
+
+\item \textbf{BP2A - Lasso}: 
+\begin{itemize}[noitemsep]
+\item Rates: $\mu = 0.1; \chi = 0.0; \alpha = 0.9$
+\item Fitness Functions: $\{f, s\}$
+\item Archive Capacity: $50$
+\item Model: Lasso run on the trace of each program in the population
+\end{itemize}
+
+\item \textbf{BP2A - Scikit Learn}: 
+\begin{itemize}[noitemsep]
+\item Rates: $\mu = 0.1; \chi = 0.0; \alpha = 0.9$
+\item Fitness Functions: $\{f, s\}$
+\item Archive Capacity: $50$
+\item Model: Scikit Learn DecisionTreeRegressor run on the trace of each program in the population
+\end{itemize}
+
+\item \textbf{BP2A - Randomized}: 
+\begin{itemize}[noitemsep]
+\item Rates: $\mu = 0.1; \chi = 0.0; \alpha = 0.9$
+\item Fitness Functions: $\{f, s\}$
+\item Archive Capacity: $50$
+\item Model: REPTree run on the trace of each program in the population, but only the weights are kept.  The subtrees corresponding to the weights that are placed in the archive are drawn uniformly at random from the program subtrees
+\end{itemize}
+
+\item \textbf{BP2A - Larger Archive}: 
+\begin{itemize}[noitemsep]
+\item Rates: $\mu = 0.1; \chi = 0.0; \alpha = 0.9$
+\item Fitness Functions: $\{f, s\}$
+\item Archive Capacity: $150$
+\item Model: REPTree run on the trace of each program in the population
+\end{itemize}
+
+\item \textbf{BP2A - Different Rates}: 
+\begin{itemize}[noitemsep]
+\item Rates: $\mu = 0.05; \chi = 0.0; \alpha = 0.95$
+\item Fitness Functions: $\{f, s\}$
+\item Archive Capacity: $50$
+\item Model: REPTree run on the trace of each program in the population
+\end{itemize}
+
+\item \textbf{BP4- REPTree}: 
+\begin{itemize}[noitemsep]
+\item Rates: $\mu = 0.1; \chi = 0.9; \alpha = 0.0$
+\item Fitness Functions: $\{f, s, c, e\}$
+\item Archive Capacity: No Archive
+\item Model: REPTree run on the trace of each program in the population
+\end{itemize}
+
+\item \textbf{BP4- Lasso}: 
+\begin{itemize}[noitemsep]
+\item Rates: $\mu = 0.1; \chi = 0.9; \alpha = 0.0$
+\item Fitness Functions: $\{f, s, c, e\}$
+\item Archive Capacity: No Archive
+\item Model: Lasso run on the trace of each program in the population
+\end{itemize}
+
+\item \textbf{BP4- Scikit Learn}: 
+\begin{itemize}[noitemsep]
+\item Rates: $\mu = 0.1; \chi = 0.9; \alpha = 0.0$
+\item Fitness Functions: $\{f, s, c, e\}$
+\item Archive Capacity: No Archive
+\item Model: Scikit Learn DecisionTreeRegressor run on the trace of each program in the population
+\end{itemize}
+
+%\item \textbf{BP4- Randomized}: 
+%\begin{itemize}[noitemsep]
+%\item Rates: $\mu = 0.1; \chi = 0.9; \alpha = 0.0$
+%\item Fitness Functions: $\{f, s, c, e\}$
+%\item Archive Capacity: No Archive
+%\item Model: REPTree run on the trace of each program in the population, but only the weights are kept.  The subtrees corresponding to the weights that are placed in the archive are drawn uniformly at random from the program subtrees
+%\end{itemize}
+
+\item \textbf{BP4A- REPTree}: 
+\begin{itemize}[noitemsep]
+\item Rates: $\mu = 0.1; \chi = 0.0; \alpha = 0.9$
+\item Fitness Functions: $\{f, s, c, e\}$
+\item Archive Capacity: $50$
+\item Model: REPTree run on the trace of each program in the population
+\end{itemize}
+
+\item \textbf{BP4A- Lasso}: 
+\begin{itemize}[noitemsep]
+\item Rates: $\mu = 0.1; \chi = 0.0; \alpha = 0.9$
+\item Fitness Functions: $\{f, s, c, e\}$
+\item Archive Capacity: $50$
+\item Model: Lasso run on the trace of each program in the population
+\end{itemize}
+
+\item \textbf{BP4A- Scikit Learn}: 
+\begin{itemize}[noitemsep]
+\item Rates: $\mu = 0.1; \chi = 0.0; \alpha = 0.9$
+\item Fitness Functions: $\{f, s, c, e\}$
+\item Archive Capacity: $50$
+\item Model: Scikit Learn DecisionTreeRegressor run on the trace of each program in the population
+\end{itemize}
+
+\item \textbf{BP4A- Randomized}: 
+\begin{itemize}[noitemsep]
+\item Rates: $\mu = 0.1; \chi = 0.0; \alpha = 0.9$
+\item Fitness Functions: $\{f, s, c, e\}$
+\item Archive Capacity: $50$
+\item Model: REPTree run on the trace of each program in the population, but only the weights are kept.  The subtrees corresponding to the weights that are placed in the archive are drawn uniformly at random from the program subtrees\end{itemize}
+
+\item \textbf{BP4A- Larger Archive}: 
+\begin{itemize}[noitemsep]
+\item Rates: $\mu = 0.1; \chi = 0.0; \alpha = 0.9$
+\item Fitness Functions: $\{f, s, c, e\}$
+\item Archive Capacity: $150$
+\item Model: REPTree run on the trace of each program in the population
+\end{itemize}
+
+\item \textbf{BP4A- Different Rates}: 
+\begin{itemize}[noitemsep]
+\item Rates: $\mu = 0.05; \chi = 0.0; \alpha = 0.95$
+\item Fitness Functions: $\{f, s, c, e\}$
+\item Archive Capacity: $50$
+\item Model: REPTree run on the trace of each program in the population
+\end{itemize}
+
+\end{enumerate}
+
+%\begin{table*}[ht]
+%\centering
+%\begin{adjustbox}{width=1\textwidth}
+%\small
+%\begin{tabular}{ c c c c c c c c c c c c }
+% \hline\hline
+%& $\mu$ & $\chi$ & $\alpha$ & $f$ & $s$ & $c$ & $e$ & $C$ & $I$ & $P$ & $M$ \\
+%\hline
+%GP & $0.1$ & $0.9$ & $0.0$ & \checkmark & \checkmark & & & & & & \\
+%BP2A - REPTree & $0.1$ & $0.0$ & $0.9$ & \checkmark & \checkmark & & & $50$ & \checkmark & REPTree \\
+%\end{tabular}
+%\end{adjustbox}
+%\caption{Average program error for best of run based on program error.}
+%\label{table:avg_fitness}
+%\end{table*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\item \textbf{GP} a mutation rate of 0.1, a crossover rate of 0.9, and an archive-based crossover rate of 0.0, and only the two conventional fitness functions.
+%\item \textbf{BP2A} uses a mutation rate of 0.1, a crossover rate of 0.0, an archive-based crossover rate of 0.9, and an archive capacity of 50 subtrees, and only the two conventional fitness functions.
+%\item \textbf{BP4} uses a mutation rate of 0.1, a crossover rate of 0.9, and an archive-based crossover rate of 0.0, and all four fitness functions.
+%\item \textbf{BP4A} uses a mutation rate of 0.1, a crossover rate of 0.0, and an archive-based crossover rate of 0.9, and all four fitness functions.
+
+
+%\section{Operator Configurations}
+%\begin{enumerate}
+%\item \textbf{GP} a mutation rate of 0.1, a crossover rate of 0.9, and an archive-based crossover rate of 0.0, and only the two conventional fitness functions.
+%\item \textbf{BP2A} uses a mutation rate of 0.1, a crossover rate of 0.0, an archive-based crossover rate of 0.9, and an archive capacity of 50 subtrees, and only the two conventional fitness functions.
+%\item \textbf{BP4} uses a mutation rate of 0.1, a crossover rate of 0.9, and an archive-based crossover rate of 0.0, and all four fitness functions.
+%\item \textbf{BP4A} uses a mutation rate of 0.1, a crossover rate of 0.0, and an archive-based crossover rate of 0.9, and all four fitness functions.
+%\end{enumerate}
+%
+%\section{Model Configurations}
+%\begin{enumerate}
+%\item \textbf{REPTree} trains the Weka REPTree decision tree on the trace of each program in the population.
+%\item \textbf{Full Pop} trains the Weka REPTree decision tree on the combined trace of all of the programs in the population.
+%\item \textbf{Lasso} trains the Lasso regression method on the trace of each program in the population.
+%\item \textbf{Scikit Learn} trains the Scikit Learn DecisionTreeRegressor on the trace of each program in the population.
+%\item \textbf{Randomized} trains the Weka REPTree decision tree on the trace of each program in the population, but only the weights are kept.  The subtrees corresponding to the weights that are placed in the archive are drawn uniformly at random from the program subtrees.
+%\item \textbf{Larger Archive} trains the Weka REPTree decision tree on the trace of each program in the population, but uses an archive size of 150 subtrees.
+%\item \textbf{Different Rates} trains the Weka REPTree decision tree on the trace of each program in the population, but uses a mutation rate of 0.05, a crossover rate of 0.0, and an archive-based crossover rate of 0.95.
+%\end{enumerate}
+
+%\clearpage
+%\newpage

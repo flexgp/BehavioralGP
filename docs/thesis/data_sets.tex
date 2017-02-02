@@ -1,0 +1,24 @@
+\chapter{Data Sets}
+\label{appendix:data_sets}
+
+All of the data sets used are defined such that the dependent variable is the output of a particular mathematical function for a given set of inputs.  They are taken from a paper entitled \textit{Genetic Programming Needs Better Benchmarks} by McDermott et al. \cite{benchmarks}  All of the inputs are taken to form a grid on some interval.  Let $E[a, b, c]$ denote $c$ samples equally spaced in the interval $[a,b]$. (Note that McDermott et al. defines $E[a, b, c]$ slightly differently.)  Below is a list of all of the data sets that are used:
+
+\begin{enumerate}[noitemsep]
+\item \textbf{Keijzer1}: $0.3x \sin(2 \pi x);$ $x \in E[-1,1,20]$
+\item \textbf{Keijzer11}: $x y+\sin((x-1)(y-1));$ $x, y \in E[-3,3,5]$
+\item \textbf{Keijzer12}: $x^{4}-x^{3}+\frac{y^{2}}{2}-y;$ $x, y \in E[-3,3,5]$
+\item \textbf{Keijzer13}: $6 \sin(x) \cos(y);$ $x, y \in E[-3,3,5]$
+\item \textbf{Keijzer14}: $\frac{8}{2 + x^{2} + y^{2}};$ $x,y \in E[-3,3,5]$
+\item \textbf{Keijzer15}: $\frac{x^{3}}{5} - \frac{y^{3}}{2} - y - x;$ $x, y \in E[-3,3,5]$
+\item \textbf{Keijzer4}: $x^{3} e^{-x} \cos(x) \sin(x) (\sin^{2}(x) \cos(x) - 1);$ $x \in E[0,10,20]$
+\item \textbf{Keijzer5}: $\frac{3 x z}{(x - 10) y^{2}};$ $x,y \in E[-1,1,4]; z \in E[1,2,4]$
+\item \textbf{Nguyen10}: $2 \sin(x) \cos(y);$ $x,y \in E[0,1,5]$
+\item \textbf{Nguyen12}: $x^{4} - x^{3} + \frac{y^{2}}{2} - y;$ $x,y \in E[0,1,5]$
+\item \textbf{Nguyen3}: $x^{5} + x^{4} + x^{3} + x^{2} + x;$ $x \in E[-1,1,20]$
+\item \textbf{Nguyen4}: $x^{6} + x^{5} + x^{4} + x^{3} + x^{2} + x;$ $x \in E[-1,1,20]$
+\item \textbf{Nguyen5}: $\sin(x^{2}) \cos(x) - 1;$ $x \in E[-1,1,20]$
+\item \textbf{Nguyen6}: $\sin(x) + \sin(x + x^{2});$ $x \in E[-1,1,20]$
+\item \textbf{Nguyen7}: $\ln(x + 1) + \ln(x^{2} + 1);$ $x \in E[0,2,20]$
+\item \textbf{Nguyen9}: $\sin(x) + \sin(y^{2});$ $x,y \in E[0,1,5]$
+\item \textbf{Sext}: $x^{6} - 2 x^{4} + x^{2};$ $x \in E[-1,1,20]$
+\end{enumerate}
