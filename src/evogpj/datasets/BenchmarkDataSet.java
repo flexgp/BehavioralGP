@@ -259,7 +259,7 @@ public class BenchmarkDataSet {
             if (input.size() == 2) {
                 double x = input.get(0);
                 double y = input.get(1);
-                return 8.0/(1 + Math.pow(x, 2) + Math.pow(y, 2));
+                return 8.0/(2 + Math.pow(x, 2) + Math.pow(y, 2));
             } else {
                 return null;
             }
