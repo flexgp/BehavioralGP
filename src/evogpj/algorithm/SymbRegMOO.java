@@ -1,8 +1,8 @@
 /**
  * Copyright (c) 2011-2013 Evolutionary Design and Optimization Group
- * 
+ *
  * Licensed under the MIT License.
- * 
+ *
  * See the "LICENSE" file for a copy of the license.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
@@ -42,14 +42,14 @@ import evogpj.sort.DominatedCount.DominationException;
 
 /**
  * This class contains the main method that runs the GP algorithm.
- * 
+ *
  * @author Owen Derby and Ignacio Arnaldo
  **/
 public class SymbRegMOO {
-    
+
     /* NUMBER OF THREADS EMPLOYED IN THE EXERNAL EVALUATION */
     protected int EXTERNAL_THREADS = Parameters.Defaults.EXTERNAL_THREADS;
-    
+
     /* DATA */
     // TRAINING SET
     protected String PROBLEM;
@@ -59,8 +59,8 @@ public class SymbRegMOO {
     // ALLOW DUPLICATE TREES
     protected boolean ALLOW_DUPLICATE_TREES = Parameters.Defaults.ALLOW_DUPLICATE_TREES;
     // FEATURES
-    protected List<String> TERM_SET;    
-    
+    protected List<String> TERM_SET;
+
     /* PARAMETERS GOVERNING THE GENETIC PROGRAMMING PROCESS */
     // POPULATION SIZE
     protected int POP_SIZE = Parameters.Defaults.POP_SIZE;
@@ -70,7 +70,7 @@ public class SymbRegMOO {
     protected Long startTime;
     // TIME OUT
     protected Long TIMEOUT;
-    
+
     // MUTATION RATE
     protected double MUTATION_RATE = Parameters.Defaults.MUTATION_RATE;
     // CROSSOVER RATE
@@ -82,7 +82,7 @@ public class SymbRegMOO {
     // DEFAULT COMBINED POPULATION MODEL FRACTION
     protected double COMBINED_POPULATION_MODEL_FRACTION = Parameters.Defaults.COMBINED_POPULATION_MODEL_FRACTION;
     
-    
+
     // DEFAULT MUTATION OPERATOR
     protected String INITIALIZE = Parameters.Defaults.INITIALIZE;
     // DEFAULT MUTATION OPERATOR
@@ -107,17 +107,17 @@ public class SymbRegMOO {
     protected String MODEL = Parameters.Defaults.MODEL;
     // DEFAULT FITNESS FUNCTION EVALUATOR
     protected String FITNESS_FUNCTION_EVALUATOR = Parameters.Defaults.FITNESS_FUNCTION_EVALUATOR;
-    
-    
+
+
     // ALL THE OPERATORS USED TO BUILD GP TREES
     protected List<String> FUNC_SET = Parameters.Defaults.FUNCTIONS;
-    
+
     // UNARY OPERATORS USED TO BUILD GP TREES
     protected List<String> UNARY_FUNC_SET;
-    
+
     // RANDOM SEED
     protected Long SEED = Parameters.Defaults.SEED;
-    
+
     /* LOG FILES*/
     // LOG BEST INDIVIDUAL PER GENERATION
     protected String MODELS_PATH = Parameters.Defaults.MODELS_PATH;
@@ -131,7 +131,7 @@ public class SymbRegMOO {
     protected String KNEE_PATH = Parameters.Defaults.KNEE_PATH;
     // LOG the fused Pareto Front
     protected String FUSED_PATH = Parameters.Defaults.FUSED_PATH;
-    
+
     /* CANDIDATE SOLUTIONS MAINTAINED DURING THE SEARCH */
     // CURRENT POPULATION
     protected Population pop;
@@ -145,7 +145,7 @@ public class SymbRegMOO {
     protected Individual best;
     // BEST INDIVIDUAL OF EACH GENERATION
     protected Population bestPop;
-    
+
     /* OPERATORS EMPLOYED IN THE SEARCH PROCESS */
     // RANDOM NUMBER GENERATOR
     protected MersenneTwisterFast rand;
@@ -170,8 +170,8 @@ public class SymbRegMOO {
     protected LinkedHashMap<String, FitnessFunction> fitnessFunctions;
     // FITNESS FUNCTION EVALUATOR
     protected FitnessFunctionEvaluator fitnessFunctionEvaluator;
-    
-    
+
+
     /* CONTROL FOR END OF EVOLUTIONARY PROCESS*/
     // CURRENT GENERATION
     protected Integer generation;
@@ -181,11 +181,11 @@ public class SymbRegMOO {
     protected int counterConvergence;
     // CURRENT FITNESS OF BEST INDIVIDUAL
     protected double lastFitness;
-    
+
     private Properties props;
-    
+
     double minTarget, maxTarget;
-    
+
     /**
      * Empty constructor, to allow subclasses to override
      */
@@ -197,7 +197,7 @@ public class SymbRegMOO {
         lastFitness = 0;
         startTime = System.currentTimeMillis();
     }
-    
+
     /**
      * Create an instance of the algorithm. This simply initializes all the
      * operators to the default parameters or whatever they are set to in the
@@ -206,7 +206,7 @@ public class SymbRegMOO {
      * <p>
      * If an invalid operator type is specified, then the program will
      * terminate, indicating which parameter is incorrect.
-     * 
+     *
      * @param props
      *            Properties object created from a .properties file specifying
      *            parameters for the algorithm
@@ -230,7 +230,7 @@ public class SymbRegMOO {
         loadParams(props);
         create_operators(props,SEED);
     }
-    
+
     public SymbRegMOO(Properties aProps,String propFile,long timeout) throws IOException {
         this();
         this.props = loadProps(propFile);
@@ -249,7 +249,7 @@ public class SymbRegMOO {
 
     /**
      * Read parameters from the Property object and set Algorithm variables.
-     * 
+     *
      * @see Parameters
      */
     private void loadParams(Properties props) {
@@ -263,7 +263,7 @@ public class SymbRegMOO {
         if (props.containsKey(Parameters.Names.EXTERNAL_THREADS))
             EXTERNAL_THREADS = Integer.valueOf(props.getProperty(Parameters.Names.EXTERNAL_THREADS));
         if (props.containsKey(Parameters.Names.FITNESS))
-            FITNESS = props.getProperty(Parameters.Names.FITNESS);            
+            FITNESS = props.getProperty(Parameters.Names.FITNESS);
         if (props.containsKey(Parameters.Names.MUTATION_RATE))
             MUTATION_RATE = Double.valueOf(props.getProperty(Parameters.Names.MUTATION_RATE));
         if (props.containsKey(Parameters.Names.XOVER_RATE))
@@ -293,7 +293,7 @@ public class SymbRegMOO {
         }
         UNARY_FUNC_SET = new ArrayList<String>();
         for(String func:FUNC_SET){
-            if(func.equals("mylog") || func.equals("exp") || func.equals("sin") || func.equals("cos") || 
+            if(func.equals("mylog") || func.equals("exp") || func.equals("sin") || func.equals("cos") ||
                     func.equals("sqrt") || func.equals("square") || func.equals("cube") ||
                     func.equals("quart") || func.equals("negate")) {
                 UNARY_FUNC_SET.add(func);
@@ -312,26 +312,26 @@ public class SymbRegMOO {
             }
         }
         if (props.containsKey(Parameters.Names.MUTATE))
-                MUTATE = props.getProperty(Parameters.Names.MUTATE);
+            MUTATE = props.getProperty(Parameters.Names.MUTATE);
         if (props.containsKey(Parameters.Names.XOVER))
-                XOVER = props.getProperty(Parameters.Names.XOVER);
+            XOVER = props.getProperty(Parameters.Names.XOVER);
         if (props.containsKey(Parameters.Names.SELECTION))
-                SELECT = props.getProperty(Parameters.Names.SELECTION);
+            SELECT = props.getProperty(Parameters.Names.SELECTION);
         if (props.containsKey(Parameters.Names.INITIALIZE))
-                INITIALIZE = props.getProperty(Parameters.Names.INITIALIZE);
+            INITIALIZE = props.getProperty(Parameters.Names.INITIALIZE);
         if (props.containsKey(Parameters.Names.FRONT_RANK_METHOD))
-                FRONT_RANK_METHOD = props.getProperty(Parameters.Names.FRONT_RANK_METHOD);
+            FRONT_RANK_METHOD = props.getProperty(Parameters.Names.FRONT_RANK_METHOD);
         if (props.containsKey(Parameters.Names.REPRODUCE))
-                REPRODUCE = props.getProperty(Parameters.Names.REPRODUCE);
+            REPRODUCE = props.getProperty(Parameters.Names.REPRODUCE);
         if (props.containsKey(Parameters.Names.ARCHIVE))
-                ARCHIVE = props.getProperty(Parameters.Names.ARCHIVE);
+            ARCHIVE = props.getProperty(Parameters.Names.ARCHIVE);
         if (props.containsKey(Parameters.Names.ARCHIVE_MUTATE))
-                ARCHIVE_MUTATE = props.getProperty(Parameters.Names.ARCHIVE_MUTATE);
+            ARCHIVE_MUTATE = props.getProperty(Parameters.Names.ARCHIVE_MUTATE);
         if (props.containsKey(Parameters.Names.MODEL))
-                MODEL = props.getProperty(Parameters.Names.MODEL);
+            MODEL = props.getProperty(Parameters.Names.MODEL);
         if (props.containsKey(Parameters.Names.FITNESS_FUNCTION_EVALUATOR))
-                FITNESS_FUNCTION_EVALUATOR = props.getProperty(Parameters.Names.FITNESS_FUNCTION_EVALUATOR);
-        
+            FITNESS_FUNCTION_EVALUATOR = props.getProperty(Parameters.Names.FITNESS_FUNCTION_EVALUATOR);
+
     }
 
     /**
@@ -354,9 +354,9 @@ public class SymbRegMOO {
      * Create all the operators from the loaded params. Seed is the seed to use
      * for the rng. If specified, d_in is some DataJava to use. Otherwise, d_in
      * should be null and fitness will load in the appropriate data.
-     * 
+     *
      * @param seed
-     * 
+     *
      */
     private void create_operators(Properties props, long seed) throws IOException {
 //        System.out.println("Running evogpj with seed: " + seed);
@@ -415,7 +415,7 @@ public class SymbRegMOO {
                     fitnessOperatorName.equals(Parameters.Operators.PROGRAM_ERROR_FITNESS)) {
                 minTarget = data.getTargetMin();
                 maxTarget = data.getTargetMax();
-                
+
                 if (TERM_SET == null) {
                     TERM_SET = new ArrayList<String>();
                     for (int i = 0; i < data.getNumberOfFeatures(); i++) TERM_SET.add("X" + (i + 1));
@@ -585,9 +585,9 @@ public class SymbRegMOO {
      * @param migrants
      */
     protected void acceptMigrants(Population migrants) {
-            pop.addAll(migrants);
+        pop.addAll(migrants);
     }
-	
+
     /**
      * This is the heart of the algorithm. This corresponds to running the
      * {@link #pop} forward one generation
@@ -603,7 +603,7 @@ public class SymbRegMOO {
      * mutation and replication. However, which one we choose is determined by
      * sampling from the distribution specified by the mutation and crossover
      * rates.
-     * 
+     *
      * @returns a LinkedHashMap mapping fitness function name to the best
      *          individual for that fitness function
      * @throws GPException
@@ -626,7 +626,7 @@ public class SymbRegMOO {
             // for each individual, count number of individuals that dominate it
             DominatedCount.countDominated(totalPop, fitnessFunctions);
         } catch (DominationException e) {
-                System.exit(-1);
+            System.exit(-1);
         }
         // if crowding tournament selection is enabled, calculate crowding distances
         if (SELECT.equals(Parameters.Operators.CROWD_SELECT)) {
@@ -673,18 +673,18 @@ public class SymbRegMOO {
 
     /**
      * get the best individual per generation in a Population object
-     * 
+     *
      * @return the best individual per generation.
      */
     public Population getBestPop(){
         return bestPop;
     }
-                
+
     /**
-    * Run the current population for the specified number of generations.
-    * 
-    * @return the best individual found.
-    */
+     * Run the current population for the specified number of generations.
+     *
+     * @return the best individual found.
+     */
     public Individual run_population() throws IOException {
         bestPop = new Population();
         // get the best individual
@@ -715,28 +715,28 @@ public class SymbRegMOO {
 //            System.out.println("ELAPSED TIME: " + timeStamp);
             generation++;
             finished = stopCriteria();
-            
+
         }
 
         Iterator<String> fitnessFunctionIterator = fitnessFunctions.keySet().iterator();
         String firstFitnessFunction = fitnessFunctionIterator.next();
         String secondFitnessFunction = fitnessFunctionIterator.next();
-        this.saveText(MODELS_PATH, "", false);
-        for(Individual ind:bestPop){
-            if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
-                for(int j = 0;j<ind.getWeights().size()-1;j++){
-                    this.saveText(MODELS_PATH, ind.getWeights().get(j) + " ", true);
-                }
-                this.saveText(MODELS_PATH, ind.getWeights().get(ind.getWeights().size()-1) + ",", true);
-                this.saveText(MODELS_PATH, ind.getLassoIntercept() + ",", true);
-            }
-            this.saveText(MODELS_PATH, ind.toString() + "\n", true);
-        }
+//        this.saveText(MODELS_PATH, "", false);
+//        for(Individual ind:bestPop){
+//            if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
+//                for(int j = 0;j<ind.getWeights().size()-1;j++){
+//                    this.saveText(MODELS_PATH, ind.getWeights().get(j) + " ", true);
+//                }
+//                this.saveText(MODELS_PATH, ind.getWeights().get(ind.getWeights().size()-1) + ",", true);
+//                this.saveText(MODELS_PATH, ind.getLassoIntercept() + ",", true);
+//            }
+//            this.saveText(MODELS_PATH, ind.toString() + "\n", true);
+//        }
         Individual acc = paretoFront.get(0);
         Individual comp = paretoFront.get(0);
         Individual knee = paretoFront.get(0);
         paretoFront.calculateEuclideanDistances(fitnessFunctions);
-        this.saveText(PARETO_PATH, "", false);
+//        this.saveText(PARETO_PATH, "", false);
         FitnessFunction firstFitness = fitnessFunctions.get(firstFitnessFunction);
         FitnessFunction secondFitness = fitnessFunctions.get(secondFitnessFunction);
         for(Individual ind:paretoFront){
@@ -751,55 +751,55 @@ public class SymbRegMOO {
             if(ind.getEuclideanDistance()<knee.getEuclideanDistance()){
                 knee = ind;
             }
-            this.saveText(PARETO_PATH, minTarget + "," + maxTarget + ",", true);
-            if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
-                for(int j = 0;j<ind.getWeights().size()-1;j++){
-                    this.saveText(PARETO_PATH, ind.getWeights().get(j) + " ", true);
-                }
-                this.saveText(PARETO_PATH, ind.getWeights().get(ind.getWeights().size()-1) + ",", true);
-                this.saveText(PARETO_PATH, ind.getLassoIntercept() + ",", true);
-            }
-            this.saveText(PARETO_PATH, ind.toString() + "\n", true);
+//            this.saveText(PARETO_PATH, minTarget + "," + maxTarget + ",", true);
+//            if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
+//                for(int j = 0;j<ind.getWeights().size()-1;j++){
+//                    this.saveText(PARETO_PATH, ind.getWeights().get(j) + " ", true);
+//                }
+//                this.saveText(PARETO_PATH, ind.getWeights().get(ind.getWeights().size()-1) + ",", true);
+//                this.saveText(PARETO_PATH, ind.getLassoIntercept() + ",", true);
+//            }
+//            this.saveText(PARETO_PATH, ind.toString() + "\n", true);
 
         }
-        // SAVE LEAST COMPLEX MODEL OF THE PARETO FRONT
-        this.saveText(LEAST_COMPLEX_PATH, "", false);
-        this.saveText(LEAST_COMPLEX_PATH, minTarget + "," + maxTarget + ",", true);
-        if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
-            for(int j = 0;j<comp.getWeights().size()-1;j++){
-                this.saveText(LEAST_COMPLEX_PATH, comp.getWeights().get(j) + " ", true);
-            }
-            this.saveText(LEAST_COMPLEX_PATH, comp.getWeights().get(comp.getWeights().size()-1) + ",", true);
-            this.saveText(LEAST_COMPLEX_PATH, comp.getLassoIntercept() + ",", true);
-        }
-        this.saveText(LEAST_COMPLEX_PATH, comp.toString() + "\n", true);
-
-        // SAVE MOST ACCURATE MODEL OF THE PARETO FRONT
-        this.saveText(MOST_ACCURATE_PATH, "", false);
-        this.saveText(MOST_ACCURATE_PATH, minTarget + "," + maxTarget + ",", true);
-        if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
-            for(int j = 0;j<acc.getWeights().size()-1;j++){
-                this.saveText(MOST_ACCURATE_PATH, acc.getWeights().get(j) + " ", true);
-            }
-            this.saveText(MOST_ACCURATE_PATH, acc.getWeights().get(acc.getWeights().size()-1) + ",", true);
-            this.saveText(MOST_ACCURATE_PATH, acc.getLassoIntercept() + ",", true);
-        }
-        this.saveText(MOST_ACCURATE_PATH, acc.toString() + "\n", true);
-
-        // SAVE KNEE MODEL OF THE PARETO FRONT
-        this.saveText(KNEE_PATH, "", false);
-        this.saveText(KNEE_PATH, minTarget + "," + maxTarget + ",", true);
-        if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
-            for(int j = 0;j<knee.getWeights().size()-1;j++){
-                this.saveText(KNEE_PATH, knee.getWeights().get(j) + " ", true);
-            }
-            this.saveText(KNEE_PATH, knee.getWeights().get(knee.getWeights().size()-1) + ",", true);
-            this.saveText(KNEE_PATH, knee.getLassoIntercept() + ",", true);
-        }
-        this.saveText(KNEE_PATH, knee.toString() + "\n", true);
+//        // SAVE LEAST COMPLEX MODEL OF THE PARETO FRONT
+//        this.saveText(LEAST_COMPLEX_PATH, "", false);
+//        this.saveText(LEAST_COMPLEX_PATH, minTarget + "," + maxTarget + ",", true);
+//        if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
+//            for(int j = 0;j<comp.getWeights().size()-1;j++){
+//                this.saveText(LEAST_COMPLEX_PATH, comp.getWeights().get(j) + " ", true);
+//            }
+//            this.saveText(LEAST_COMPLEX_PATH, comp.getWeights().get(comp.getWeights().size()-1) + ",", true);
+//            this.saveText(LEAST_COMPLEX_PATH, comp.getLassoIntercept() + ",", true);
+//        }
+//        this.saveText(LEAST_COMPLEX_PATH, comp.toString() + "\n", true);
+//
+//        // SAVE MOST ACCURATE MODEL OF THE PARETO FRONT
+//        this.saveText(MOST_ACCURATE_PATH, "", false);
+//        this.saveText(MOST_ACCURATE_PATH, minTarget + "," + maxTarget + ",", true);
+//        if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
+//            for(int j = 0;j<acc.getWeights().size()-1;j++){
+//                this.saveText(MOST_ACCURATE_PATH, acc.getWeights().get(j) + " ", true);
+//            }
+//            this.saveText(MOST_ACCURATE_PATH, acc.getWeights().get(acc.getWeights().size()-1) + ",", true);
+//            this.saveText(MOST_ACCURATE_PATH, acc.getLassoIntercept() + ",", true);
+//        }
+//        this.saveText(MOST_ACCURATE_PATH, acc.toString() + "\n", true);
+//
+//        // SAVE KNEE MODEL OF THE PARETO FRONT
+//        this.saveText(KNEE_PATH, "", false);
+//        this.saveText(KNEE_PATH, minTarget + "," + maxTarget + ",", true);
+//        if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
+//            for(int j = 0;j<knee.getWeights().size()-1;j++){
+//                this.saveText(KNEE_PATH, knee.getWeights().get(j) + " ", true);
+//            }
+//            this.saveText(KNEE_PATH, knee.getWeights().get(knee.getWeights().size()-1) + ",", true);
+//            this.saveText(KNEE_PATH, knee.getLassoIntercept() + ",", true);
+//        }
+//        this.saveText(KNEE_PATH, knee.toString() + "\n", true);
         return acc;
     }
-    
+
     public boolean stopCriteria(){
         boolean stop = false;
         if( System.currentTimeMillis() >= TIMEOUT){
@@ -808,7 +808,7 @@ public class SymbRegMOO {
         }
         return stop;
     }
-        
+
     public static Properties loadProps(String propFile) {
         Properties props = new Properties();
         BufferedReader f;
@@ -824,7 +824,7 @@ public class SymbRegMOO {
 //        System.out.println(props.toString());
         return props;
     }
-       
+
     /**
      * Save text to a filepath
      * @param filepath
@@ -842,7 +842,7 @@ public class SymbRegMOO {
             System.exit(-1);
         }
     }
-        
+
     public List<String> getFuncs(){
         return FUNC_SET;
     }
@@ -854,5 +854,5 @@ public class SymbRegMOO {
     public boolean running() {
         return (generation <= NUM_GENS) && (!finished);
     }
-  
+
 }

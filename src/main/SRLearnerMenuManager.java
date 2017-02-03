@@ -1,8 +1,8 @@
 /**
  * Copyright (c) 2011-2013 Evolutionary Design and Optimization Group
- * 
+ *
  * Licensed under the MIT License.
- * 
+ *
  * See the "LICENSE" file for a copy of the license.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
@@ -31,11 +31,11 @@ import java.util.Properties;
  * @author Ignacio Arnaldo
  */
 public class SRLearnerMenuManager {
-    
+
     public SRLearnerMenuManager(){
-        
+
     }
-    
+
     public void printUsage(){
         System.err.println();
         System.err.println("USAGE:");
@@ -54,63 +54,24 @@ public class SRLearnerMenuManager {
     }
 
     public void parseSymbolicRegressionRun(String args[]) throws IOException {
-        String dataPath;
         int numMinutes = 0;
-        SymbRegMOO srEvoGPj;
-        if (args.length==10) {
-            dataPath = args[1];
-            if (args[2].equals("-minutes")) {
-                numMinutes = Integer.valueOf(args[3]);
-                if(args[4].equals("-properties")){ // JAVA WITH PROPERTIES
-                    String propsFile = args[5];
-                    if (args[6].equals("-runs") && args[8].equals("-filename")) {
-                        int numRuns = Integer.parseInt(args[7]);
-                        String filename = args[9];
-                        double totalFitness = 0;
-                        double totalSize = 0;
-                        long totalTime = 0;
-                        long currentTime = System.currentTimeMillis();
-                        saveText(filename, "", false);
-                        System.out.format("Running %s\n", filename);
-                        System.out.flush();
-                        Properties props = new Properties();
-                        for (int i = 0; i < numRuns; i++) {
-                            props.clear();
-                            props.put(Parameters.Names.PROBLEM, dataPath);
-                            props.put(Parameters.Names.SEED, String.valueOf(System.currentTimeMillis() + i));
-                            srEvoGPj = new SymbRegMOO(props,propsFile,numMinutes*60);
-                            Individual bestIndi = srEvoGPj.run_population();
-                            double fitness = bestIndi.getFitness();
-                            int size = ((Tree) bestIndi.getGenotype()).getSize();
-                            long time = System.currentTimeMillis() - currentTime;
-                            totalFitness += fitness;
-                            totalSize += (double) size;
-                            totalTime += time;
-                            saveText(filename, Double.toString(fitness) + "," + Integer.toString(size) + "," + Long.toString(time) + "\n", true);
-                            currentTime = System.currentTimeMillis();
-                        }
-                        double averageFitness = totalFitness/(double) numRuns;
-                        double averageSize = totalSize/(double) numRuns;
-                        double averageTime = (double) totalTime/(double) numRuns;
-//                        System.out.format("Average fitness: %s; Average size: %s", averageFitness, averageSize);
-                        saveText(filename, "Average:", true);
-                        saveText(filename, Double.toString(averageFitness) + "," + Double.toString(averageSize) + "," + Double.toString(averageTime) + "\n", true);
-                    }
-                    // run evogpj with properties file and modified properties
-                }else{
-                    printUsage();
-                    System.exit(-1);
-                }
-            }else{
-                printUsage();
-                System.exit(-1);
-            }
-        } else {
-            printUsage();
-            System.exit(-1);
-        }
+        String dataPath = args[1];
+        numMinutes = 10000;
+        String propsFile = args[3];
+        String filename = "temp_output";
+        Properties props = new Properties();
+        props.put(Parameters.Names.PROBLEM, dataPath);
+        props.put(Parameters.Names.SEED, String.valueOf(System.currentTimeMillis()));
+        SymbRegMOO srEvoGPj = new SymbRegMOO(props,propsFile,numMinutes*60);
+        long currentTime = System.currentTimeMillis();
+        Individual bestIndi = srEvoGPj.run_population();
+        double fitness = bestIndi.getFitness();
+        int size = ((Tree) bestIndi.getGenotype()).getSize();
+        long time = System.currentTimeMillis() - currentTime;
+        saveText(filename, "", false);
+        saveText(filename, Double.toString(fitness) + "," + Integer.toString(size) + "," + Long.toString(time) + "\n", true);
     }
-    
+
     public void parseSymbolicRegressionTrain(String args[]) throws IOException{
         String dataPath;
         int numMinutes=0;
@@ -150,8 +111,8 @@ public class SRLearnerMenuManager {
             System.exit(-1);
         }
     }
-    
-    
+
+
     //java -jar evogpj.jar -predictions path_to_data -o filename -integer true -scaled path_to_scaled_models
     public void parseSymbolicRegressionPredictions(String args[]) throws IOException, ClassNotFoundException{
         String dataPath;
@@ -188,9 +149,9 @@ public class SRLearnerMenuManager {
             printUsage();
             System.exit(-1);
         }
-        
+
     }
-    
+
     //java -jar evogpj.jar -test path_to_data -integer true -scaled path_to_scaled_models
     public void parseSymbolicRegressionTest(String args[]) throws IOException, ClassNotFoundException{
         String dataPath;
@@ -234,7 +195,7 @@ public class SRLearnerMenuManager {
                 tsm.saveModelsToFile("test"+popPath);
                 System.out.println();
             }
-            
+
         }else if(args.length==6){
             dataPath = args[1];
             if(args[2].equals("-integer")){
@@ -259,10 +220,10 @@ public class SRLearnerMenuManager {
             printUsage();
             System.exit(-1);
         }
-        
+
     }
-    
-    
+
+
     public static void main(String args[]) throws IOException, ClassNotFoundException, InterruptedException{
         SRLearnerMenuManager m = new SRLearnerMenuManager();
         if (args.length == 0) {
