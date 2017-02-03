@@ -13,8 +13,6 @@ import java.util.List;
  */
 public class BenchmarkDataSet {
 
-    private static final double PRECISION = 100000.0;
-
     private static List<List<Double>> constructDataSet(String name) {
         List<List<Double>> inputs;
         List<List<Double>> data;
@@ -108,11 +106,6 @@ public class BenchmarkDataSet {
             List<Double> input = inputs.get(i);
             double output = f.call(input);
             data.get(i).add(output);
-        }
-        for (List<Double> point : data) {
-            for (int i = 0; i < point.size(); i++) {
-                point.set(i, Math.round(point.get(i) * BenchmarkDataSet.PRECISION)/BenchmarkDataSet.PRECISION);
-            }
         }
         return data;
     }
