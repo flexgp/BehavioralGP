@@ -70,6 +70,7 @@ public class Individual implements Serializable {
     private Map<ImmutableList<Double>, Double> processedWeights;
     private double modelError;
     private double modelComplexity;
+    private double modelContribution;
 
     /**
      * Create an individual with the given genotype. The new individuals
@@ -418,5 +419,13 @@ public class Individual implements Serializable {
 
     public void setModelComplexity(double modelComplexity) {
         this.modelComplexity = modelComplexity;
+    }
+
+    public double getModelContribution() {
+        return this.modelContribution;
+    }
+
+    public void setModelContribution(double modelContribution) {
+        this.modelContribution = modelContribution;
     }
 }
