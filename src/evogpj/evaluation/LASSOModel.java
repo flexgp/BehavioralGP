@@ -58,6 +58,11 @@ public class LASSOModel implements Model {
         return individual.getModelComplexity();
     }
 
+    @Override
+    public double getModelContribution(Individual individual) throws IndividualModelValueNotDefinedException {
+        throw new IndividualModelValueNotDefinedException();
+    }
+
     private void buildModelFromIndividual(Individual individual) throws Exception {
         Map<ImmutableList<Double>, TreeNode> geneticMaterial = individual.getGeneticMaterial();
 
