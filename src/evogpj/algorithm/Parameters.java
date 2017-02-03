@@ -217,6 +217,7 @@ public final class Parameters {
         public static final String RANDOM_MODEL = "fitness.RandomModel";
         public static final String FULL_POP_REPTREE_MODEL = "fitness.FullPopulationREPTreeModel";
         public static final String LASSO_MODEL = "fitness.LASSOModel";
+        public static final String RANDOM_DRAWS_REPTREE_MODEL = "fitness.RandomDrawsREPTreeModel";
 
         // FITNESS_FUNCTION_EVALUATOR values
         public static final String ORDINARY_FITNESS_FUNCTION_EVALUATOR = "fitness.OrdinaryFitnessFunctionEvaluator";
