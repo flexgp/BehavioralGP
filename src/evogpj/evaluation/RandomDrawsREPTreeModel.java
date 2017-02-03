@@ -36,13 +36,14 @@ public class RandomDrawsREPTreeModel implements Model {
         processedGeneticMaterial.clear();
         weights.clear();
 
-        int numSubtreesInPopulation = 0;
+        List<Integer> treeSizes = new ArrayList<>();
         for (Individual individual : population) {
             individual.resetModelContribution();
-            numSubtreesInPopulation += ((Tree) individual.getGenotype()).getSize();
+            int size = ((Tree) individual.getGenotype()).getSize();
+            treeSizes.add(size);
         }
-        double averageTreeSize = (double) numSubtreesInPopulation / (double) population.size();
-        int numFeaturesPerModel = new Double(Math.floor(averageTreeSize)).intValue();
+        Collections.sort(treeSizes);
+        treeSizes = treeSizes.subList(0, treeSizes.size()/5);
 
         Map<ImmutableList<Double>, TreeNode> collectedGeneticMaterial = new HashMap<>();
         Map<ImmutableList<Double>, Individual> semanticsToIndividual = new HashMap<>();
@@ -64,8 +65,8 @@ public class RandomDrawsREPTreeModel implements Model {
             int totalFeaturesUsed = buildModelsFromCollectedGeneticMaterial(
                     collectedGeneticMaterial,
                     semanticsToIndividual,
-                    population.size(),
-                    numFeaturesPerModel
+                    treeSizes,
+                    population.size()
                     );
             if (totalFeaturesUsed > 0) {
                 for (Individual individual : population) {
@@ -113,8 +114,8 @@ public class RandomDrawsREPTreeModel implements Model {
     private int buildModelsFromCollectedGeneticMaterial(
             Map<ImmutableList<Double>, TreeNode> combinedGeneticMaterial,
             Map<ImmutableList<Double>, Individual> semanticsToIndividual,
-            int numModels,
-            int numFeaturesPerModel
+            List<Integer> numFeaturesDistribution,
+            int numModels
     ) throws Exception {
 
         List<ImmutableList<Double>> semanticsList = new ArrayList<>();
@@ -128,7 +129,9 @@ public class RandomDrawsREPTreeModel implements Model {
         for (int modelBuild = 0; modelBuild < numModels; modelBuild++) {
 
             Map<ImmutableList<Double>, TreeNode> geneticMaterial = new HashMap<>();
-            for (int feature = 0; feature < numFeaturesPerModel; feature++) {
+            int numFeaturesIndex = rand.nextInt(numFeaturesDistribution.size());
+            int numFeatures = numFeaturesDistribution.get(numFeaturesIndex);
+            for (int feature = 0; feature < numFeatures; feature++) {
                 int index = rand.nextInt(semanticsList.size());
                 ImmutableList<Double> semantics = semanticsList.get(index);
                 TreeNode syntax = combinedGeneticMaterial.get(semantics);
