@@ -375,6 +375,8 @@ public class SymbRegMOO {
             model = new RandomModel(targetValues, rand);
         } else if (MODEL.equals(Parameters.Operators.LASSO_MODEL)) {
             model = new LASSOModel(targetValues);
+        } else if (MODEL.equals(Parameters.Operators.RANDOM_DRAWS_REPTREE_MODEL)) {
+            model = new RandomDrawsREPTreeModel(targetValues, rand);
         } else {
             System.err.format("Invalid Model %s specified for problem type %s%n", MODEL);
             System.exit(-1);
