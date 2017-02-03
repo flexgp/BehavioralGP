@@ -13,7 +13,7 @@ hs_err_pid*
 
 .DS_Store
 .idea/
-extended-bgp.iml
+*.iml
 *.txt
 props/
 runs/
