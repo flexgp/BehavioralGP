@@ -427,6 +427,8 @@ public class SymbRegMOO {
                 fitnessFunctions.put(fitnessOperatorName, new ModelErrorFitness(model));
             } else if (fitnessOperatorName.equals(Parameters.Operators.MODEL_COMPLEXITY_FITNESS)) {
                 fitnessFunctions.put(fitnessOperatorName, new ModelComplexityFitness(model));
+            } else if (fitnessOperatorName.equals(Parameters.Operators.MODEL_CONTRIBUTION_FITNESS)) {
+                fitnessFunctions.put(fitnessOperatorName, new ModelContributionFitness(model));
             } else {
                 System.err.format("Invalid fitness function %s specified for problem type %s%n",fitnessOperatorName);
                 System.exit(-1);
