@@ -28,18 +28,43 @@ public class FullPopulationREPTreeModel implements Model {
     public void buildModel(Population population) {
         processedGeneticMaterial.clear();
         weights.clear();
+        for (Individual individual : population) {
+            individual.resetModelContribution();
+        }
+
         Map<ImmutableList<Double>, TreeNode> collectedGeneticMaterial = new HashMap<>();
+        Map<ImmutableList<Double>, Individual> semanticsToIndividual = new HashMap<>();
         for (Individual individual : population) {
             Map<ImmutableList<Double>, TreeNode> geneticMaterial = individual.getGeneticMaterial();
             for (Map.Entry entry : geneticMaterial.entrySet()) {
                 ImmutableList<Double> semantics = (ImmutableList<Double>) entry.getKey();
                 TreeNode syntax = geneticMaterial.get(semantics);
-                combineGeneticMaterial(collectedGeneticMaterial, semantics, syntax);
+                combineGeneticMaterial(
+                        collectedGeneticMaterial,
+                        semantics,
+                        syntax,
+                        semanticsToIndividual,
+                        individual
+                );
             }
         }
         try {
-            buildModelFromCollectedGeneticMaterial(collectedGeneticMaterial);
+            int numFeaturesUsed = buildModelFromCollectedGeneticMaterial(collectedGeneticMaterial, semanticsToIndividual);
+            if (numFeaturesUsed > 0) {
+                for (Individual individual : population) {
+                    int modelContribution = individual.getModelContribution();
+                    double modelContributionFitness = 1.0 - (double) modelContribution / (double) numFeaturesUsed;
+                    individual.setModelContributionFitness(modelContributionFitness);
+                }
+            } else {
+                for (Individual individual : population) {
+                    individual.setModelContributionFitness(1.0);
+                }
+            }
         } catch (Exception e) {
+            for (Individual individual : population) {
+                individual.setModelContributionFitness(1.0);
+            }
         }
     }
 
@@ -63,7 +88,15 @@ public class FullPopulationREPTreeModel implements Model {
         throw new IndividualModelValueNotDefinedException();
     }
 
-    private void buildModelFromCollectedGeneticMaterial(Map<ImmutableList<Double>, TreeNode> geneticMaterial) throws Exception {
+    @Override
+    public double getModelContribution(Individual individual) {
+        return individual.getModelContributionFitness();
+    }
+
+    private int buildModelFromCollectedGeneticMaterial(
+            Map<ImmutableList<Double>, TreeNode> geneticMaterial,
+            Map<ImmutableList<Double>, Individual> semanticsToIndividual
+    ) throws Exception {
 
         List<String> featureNamesList = new ArrayList<>();
         Map<String, ImmutableList<Double>> featureNamesMap = new HashMap<>();
@@ -126,19 +159,12 @@ public class FullPopulationREPTreeModel implements Model {
             double weight = 1.0 / ((1.0 + error) * usefulSubtrees.size());
             for (ImmutableList<Double> semantics : usefulSubtrees) {
                 TreeNode syntax = geneticMaterial.get(semantics);
-                if (processedGeneticMaterial.containsKey(semantics)) {
-                    int oldSize = processedGeneticMaterial.get(semantics).getSubtreeSize();
-                    int newSize = syntax.getSubtreeSize();
-                    if (newSize < oldSize) {
-                        processedGeneticMaterial.put(semantics, syntax);
-                        weights.put(semantics, weight);
-                    }
-                } else {
-                    processedGeneticMaterial.put(semantics, syntax);
-                    weights.put(semantics, weight);
-                }
+                processedGeneticMaterial.put(semantics, syntax);
+                weights.put(semantics, weight);
+                semanticsToIndividual.get(semantics).updateModelContribution(1);
             }
         }
+        return usefulSubtrees.size();
     }
 
     /**
@@ -150,20 +176,29 @@ public class FullPopulationREPTreeModel implements Model {
      *                        data, and each value is its syntax.
      * @param semantics The key to geneticMaterial
      * @param syntax The value to geneticMaterial
+     * @param semanticsToIndividual A map that represents which Individual
+     *                              contributed the semantics that are in
+     *                              the geneticMaterial.
+     * @param individual The individual to whom the semantics and syntax
+     *                   belong.
      */
     private void combineGeneticMaterial(
             Map<ImmutableList<Double>, TreeNode> geneticMaterial,
             ImmutableList<Double> semantics,
-            TreeNode syntax
+            TreeNode syntax,
+            Map<ImmutableList<Double>, Individual> semanticsToIndividual,
+            Individual individual
     ) {
         if (geneticMaterial.containsKey(semantics)) {
             int oldSize = geneticMaterial.get(semantics).getSubtreeSize();
             int newSize = syntax.getSubtreeSize();
             if (newSize < oldSize) {
                 geneticMaterial.put(semantics, syntax);
+                semanticsToIndividual.put(semantics, individual);
             }
         } else {
             geneticMaterial.put(semantics, syntax);
+            semanticsToIndividual.put(semantics, individual);
         }
     }
 }

@@ -96,6 +96,11 @@ public abstract class MultiThreadedModel implements Model {
         return individual.getModelComplexity();
     }
 
+    @Override
+    public double getModelContribution(Individual individual) throws IndividualModelValueNotDefinedException {
+        throw new IndividualModelValueNotDefinedException();
+    }
+
     protected abstract void buildModelFromIndividual(Individual individual) throws Exception;
 
     public class ModelThread extends Thread {

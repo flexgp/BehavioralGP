@@ -58,6 +58,11 @@ public class REPTreeModel implements Model {
     public double getModelComplexity(Individual individual) {
         return individual.getModelComplexity();
     }
+
+    @Override
+    public double getModelContribution(Individual individual) throws IndividualModelValueNotDefinedException {
+        throw new IndividualModelValueNotDefinedException();
+    }
     
     private void buildModelFromIndividual(Individual individual) throws Exception {
         Map<ImmutableList<Double>, TreeNode> geneticMaterial = individual.getGeneticMaterial();

@@ -137,6 +137,7 @@ public final class Parameters {
         public static final String PROGRAM_SIZE_FITNESS = "fitness.ProgramSizeFitness.Java";
         public static final String MODEL_ERROR_FITNESS = "fitness.ModelErrorFitness.Java";
         public static final String MODEL_COMPLEXITY_FITNESS = "fitness.ModelComplexityFitness.Java";
+        public static final String MODEL_CONTRIBUTION_FITNESS = "fitness.ModelContributionFitness.Java";
 
         // Symbolic Regression
         public static final String SR_JAVA_FITNESS = "fitness.SRFitness.Java";

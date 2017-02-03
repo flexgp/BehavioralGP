@@ -45,4 +45,11 @@ public interface Model {
      * @throws IndividualModelValueNotDefinedException
      */
     double getModelComplexity(Individual individual) throws IndividualModelValueNotDefinedException;
+
+    /**
+     * @param individual
+     * @return The model contribution for the specified Individual.
+     * @throws IndividualModelValueNotDefinedException
+     */
+    double getModelContribution(Individual individual) throws IndividualModelValueNotDefinedException;
 }
