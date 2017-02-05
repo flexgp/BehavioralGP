@@ -18,14 +18,14 @@ import java.util.*;
 public class FullPopulationREPTreeModel implements Model {
     protected List<Double> targetValues;
     protected boolean crowdedTournamentSelection;
-    protected int fractionOfPopulationToUse;
+    protected double fractionOfPopulationToUse;
     protected Map<ImmutableList<Double>, TreeNode> processedGeneticMaterial;
     protected Map<ImmutableList<Double>, Double> weights;
     protected LinkedHashMap<String, FitnessFunction> fitnessFunctions = new LinkedHashMap<>();
 
     public FullPopulationREPTreeModel(List<Double> targetValues,
                                       boolean crowdedTournamentSelection,
-                                      int fractionOfPopulationToUse
+                                      double fractionOfPopulationToUse
     ) {
         this.targetValues = targetValues;
         this.crowdedTournamentSelection = crowdedTournamentSelection;

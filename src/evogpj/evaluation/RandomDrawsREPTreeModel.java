@@ -24,7 +24,7 @@ public class RandomDrawsREPTreeModel implements Model {
     protected List<Double> targetValues;
     protected MersenneTwisterFast rand;
     protected boolean crowdedTournamentSelection;
-    protected int fractionOfPopulationToUse;
+    protected double fractionOfPopulationToUse;
     protected Map<ImmutableList<Double>, TreeNode> processedGeneticMaterial;
     protected Map<ImmutableList<Double>, Double> weights;
     protected LinkedHashMap<String, FitnessFunction> fitnessFunctions = new LinkedHashMap<>();
@@ -32,7 +32,7 @@ public class RandomDrawsREPTreeModel implements Model {
     public RandomDrawsREPTreeModel(List<Double> targetValues,
                                    MersenneTwisterFast rand,
                                    boolean crowdedTournamentSelection,
-                                   int fractionOfPopulationToUse) {
+                                   double fractionOfPopulationToUse) {
         this.targetValues = targetValues;
         this.rand = rand;
         this.crowdedTournamentSelection = crowdedTournamentSelection;
