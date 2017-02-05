@@ -1,0 +1,15 @@
+\section{Exploiting Subprograms}\label{sect:foreground}
+What emerges from the details of BGP's successful examples is a strategy which can be realized in a number of ways other than the algorithms tried in the original paper.
+Steps
+\begin{enumerate}
+\item Capture the behavior of \st. Currently done with trace matrix T in aggregate for every \st in a program.
+\item Assign a value of merit to the \st's behavior. Currently done with one program's T + label and modeling with REPTREE. Use model's fitness. Fitness of REPTREE model is associated with program in options 4A and 4, Fitness of model is also associated with \st selection for archive and estimate of archive fitness.
+\item Guide the construction of new programs using high value \st{s} and knowledge of which \st{s} have high value. Currently done with archive crossover and 2 fitness measures from model incorporated into fitness of program during selection for replication.
+\end{enumerate}
+
+This contribution explores 2 alternatives to (2). \begin{inparaenum}\item We will ask whether different model algorithms  with different feature selection pressure and model bias have significant impact on fitness and whether implementation difference impacts how many  \st{s} are identified.  \item Give motivation. We will try new aggregated variations on T matrix  (full and some of pop). The aggregations of T motivate different fitness being passed to program from modeling.\end{inparaenum}
+Describe the algorithm for 2 Aggregated Trace.
+
+
+
+
