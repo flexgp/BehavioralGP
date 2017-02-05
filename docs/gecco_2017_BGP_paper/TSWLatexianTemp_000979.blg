@@ -1,0 +1,57 @@
+This is BibTeX, Version 0.99d (TeX Live 2011)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: TSWLatexianTemp_000979.aux
+The style file: ACM-Reference-Format.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Database file #1: BGP_gecco_2017.bib
+Warning--I'm ignoring KrawiecBPS2016's extra "url" field
+--line 17 of file BGP_gecco_2017.bib
+Warning--I didn't find a database entry for "PangeaPaper"
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Warning--empty address in KrawiecBPS2016
+Warning--unrecognized DOI value [doi:10.1007/978-3-319-27565-9]
+Warning--empty publisher in KrawiecGECCO2014
+Warning--empty address in KrawiecGECCO2014
+You've used 2 entries,
+            5551 wiz_defined-function locations,
+            1313 strings with 15965 characters,
+and the built_in function-call counts, 1841 in all, are:
+= -- 181
+> -- 58
+< -- 0
++ -- 16
+- -- 24
+* -- 121
+:= -- 215
+add.period$ -- 12
+call.type$ -- 2
+change.case$ -- 11
+chr.to.int$ -- 2
+cite$ -- 5
+duplicate$ -- 164
+empty$ -- 117
+format.name$ -- 28
+if$ -- 391
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 7
+newline$ -- 58
+num.names$ -- 16
+pop$ -- 67
+preamble$ -- 2
+purify$ -- 21
+quote$ -- 0
+skip$ -- 47
+stack$ -- 0
+substring$ -- 138
+swap$ -- 15
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 22
+warning$ -- 4
+while$ -- 19
+width$ -- 0
+write$ -- 77
+(There were 6 warnings)
