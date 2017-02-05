@@ -39,24 +39,27 @@ public class FullPopulationREPTreeModel implements Model {
         processedGeneticMaterial.clear();
         weights.clear();
 
-        Population usedPopulation = new Population();
+        Population sortedPopulation = new Population();
         for (Individual individual : population) {
             individual.resetModelContribution();
-            usedPopulation.add(individual);
+            sortedPopulation.add(individual);
         }
         try {
-            DominatedCount.countDominated(usedPopulation, fitnessFunctions);
+            DominatedCount.countDominated(sortedPopulation, fitnessFunctions);
         } catch (DominatedCount.DominationException e) {
             System.exit(-1);
         }
         if (crowdedTournamentSelection) {
-            CrowdingSort.computeCrowdingDistances(usedPopulation, fitnessFunctions);
+            CrowdingSort.computeCrowdingDistances(sortedPopulation, fitnessFunctions);
         }
-        usedPopulation.sort(crowdedTournamentSelection);
+        sortedPopulation.sort(crowdedTournamentSelection);
 
         Double numIndividualsToInclude = Math.floor(fractionOfPopulationToUse * population.size());
         int populationCutoffIndex = numIndividualsToInclude.intValue();
-        usedPopulation = (Population) usedPopulation.subList(0, populationCutoffIndex);
+        Population usedPopulation = new Population();
+        for (int index = 0; index < populationCutoffIndex; index++) {
+            usedPopulation.add(sortedPopulation.get(index));
+        }
 
         Map<ImmutableList<Double>, TreeNode> collectedGeneticMaterial = new HashMap<>();
         Map<ImmutableList<Double>, Individual> semanticsToIndividual = new HashMap<>();
