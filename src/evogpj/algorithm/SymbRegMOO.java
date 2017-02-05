@@ -436,6 +436,7 @@ public class SymbRegMOO {
                 System.exit(-1);
             }
         }
+        model.passFitnessFunctions(fitnessFunctions);
 
         if (FITNESS_FUNCTION_EVALUATOR.equals(Parameters.Operators.ORDINARY_FITNESS_FUNCTION_EVALUATOR)) {
             fitnessFunctionEvaluator = new OrdinaryFitnessFunctionEvaluator(fitnessFunctions);
