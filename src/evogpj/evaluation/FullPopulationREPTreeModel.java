@@ -17,6 +17,7 @@ public class FullPopulationREPTreeModel implements Model {
     protected List<Double> targetValues;
     protected Map<ImmutableList<Double>, TreeNode> processedGeneticMaterial;
     protected Map<ImmutableList<Double>, Double> weights;
+    protected LinkedHashMap<String, FitnessFunction> fitnessFunctions;
 
     public FullPopulationREPTreeModel(List<Double> targetValues) {
         this.targetValues = targetValues;
@@ -91,6 +92,11 @@ public class FullPopulationREPTreeModel implements Model {
     @Override
     public double getModelContribution(Individual individual) {
         return individual.getModelContributionFitness();
+    }
+
+    @Override
+    public void passFitnessFunctions(LinkedHashMap<String, FitnessFunction> fitnessFunctions) {
+        this.fitnessFunctions = fitnessFunctions;
     }
 
     private int buildModelFromCollectedGeneticMaterial(
