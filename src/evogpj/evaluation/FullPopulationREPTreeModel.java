@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableList;
 import evogpj.genotype.TreeNode;
 import evogpj.gp.Individual;
 import evogpj.gp.Population;
+import evogpj.sort.CrowdingSort;
+import evogpj.sort.DominatedCount;
 import weka.classifiers.Evaluation;
 import weka.classifiers.trees.REPTree;
 import weka.core.*;
@@ -15,12 +17,19 @@ import java.util.*;
  */
 public class FullPopulationREPTreeModel implements Model {
     protected List<Double> targetValues;
+    protected boolean crowdedTournamentSelection;
+    protected int fractionOfPopulationToUse;
     protected Map<ImmutableList<Double>, TreeNode> processedGeneticMaterial;
     protected Map<ImmutableList<Double>, Double> weights;
-    protected LinkedHashMap<String, FitnessFunction> fitnessFunctions;
+    protected LinkedHashMap<String, FitnessFunction> fitnessFunctions = new LinkedHashMap<>();
 
-    public FullPopulationREPTreeModel(List<Double> targetValues) {
+    public FullPopulationREPTreeModel(List<Double> targetValues,
+                                      boolean crowdedTournamentSelection,
+                                      int fractionOfPopulationToUse
+    ) {
         this.targetValues = targetValues;
+        this.crowdedTournamentSelection = crowdedTournamentSelection;
+        this.fractionOfPopulationToUse = fractionOfPopulationToUse;
         processedGeneticMaterial = new HashMap<>();
         weights = new HashMap<>();
     }
@@ -29,13 +38,29 @@ public class FullPopulationREPTreeModel implements Model {
     public void buildModel(Population population) {
         processedGeneticMaterial.clear();
         weights.clear();
+
+        Population usedPopulation = new Population();
         for (Individual individual : population) {
             individual.resetModelContribution();
+            usedPopulation.add(individual);
         }
+        try {
+            DominatedCount.countDominated(usedPopulation, fitnessFunctions);
+        } catch (DominatedCount.DominationException e) {
+            System.exit(-1);
+        }
+        if (crowdedTournamentSelection) {
+            CrowdingSort.computeCrowdingDistances(usedPopulation, fitnessFunctions);
+        }
+        usedPopulation.sort(crowdedTournamentSelection);
+
+        Double numIndividualsToInclude = Math.floor(fractionOfPopulationToUse * population.size());
+        int populationCutoffIndex = numIndividualsToInclude.intValue();
+        usedPopulation = (Population) usedPopulation.subList(0, populationCutoffIndex);
 
         Map<ImmutableList<Double>, TreeNode> collectedGeneticMaterial = new HashMap<>();
         Map<ImmutableList<Double>, Individual> semanticsToIndividual = new HashMap<>();
-        for (Individual individual : population) {
+        for (Individual individual : usedPopulation) {
             Map<ImmutableList<Double>, TreeNode> geneticMaterial = individual.getGeneticMaterial();
             for (Map.Entry entry : geneticMaterial.entrySet()) {
                 ImmutableList<Double> semantics = (ImmutableList<Double>) entry.getKey();
@@ -96,7 +121,11 @@ public class FullPopulationREPTreeModel implements Model {
 
     @Override
     public void passFitnessFunctions(LinkedHashMap<String, FitnessFunction> fitnessFunctions) {
-        this.fitnessFunctions = fitnessFunctions;
+        Iterator<String> iterator = fitnessFunctions.keySet().iterator();
+        String firstFitnessFunction = iterator.next();
+        String secondFitnessFunction = iterator.next();
+        this.fitnessFunctions.put(firstFitnessFunction, fitnessFunctions.get(firstFitnessFunction));
+        this.fitnessFunctions.put(secondFitnessFunction, fitnessFunctions.get(secondFitnessFunction));
     }
 
     private int buildModelFromCollectedGeneticMaterial(
