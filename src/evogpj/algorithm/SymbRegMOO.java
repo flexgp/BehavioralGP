@@ -79,6 +79,8 @@ public class SymbRegMOO {
     protected double ARCHIVE_MUTATION_RATE = Parameters.Defaults.ARCHIVE_MUTATION_RATE;
     // DEFAULT ARCHIVE CAPACITY
     protected int ARCHIVE_CAPACITY = Parameters.Defaults.ARCHIVE_CAPACITY;
+    // DEFAULT COMBINED POPULATION MODEL FRACTION
+    protected double COMBINED_POPULATION_MODEL_FRACTION = Parameters.Defaults.COMBINED_POPULATION_MODEL_FRACTION;
     
     
     // DEFAULT MUTATION OPERATOR
@@ -270,6 +272,8 @@ public class SymbRegMOO {
             ARCHIVE_MUTATION_RATE = Double.valueOf(props.getProperty(Parameters.Names.ARCHIVE_MUTATION_RATE));
         if (props.containsKey(Parameters.Names.ARCHIVE_CAPACITY))
             ARCHIVE_CAPACITY = Integer.valueOf(props.getProperty(Parameters.Names.ARCHIVE_CAPACITY));
+        if (props.containsKey(Parameters.Names.COMBINED_POPULATION_MODEL_FRACTION))
+            COMBINED_POPULATION_MODEL_FRACTION = Double.valueOf(props.getProperty(Parameters.Names.COMBINED_POPULATION_MODEL_FRACTION));
         if (props.containsKey(Parameters.Names.POP_SIZE))
             POP_SIZE = Integer.valueOf(props.getProperty(Parameters.Names.POP_SIZE));
         if (props.containsKey(Parameters.Names.POP_DATA_PATH))
@@ -368,7 +372,11 @@ public class SymbRegMOO {
         if (MODEL.equals(Parameters.Operators.REPTREE_MODEL)) {
             model = new REPTreeModel(targetValues);
         } else if (MODEL.equals(Parameters.Operators.FULL_POP_REPTREE_MODEL)) {
-            model = new FullPopulationREPTreeModel(targetValues);
+            model = new FullPopulationREPTreeModel(
+                    targetValues,
+                    SELECT.equals(Parameters.Operators.CROWD_SELECT),
+                    COMBINED_POPULATION_MODEL_FRACTION
+            );
         } else if (MODEL.equals(Parameters.Operators.PYTHON_MODEL)) {
             model = new PythonModel(targetValues, EXTERNAL_THREADS);
         } else if (MODEL.equals(Parameters.Operators.RANDOM_MODEL)) {
@@ -376,7 +384,12 @@ public class SymbRegMOO {
         } else if (MODEL.equals(Parameters.Operators.LASSO_MODEL)) {
             model = new LASSOModel(targetValues);
         } else if (MODEL.equals(Parameters.Operators.RANDOM_DRAWS_REPTREE_MODEL)) {
-            model = new RandomDrawsREPTreeModel(targetValues, rand);
+            model = new RandomDrawsREPTreeModel(
+                    targetValues,
+                    rand,
+                    SELECT.equals(Parameters.Operators.CROWD_SELECT),
+                    COMBINED_POPULATION_MODEL_FRACTION
+            );
         } else {
             System.err.format("Invalid Model %s specified for problem type %s%n", MODEL);
             System.exit(-1);
