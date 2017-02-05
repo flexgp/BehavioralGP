@@ -67,6 +67,10 @@ public class RandomModel implements Model {
         throw new IndividualModelValueNotDefinedException();
     }
 
+    @Override
+    public void passFitnessFunctions(LinkedHashMap<String, FitnessFunction> fitnessFunctions) {
+    }
+
     private void buildModelFromIndividual(Individual individual) throws Exception {
         Map<ImmutableList<Double>, TreeNode> geneticMaterial = individual.getGeneticMaterial();
 
