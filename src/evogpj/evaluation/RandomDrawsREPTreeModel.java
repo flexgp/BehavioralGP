@@ -23,6 +23,7 @@ public class RandomDrawsREPTreeModel implements Model {
     protected MersenneTwisterFast rand;
     protected Map<ImmutableList<Double>, TreeNode> processedGeneticMaterial;
     protected Map<ImmutableList<Double>, Double> weights;
+    protected LinkedHashMap<String, FitnessFunction> fitnessFunctions;
 
     public RandomDrawsREPTreeModel(List<Double> targetValues, MersenneTwisterFast rand) {
         this.targetValues = targetValues;
@@ -109,6 +110,11 @@ public class RandomDrawsREPTreeModel implements Model {
     @Override
     public double getModelContribution(Individual individual) {
         return individual.getModelContributionFitness();
+    }
+
+    @Override
+    public void passFitnessFunctions(LinkedHashMap<String, FitnessFunction> fitnessFunctions) {
+        this.fitnessFunctions = fitnessFunctions;
     }
 
     private int buildModelsFromCollectedGeneticMaterial(
