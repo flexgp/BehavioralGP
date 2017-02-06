@@ -1,15 +1,18 @@
 \section{Exploiting Subprograms}\label{sect:foreground}
-What emerges from the details of BGP's successful examples is a strategy which can be realized in a number of ways other than the algorithms tried in the original paper.
-Steps
-\begin{enumerate}
-\item Capture the behavior of \st. Currently done with trace matrix T in aggregate for every \st in a program.
-\item Assign a value of merit to the \st's behavior. Currently done with one program's T + label and modeling with REPTREE. Use model's fitness. Fitness of REPTREE model is associated with program in options 4A and 4, Fitness of model is also associated with \st selection for archive and estimate of archive fitness.
-\item Guide the construction of new programs using high value \st{s} and knowledge of which \st{s} have high value. Currently done with archive crossover and 2 fitness measures from model incorporated into fitness of program during selection for replication.
-\end{enumerate}
+What emerges from the details of BGP's successful examples is a strategy:  
+\begin{inparaenum}
 
-This contribution explores 2 alternatives to (2). \begin{inparaenum}\item We will ask whether different model algorithms  with different feature selection pressure and model bias have significant impact on fitness and whether implementation difference impacts how many  \st{s} are identified.  \item Give motivation. We will try new aggregated variations on T matrix  (full and some of pop). The aggregations of T motivate different fitness being passed to program from modeling.\end{inparaenum}
-Describe the algorithm for 2 Aggregated Trace.
+\item Capture the behavior of \st{s} within a program in a trace matrix $T$.
 
+\item  Regress T as feature data on the desired program outputs and derive a model $M$. 
 
+\item Assign a value of merit $f$ to each \st within $M$. Use this merit to determine whether it should be inserted into an archive. Use a modified crossover that draws subprograms from the archive. 
 
+\item Integrate model error and complexity into program fitness so that subprogram behavior influences selection.
+\end{inparaenum} \\
 
+One example of the strategy is realized in \cite{KrawiecGECCO2014} where, in Step~(2), \TODO{a REPTREE implementation} of Decision Tree\TODO{CITE} is used for regression modeling and merit is measured as \TODO{insert formula}.  Following our motivation to understand the impact of model bias on useful subprogram identification and program fitness, we first implement an alternative realization of BGP's strategy by using a \SCIKIT learn implementation\TODO{CITE} for regression modeling. \TODO{State how they differ.} With the \SCIKIT implementation we derive $M_S$ and contrast it to deriving $M$ which for clarity we now denote as $M_R$. 
+
+Next, following our observation that prior work derives useful subtree fitness from a model that references just the feature set of \textit{one} program, we realize Steps~(1) and (4) alternately.  In Step~(1) we first select a set of programs  $U$ from the population. We then form a new kind of trace matrix $T_c$ by column-wise concatenating all $T${'s} of the programs in $U$.  $T_c$ is then passed through Steps~(2) and (3). Step~(4) changes because subprograms in $M$ come from the set $U$ not solely one program. The information we can integrate into program fitness is whether a program contributed a feature to $M$. For this we \TODO{insert new fitness factor}.
+
+%Initially $U$ will be the entire population.

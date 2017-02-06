@@ -50,14 +50,13 @@ In this work,  we explore various extensions to the BGP paradigm that are motiva
 \textit{How important is it which subprograms the model technique selects and how accurate a model is? }  We answer these questions by comparing BGP competence under 2 different implementations of decision tree modeling which we observe have different baises. Our investigation contrasts feature identification and model accuracy under the two implementations. 
 
 \item \textbf{Alternate ways to identify useful subprograms: \textbf{``Plays well with others?''}}. BGP uses the trace matrix from a program implying all the subprograms of one program are treated as a set of features during modeling. This means that feature selection and subprogram fitness estimation occurs within the program context.  Essentially, each subprogram is juxtaposed with ``relatives'' -- its parent, neighbors and even child in GP tree terms. Does this context provide the best means of identifying useful subprograms? It may not. Crossover moves a subprogram into another program so, to work most effectively, it should explore recombinations of subprograms that work well \textit{in other subprograms and programs in the population}. We examine this idea by concatenating program traces from a set of programs, not solely one program and reflecting subprogram participation in the model as a means of archive selection and program fitness. We examine concatenation of the entire population and sub-populations based on fitness to ask whether fitter programs with concatenated traces are more effective than an open playing field. i.e. the entire population.  
-
   %Perhaps program context does not reflect how well a subprogram ``\textit{plays with other subprograms in the population}''.
 \end{inparaenum}
 
-In BGP the subtree's are judged only in conjunction with the program they're from, that is the model only uses a feature set that is  from the program. This limits the features of the models, since every subprogram can syntactically stand alone and be combined with any other subprogram, why not consider them all collectively? Or are they synergistic?  Does the model bias matter?
+\TODO{MOVE TO SUMMARY } In BGP the subtree's are judged only in conjunction with the program they're from, that is the model only uses a feature set that is  from the program. This limits the features of the models, since every subprogram can syntactically stand alone and be combined with any other subprogram, why not consider them all collectively? Or are they synergistic?  Does the model bias matter?
 
-Our specific demonstration focus herein is  symbolic regression. We choose SR because i where the landscape of possible solutions is often enormous (even infinite). SR has good benchmarks so it allows us to measure progress and extensions. Also there's real world application including solving system identification and, with modest modification, machine learning regression and classification.
+Our specific demonstration focus herein is  symbolic regression. We choose SR because i where the landscape of possible solutions is often enormous (even infinite). SR has good benchmarks so it allows us to measure progress and extensions. Also there's real world application including solving system identification and, with modest modification, machine learning regression and classification.  In passing, we replicate BGP logic, making our project software available with an open source license.
 
-In passing, we replicate BGP logic, making our project software available with an open source license.
- We proceed as follows: 
+We proceed as follows: \TODO{INSERT ROADMAP} 
+\vspace{1.0in}
 
