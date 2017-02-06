@@ -1,9 +1,8 @@
 \section{Related Work (one column)}
 \label{sec:related-work}
 
-\TODO{Talk about BGP in the context of program synthesis in general:  Armando, Gulwani, very recent Deep learning stuff!}
+BGP is not the only approach to program synthesis, there are e.g. sketching\cite{solar2008program}, i.e. communicating insight through a partial program, generalized program verification\cite{srivastava2010program}, as well as hybrid computing with neural network and external menory\cite{graves2016hybrid}
 
-\TODO{Is any of the material below from another source? I wouldn't have thought of Memetic GP! }
 One extension to the genetic programming paradigm is behavioral
 genetic programming (BGP) \cite{krawiecGECCO2014,KrawiecBPS2016}.  BGP attempts to identify
 useful subprograms that can then be used to enhance the evolutionary
@@ -16,18 +15,21 @@ the form of archives\cite{haynes1997line}. Extension are e.g. Memetic Semantic G
 Programming\cite{Ffrancon:2015:MSG:2739480.2754697} compute the
 optimal ``shouldbe'' values each subtree should return.
 
-\TODO{We should look at who cites the GECCO 2014 and book. That may point to related work.}
+Since its inception\cite{KrawiecSwan} and the introduction of the
+trace matrix and demonstration of blah in a system called
+PANGEA\cite{krawiec2013pattern} where minimum description length was
+induced from the program execution, there have been a variety of
+extensions. For example, in the general vein of behaviorally
+characterizing a program by more than its accuracy, e.g. when
+discovering search objectives for test-based
+problems\cite{liskowski2016online}.
 
-\TODO{ Also I looked through KK's papers since 2014 and the ones where he and Liskowski use NN-matrix factorization could be included. I added them in the .bib  }  Since its inception\cite{KrawiecSwan} and the introduction of the trace matrix and demonstration of blah in a system called IFORGET where X was the point, there have been a variety of extensions. For example,  in the general vein of behaviorally characterizing a program by more than its accuracy, K and Liskowski investigate which test cases it solves..
-
-
-Semantic GP, where program output is scrutinized for every test
-individually, initiated by a study of the impact of crossover on
-program semantics and semantic building
-blocks~\cite{mcphee2008semantic}. A survey of semantic models in
-GP~\cite{vanneschi2014survey} where semantics is intended as the set
-of output values of a program on the training data. This paper gives
-an overview of methods for initialization, variation operators, as
-well as thedifferent objectives of perserving of semantic diversity,
-locality and geometry of topological spaces.
+The relationship between BGP and Semantic GP is the common goal of
+characterising program behaviour in more detail, and exploit this
+information. Wheras BGP looks at subprograms semantic GP, where
+program output is scrutinized for every test individually, was
+initiated by a study of the impact of crossover on program semantics
+and semantic building blocks~\cite{mcphee2008semantic}. A survey of
+semantic models in GP~\cite{vanneschi2014survey} gives an overview of
+methods for operators, as well as different objectives.
 
