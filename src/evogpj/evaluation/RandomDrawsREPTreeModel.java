@@ -6,6 +6,8 @@ import evogpj.genotype.TreeNode;
 import evogpj.gp.Individual;
 import evogpj.gp.MersenneTwisterFast;
 import evogpj.gp.Population;
+import evogpj.sort.CrowdingSort;
+import evogpj.sort.DominatedCount;
 import weka.classifiers.Evaluation;
 import weka.classifiers.trees.REPTree;
 import weka.core.Attribute;
@@ -21,12 +23,20 @@ import java.util.*;
 public class RandomDrawsREPTreeModel implements Model {
     protected List<Double> targetValues;
     protected MersenneTwisterFast rand;
+    protected boolean crowdedTournamentSelection;
+    protected double fractionOfPopulationToUse;
     protected Map<ImmutableList<Double>, TreeNode> processedGeneticMaterial;
     protected Map<ImmutableList<Double>, Double> weights;
+    protected LinkedHashMap<String, FitnessFunction> fitnessFunctions = new LinkedHashMap<>();
 
-    public RandomDrawsREPTreeModel(List<Double> targetValues, MersenneTwisterFast rand) {
+    public RandomDrawsREPTreeModel(List<Double> targetValues,
+                                   MersenneTwisterFast rand,
+                                   boolean crowdedTournamentSelection,
+                                   double fractionOfPopulationToUse) {
         this.targetValues = targetValues;
         this.rand = rand;
+        this.crowdedTournamentSelection = crowdedTournamentSelection;
+        this.fractionOfPopulationToUse = fractionOfPopulationToUse;
         processedGeneticMaterial = new HashMap<>();
         weights = new HashMap<>();
     }
@@ -37,17 +47,35 @@ public class RandomDrawsREPTreeModel implements Model {
         weights.clear();
 
         List<Integer> treeSizes = new ArrayList<>();
+        Population sortedPopulation = new Population();
         for (Individual individual : population) {
             individual.resetModelContribution();
+            sortedPopulation.add(individual);
             int size = ((Tree) individual.getGenotype()).getSize();
             treeSizes.add(size);
         }
         Collections.sort(treeSizes);
         treeSizes = treeSizes.subList(0, treeSizes.size()/5);
+        try {
+            DominatedCount.countDominated(sortedPopulation, fitnessFunctions);
+        } catch (DominatedCount.DominationException e) {
+            System.exit(-1);
+        }
+        if (crowdedTournamentSelection) {
+            CrowdingSort.computeCrowdingDistances(sortedPopulation, fitnessFunctions);
+        }
+        sortedPopulation.sort(crowdedTournamentSelection);
+
+        Double numIndividualsToInclude = Math.floor(fractionOfPopulationToUse * population.size());
+        int populationCutoffIndex = numIndividualsToInclude.intValue();
+        Population usedPopulation = new Population();
+        for (int index = 0; index < populationCutoffIndex; index++) {
+            usedPopulation.add(sortedPopulation.get(index));
+        }
 
         Map<ImmutableList<Double>, TreeNode> collectedGeneticMaterial = new HashMap<>();
         Map<ImmutableList<Double>, Individual> semanticsToIndividual = new HashMap<>();
-        for (Individual individual : population) {
+        for (Individual individual : usedPopulation) {
             Map<ImmutableList<Double>, TreeNode> geneticMaterial = individual.getGeneticMaterial();
             for (Map.Entry entry : geneticMaterial.entrySet()) {
                 ImmutableList<Double> semantics = (ImmutableList<Double>) entry.getKey();
@@ -109,6 +137,15 @@ public class RandomDrawsREPTreeModel implements Model {
     @Override
     public double getModelContribution(Individual individual) {
         return individual.getModelContributionFitness();
+    }
+
+    @Override
+    public void passFitnessFunctions(LinkedHashMap<String, FitnessFunction> fitnessFunctions) {
+        Iterator<String> iterator = fitnessFunctions.keySet().iterator();
+        String firstFitnessFunction = iterator.next();
+        String secondFitnessFunction = iterator.next();
+        this.fitnessFunctions.put(firstFitnessFunction, fitnessFunctions.get(firstFitnessFunction));
+        this.fitnessFunctions.put(secondFitnessFunction, fitnessFunctions.get(secondFitnessFunction));
     }
 
     private int buildModelsFromCollectedGeneticMaterial(

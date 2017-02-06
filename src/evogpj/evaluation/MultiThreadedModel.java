@@ -5,10 +5,7 @@ import evogpj.genotype.TreeNode;
 import evogpj.gp.Individual;
 import evogpj.gp.Population;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -99,6 +96,10 @@ public abstract class MultiThreadedModel implements Model {
     @Override
     public double getModelContribution(Individual individual) throws IndividualModelValueNotDefinedException {
         throw new IndividualModelValueNotDefinedException();
+    }
+
+    @Override
+    public void passFitnessFunctions(LinkedHashMap<String, FitnessFunction> fitnessFunctions) {
     }
 
     protected abstract void buildModelFromIndividual(Individual individual) throws Exception;

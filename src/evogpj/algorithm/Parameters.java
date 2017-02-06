@@ -85,6 +85,7 @@ public final class Parameters {
         public static final String TREE_MUTATE_MAX_DEPTH = "tree_mutate_max_depth";
         public static final String TOURNEY_SIZE = "tourney_size";
         public static final String ARCHIVE_CAPACITY = "archive_capacity";
+        public static final String COMBINED_POPULATION_MODEL_FRACTION = "combined_population_model_fraction";
         /**
          * For multi-objective optimization
          */
@@ -306,6 +307,7 @@ public final class Parameters {
         public static final String REPRODUCE = Operators.ORDINARY_REPRODUCE;
 
         public static final int ARCHIVE_CAPACITY = 50;
+        public static final double COMBINED_POPULATION_MODEL_FRACTION = 1.0;
         public static final String ARCHIVE = Operators.BP_ARCHIVE;
         public static final String ARCHIVE_MUTATE = Operators.ARCHIVE_MUTATE;
         public static final String MODEL = Operators.REPTREE_MODEL;

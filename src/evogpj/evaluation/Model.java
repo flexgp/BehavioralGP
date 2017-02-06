@@ -5,6 +5,7 @@ import evogpj.genotype.TreeNode;
 import evogpj.gp.Individual;
 import evogpj.gp.Population;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,4 +53,9 @@ public interface Model {
      * @throws IndividualModelValueNotDefinedException
      */
     double getModelContribution(Individual individual) throws IndividualModelValueNotDefinedException;
+
+    /**
+     * @param fitnessFunctions
+     */
+    void passFitnessFunctions(LinkedHashMap<String, FitnessFunction> fitnessFunctions);
 }
