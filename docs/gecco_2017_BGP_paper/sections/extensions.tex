@@ -1,18 +1,46 @@
 \section{Exploiting Subprograms}\label{sect:foreground}
+\subsection{BGP Strategy}
 What emerges from the details of BGP's successful examples is a strategy:  
 \begin{inparaenum}
 
 \item Capture the behavior of \st{s} within a program in a trace matrix $T$.
 
-\item  Regress T as feature data on the desired program outputs and derive a model $M$. 
+\item  Regress $T$ as feature data on the desired program outputs and derive a model $M$. 
 
-\item Assign a value of merit $f$ to each \st within $M$. Use this merit to determine whether it should be inserted into an archive. Use a modified crossover that draws subprograms from the archive. 
+\item Assign a value of merit $w$ to each \st within $M$. Use this merit to determine whether it should be inserted into an archive. Use a modified crossover that draws subprograms from the archive. 
 
 \item Integrate model error and complexity into program fitness so that subprogram behavior influences selection.
 \end{inparaenum} \\
 
-One example of the strategy is realized in \cite{KrawiecGECCO2014} where, in Step~(2), \TODO{a REPTREE implementation} of Decision Tree\TODO{CITE} is used for regression modeling and merit is measured as \TODO{insert formula}.  Following our motivation to understand the impact of model bias on useful subprogram identification and program fitness, we first implement an alternative realization of BGP's strategy by using a \SCIKIT learn implementation\TODO{CITE} for regression modeling. \TODO{State how they differ.} With the \SCIKIT implementation we derive $M_S$ and contrast it to deriving $M$ which for clarity we now denote as $M_R$. 
+% WEKA Citation M. Hall, E. Frank, G. Holmes, B. Pfahringer,%P. Reutemann, and I. H. Witten. The weka data mining software: An update. SIGKDD Explor. Newsl., 11(1):10–18, Nov. 2009.
 
-Next, following our observation that prior work derives useful subtree fitness from a model that references just the feature set of \textit{one} program, we realize Steps~(1) and (4) alternately.  In Step~(1) we first select a set of programs  $U$ from the population. We then form a new kind of trace matrix $T_c$ by column-wise concatenating all $T${'s} of the programs in $U$.  $T_c$ is then passed through Steps~(2) and (3). Step~(4) changes because subprograms in $M$ come from the set $U$ not solely one program. The information we can integrate into program fitness is whether a program contributed a feature to $M$. For this we \TODO{insert new fitness factor}.
+One example of the strategy is realized in \cite{KrawiecGECCO2014} where, in Step~(2), the fast REPTree (Reduced  Error  Pruning  Tree) algorithm  of decision tree classification from the WEKA Data Mining software library\cite{Hall:2009:WDM:1656274.1656278} is used for regression modeling.  REPTree builds a decision/regression tree using information gain/variance. In Step~(3) merit is measured per Equation~\ref{eq:subtree_weight} where $|U(p)|$ is the number of subprograms (equivalently distinct columns of the trace) used in the model and $e$ is model error.
+
+
+\begin{equation}
+\label{eq:subtree_weight}
+w = \frac{1}{(1 + e)|U(p)|}
+\end{equation}
+
+\subsection{Exploring Model Bias}
+Following our motivation to understand the impact of model bias on useful subprogram identification and program fitness, we first explore an alternative realization of BGP's strategy by using the \SCIKIT optimized version of the CART decision tree algorithm\footnote{\url{http://scikit-learn.org/stable/modules/tree.html\#tree-algorithms-id3-c4-5-c5-0-and-cart}}.  CART (Classification and Regression Trees) is very similar to C4.5, but it differs in that it supports numerical target variables (regression) and does not compute rule sets. CART constructs binary trees using the feature and threshold that yield the largest information gain at each node.  With the \SCIKIT implementation we derive $M_S$ and contrast it to deriving $M$ which for clarity we now denote as $M_R$ with subscripts S for \SCIKIT and R for REPTree. 
+
+\subsection{Identifying Useful Subprograms}
+\newcommand{\FULL}{\textbf{FULL}\xspace}
+\newcommand{\DRAW}{\textbf{DRAW}\xspace}
+Next, following our desire to investigate alternate ways to identify useful subprograms and our observation that prior work derives useful subtree fitness from a model that references just the feature set of \textit{one} program, we realize Steps~(1) and (4) alternately.  In Step~(1) we first select a set of programs  $C$ from the population. We then form a new kind of trace matrix $T_c$ by column-wise concatenating all $T${'s} of the programs in $C$. In a version we call \FULL,  $T_c$ is then passed through Step~(2). Steps~(3) and (4) are omitted because in each generation only a single machine learning model is built so all of the selected trees put into the archive in a single generation have the same weight.  We can thus experiment with different programs in $C$, trying $C$ holding all the programs in the population, for diversity and, conversely trying elitism, holding only a top fraction of the  population by fitness. 
+
+% $x\%$ by fitness (as computed by NSGA2 pareto crowding ordering) where $x$ ranges from 25\% of the population to a less elite shares of $50\%$ and $75\%$.
+
+An alternate implementation, that we name \DRAW,  is to draw random subsets from the combined trace of the programs in the population, and build a model on each.  This would create many candidate subtrees with different weights, and possibly a more robust archive, if it can be populated with subtrees that are frequently selected by the machine learning model.  Step~(4) changes because subprograms in $M$ come from the set $U$ not solely one program. The information we can integrate into program fitness is whether a program contributed a feature to $M$. For this we use $w_c$, see Equation~\ref{eq:subtree_contrib} which weighs how many times a program's subprogram appeared in the model normalized by the number of features in the model. Let $p'$ be the number of subtrees in the model from program $p$.  We define the weight as $w_c$ per Equation~\ref{eq:subtree_contrib}
+
+
+\begin{equation}
+\label{eq:subtree_contrib}
+w_c = 1 - \frac{p'}{U(M)}
+\end{equation}
+
+Implementation details of \FULL and of \DRAW are provided the next section.  
+
 
 %Initially $U$ will be the entire population.
