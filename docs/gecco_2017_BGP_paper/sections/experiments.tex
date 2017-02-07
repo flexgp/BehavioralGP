@@ -57,11 +57,11 @@ Q1. Does the feature selection bias of the model step matter?
 
 \input{sections/decision_tree_ranks}
 
-Table~\ref{table:ranksReTreeVCART} shows the results of running the 3 different configurations (BGP2A, BGP4, BGP4A) with different decision tree algorithms.  Averaged over rankings for each benchmark  BP2A using \REPTREE was best. For BP2A \REPTREE outranked \SCIKIT but when model error was integrated into the program fitness, whether an archive was used or not made no difference to \SCIKIT beating \REPTREE  rankings by fitness, averaged across the benchmark set.  
+Table~\ref{table:ranksReTreeVCART} shows the results of running the 3 different configurations (BGP2A, BGP4, BGP4A) with different decision tree algorithms.  Averaged over rankings for each benchmark  BP2A using \REPTREE was best. For BPG2A, \REPTREE outranked \SCIKIT but when model error was integrated into the program fitness, (i.e. BPG4A and BPG4) whether an archive was used or not made no difference to \SCIKIT being superior to \REPTREE  in rankings by fitness, averaged across the benchmark set.  
 
-When we compare the result of using the archive while model error is integrated into the program fitness, for both \REPTREE and \SCIKIT it is better to use an archive than to forgo one.  Comparing BP2A with BP4A where the configurations uses an archive \SCIKIT or for \REPTREE allows one to measure the impact of model error integration.  In both cases it is not helpful to integrate model error into program fitness. 
+When we compare the results of using the archive while model error is integrated into the program fitness (i.e.  BPG4A to BPG4), for both \REPTREE and \SCIKIT it is better to use an archive than to forgo one.  Comparing BPG2A with BPG4A where the configurations uses an archive \SCIKIT or for \REPTREE allows one to measure the impact of model error integration.  In both cases it is not helpful to integrate model error into program fitness. 
 
-For a deeper diver, Table~\ref{table:fitnessReTreeVCART} shows the average best fitness at end of run (of 30 runs), for each benchmark.   Averaging all fitness results, no clear winner is  discernible. For certain comparisons \SCIKIT will be superior while for others \REPTREE is.   We also show one randomly selected run of Keijzer1 running with \REPTREE modeling and configuration BP4.   We plot on the first row  model error on the left and the fitness of the best program (right).  The plots on the second row show number of features of model  and number of subprograms in the best program (right). The plots on the third row show the ratio of number of model features to program subtrees (left) and ratio of model error to program fitness. Since the run is configured for  BP4 program fitness integrates both model error and complexity.  
+For a deeper dive, at the specific benchmark level, Table~\ref{table:fitnessReTreeVCART} shows the average best fitness at end of run (of 30 runs), for each benchmark.   Averaging all fitness results, no clear winner is  discernible. For certain comparisons \SCIKIT will be superior while for others \REPTREE is.   We also show one randomly selected run of Keij1 running with \REPTREE modeling and configuration BPG4.   We plot on the first row  model error on the left and the fitness of the best program (right).  The plots on the second row show number of features of model  and number of subprograms in the best program (right). The plots on the third row show the ratio of number of model features to program subtrees (left) and ratio of model error to program fitness. Since the run is configured for  BPG4 program fitness integrates both model error and complexity.  No discernible difference arose among this sort of plot. This is understandable given the stochastic nature of BGP.
 
 \input{sections/decision_tree_fitness}
 
@@ -87,14 +87,16 @@ We conclude that in this case of different decision tree algorithms perhaps the 
 \subsection{Aggregate Trace Matrices}\label{sect:agg-features}
 For the algorithm configurations of this section which compare within \FULL and within \DRAW, we adopt a clearer notation. We drop the BGP prefix and we use $M$ or $\hat M$ to designate whether model error was integrated into program fitness and $A$ of $\hat A$ to designate whether subprograms were were qualified for archive insertion and archive retrieval during BGP crossover.
 
-More details of the \DRAW method are appropriate.  We considered the model error tagged to a subprogram prior to archive entry by the BGP realization. It enhances the fitness of smaller subprograms by the $U|p|$ factor in its denominator. Therefore we designed \DRAW to behave similarly.  \DRAW proceeds as follows:
+More details of the \DRAW method are appropriate.  Referencing \cite{krawiecGecco2014} we analyzed how its model error, see Equation~\ref{eq:subtree_weight} and noted that  the $U|p|$ factor in its denominator increases the fitness of smaller subprograms. Therefore we designed \DRAW to also favor the archiving of smaller subprograms.  \DRAW proceeds as follows:
 
 \begin{inparaenum}
-\item The population is sorted best to worst by program fitness (program error and size) using the NSGA crowding calculation.
+\item The population is sorted best to worst by program fitness (program error and size) using the NSGA pareto front crowding calculation because BGP is multi-objective.
 
-\item The sorted population is cut off from below at a threshold $\lambda \%$ to form $C$.  The trace matrixes of every program in $C$ are concatenated to form $T_C$ which we call the subprogram pool.  We sort $C$ by size and select the smallest $20\%$ of elements of $C$ forming a sample we call $K$.
+\item The sorted population is cut off from below at a threshold $\lambda \%$ to form $C$.  The trace matrixes of every program in $C$ are concatenated to form $T_C$ which we call the subprogram pool.  
+
+\item We next sort $C$ by \textbf{size} and select the smallest $20\%$ of elements of $C$ forming a size sample we call $K$. Note that $K$ has the smallest 20\% programs from $C$
    
-\item Finally we draw from $K$ at random a size. Then we select the equivalent number of columns at random from $T_C$ and form a model. We repeat this step each time for the size of the population.
+\item Finally we draw from $K$ at random to obtain the number of subprograms that will be collectively modeled. Then we select the equivalent number of columns at random from $T_C$ and form a model. We repeat this step each time for the size of the population.  This generates multiple smaller collections of diverse subprograms. 
 
 \end{inparaenum}
 
@@ -107,7 +109,9 @@ More details of the \DRAW method are appropriate.  We considered the model error
 
 \input{sections/ranks_all}
 
-We first asked what if $|C| = PopSize$?  If we compare the result of \DRAW to \FULL we can gauge the difference of generating many more small models vs one bigger model.   See the bottom line of Table!\ref{table:XXdraws_avg_ranks} and 
+We first asked what if  $C$ is composed of \textbf{every} subprogram in the population, i.e. $|C| = PopSize$?  While this $C$ using \FULL would only support one model being derived, it would give all subprograms in the population an opportunity to be used with each other in the model as features.  Similarly, but favoring many smaller combinations drawn from all subprograms, \DRAW would, through repetition,  give all subprograms in the population an opportunity to be used with some of the all the others.   If we compare the result of \DRAW to \FULL we can gauge the difference of generating many more small models vs one bigger model, when every subprogram in the population is ``eligible'' to be selected as a model feature.   This comparison is detailed on the bottom line of Table!\ref{table:XXdraws_avg_ranks} where the leftmost averaged ranking results (by average fitness, across the 17 benchmarks) for different model and archive options are from \DRAW and the rightmost are from \FULL. The data reveals that using all the subprograms, with either \FULL or \DRAW is NOT advantageous. Further empirical investigation to understand this result further should consider two issues: \begin{inparaenum} \item program size to fitness distribution of the population each generation could be leading to very large number of subprograms and \item the modeling algorithm (\REPTREE) may be overwhelmed, in the case of \FULL, by the number of features, given the much smaller number of training cases for the regression. \end{inparaenum}
+
+Next we can consider the rankings of each option of model fitness integration (M vs $\hat M$) across different selections for the subprogram pool $C$.  When $C=25\%$ the model feature options are from the highest fitness tier of the population.  This appears, in 4 cases of 6, to \textit{impede} the error of the best of run, as measured by average ranking.  In 4 of 6 cases, including all 3 of \DRAW,  sizing the subprogram pool to be slightly less elitist ($C=50\% or C=75\%$ was better. But extending $C$ to 100\% appears to be to diverse.  Table~\ref{table:fitness_draw_full} and Table\ref{table:XXdraws_avg_ranks} provide more detailed average fitness and ranking information, i.e. results for each individual benchmark.  
 
 %show discuss results of full-pop (call it 100\_XX)\\
 %
