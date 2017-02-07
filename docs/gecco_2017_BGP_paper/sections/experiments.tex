@@ -5,7 +5,7 @@ We start this section by detailing the benchmarks we use, the parameters of our 
  
 \subsection{Experimental Data, Parameters}\label{sect:data_sets}
 
-Our investigation uses 17 symbolic regression benchmarks from~\CHECK{\cite{benchmarks}}. All of the benchmarks are defined such that the dependent variable is the output of a particular mathematical function for a given set of inputs.  All of the inputs are taken to form a grid on some interval.  Let $E[a, b, c]$ denote $c$ samples equally spaced in the interval $[a,b]$. (Note that McDermott et al. defines $E[a, b, c]$ slightly differently.)  Below is a list of all of the benchmarks that are used:
+Our investigation uses 17 symbolic regression benchmarks from~\cite{benchmarks}. All of the benchmarks are defined such that the dependent variable is the output of a particular mathematical function for a given set of inputs.  All of the inputs are taken to form a grid on some interval.  Let $E[a, b, c]$ denote $c$ samples equally spaced in the interval $[a,b]$. (Note that McDermott et al. defines $E[a, b, c]$ slightly differently.)  Below is a list of all of the benchmarks that are used:
 
 \begin{enumerate}[noitemsep]
 \item \textbf{Keijzer1}: $0.3x \sin(2 \pi x);$ $x \in E[-1,1,20]$
@@ -46,22 +46,28 @@ We use a standard implementation of GP from~\cite{} and chose parameters accordi
 \item \textbf{\SCIKIT} defaults
 \end{itemize}
 
-First we replicated with 3 BGP algorithm configurations that use REPTree from KK et al's work on the symbolic regression benchmarks. These we name BGP2A, BGP4, BGP4A where the 2 indicates that no information from modeling flowed back to selection. The number 4 indicates that a program's fitness was modified by the model error $e$ and size $c$.   The suffix A indicates whether or not we subprograms from the model were qualified for archive insertion and archive retrieval during BGP crossover. We observed results consistent with the prior work. Our open source software is available on GIT.\\
+First we replicated with 3 BGP algorithm configurations that use REPTree from KK et al's work on the symbolic regression benchmarks. These we name BGP2A, BGP4, BGP4A where the 2 indicates that no information from modeling flowed back to selection. The number 4 indicates that a program's fitness was modified by the model error $e$ and size $c$.   The suffix A indicates whether or not subprograms from the model were qualified for archive insertion and archive retrieval during BGP crossover. We observed results consistent with the prior work. Our open source software is available on GIT.
 
-This allowed us to proceed to evaluate feature selection sensitivity.
+This allowed us to proceed to evaluate feature selection sensitivity based on modeling algorithm.
 
 \subsection{Feature Selection Sensitivity}\label{sect:ftr-select}
 
-\input{sections/draws_average_ranks}
-%\input{sections/fullpop_average_ranks}
-
-And here is the average fitness table ....
-
-\input{sections/average_fitness_DF}
-
-For the algorithm configurations we adopt a clearer notation. We drop the BGP prefix and we designate 
+For the algorithm configurations we adopt a clearer notation. We drop the BGP prefix and we use $M$ or $\hat M$ to designate whether model error was integrated into program fitness and $A$ of $\hat A$ to designate whether subprograms were were qualified for archive insertion and archive retrieval during BGP crossover.
 
 Q1. Does the feature selection bias of the model step matter? 
+
+\input{sections/decision_tree_ranks}
+
+Look at Table~\ref{table:ranksReTreeVCART} for rankings by fitness, averaged across the benchmark set.
+
+
+\input{sections/decision_tree_fitness}
+
+Look at Table~\ref{table:fitnessReTreeVCART} for fitness, averaged across the benchmark set.
+
+
+\begin{figure}[htbp]\begin{center}\includegraphics[width=0.99\linewidth]{sections/figures/figure_reptree.png}\caption{We take one run of Keijzer1 running with \REPTREE modeling and configuration BP4.   We plot on the first row  model error on the left and the fitness of the best program (right).  The plots on the second row show number of features of model  and number of subprograms in the best program (right). The plots on the third row show the ratio of number of model features to program subtrees (left) and ratio of model error to program fitness. Since the run is configured for  BP4 program fitness integrates both model error and complexity.}\label{fig:deepdive}\end{center}\end{figure}
+
 
 Describe difference in implementations between Reptree and SKL-RepTree.\\
 Need REPTREE and Scikit learn algorithm references and links to their code.
@@ -81,6 +87,16 @@ Segue to next subsection: Do features depend on one another? We're identifying t
 
 \subsection{Aggregate Trace Matrices}\label{sect:agg-features}
 
+\input{sections/draws_average_ranks}
+%\input{sections/fullpop_average_ranks}
+
+And here is the average fitness table ....
+
+\input{sections/average_fitness_DF}
+
+\input{sections/ranks_all}
+
+
 The question is what aggregations? What if we take everyone?
 
 show discuss results of full-pop (call it 100\_XX)\\
@@ -96,6 +112,6 @@ Show/describe a longitudinal comparison of all 4 and add in best of program-trac
 
 Does the discrimination by program fitness plus the aggregation among programs work better than just program trace? SHOW GRAND RANKING.
 
-\TODO{Insert my sketch of tables of results}
-
-\TODO{Not for Monday night but if we get accepted, we can increase the number of runs and robustness of the detailed results to encompass more datasets or more runs and provide average and standard deviation}
+%\TODO{Insert my sketch of tables of results}
+%
+%\TODO{Not for Monday night but if we get accepted, we can increase the number of runs and robustness of the detailed results to encompass more datasets or more runs and provide average and standard deviation}
