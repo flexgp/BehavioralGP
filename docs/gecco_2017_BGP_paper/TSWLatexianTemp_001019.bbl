@@ -1,0 +1,281 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\newcommand{\noopsort}[1]{} \newcommand{\printfirst}[2]{#1}
+  \newcommand{\singleletter}[1]{#1} \newcommand{\switchargs}[2]{#2#1}
+\begin{thebibliography}{00}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{}, \showDOI{}, and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showDOI}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showDOI #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showDOI      \undefined \def \showDOI       #1{{\tt DOI:}\penalty0{#1}\ }
+  \fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       #1{#1}          \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[\protect\citeauthoryear{Basin, Deville, Flener, Hamfelt, and
+  Nilsson}{Basin et~al\mbox{.}}{2004}]%
+        {Basin04synthesisof}
+\bibfield{author}{\bibinfo{person}{David Basin}, \bibinfo{person}{Yves
+  Deville}, \bibinfo{person}{Pierre Flener}, \bibinfo{person}{Andreas Hamfelt},
+  {and} \bibinfo{person}{Jørgen~Fischer Nilsson}.}
+  \bibinfo{year}{2004}\natexlab{}.
+\newblock \showarticletitle{Synthesis of programs in computational logic}. In
+  \bibinfo{booktitle}{{\em PROGRAM DEVELOPMENT IN COMPUTATIONAL LOGIC}}.
+  \bibinfo{publisher}{Springer}, \bibinfo{pages}{30--65}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Ffrancon and Schoenauer}{Ffrancon and
+  Schoenauer}{2015}]%
+        {Ffrancon:2015:MSG:2739480.2754697}
+\bibfield{author}{\bibinfo{person}{Robyn Ffrancon} {and} \bibinfo{person}{Marc
+  Schoenauer}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Memetic Semantic Genetic Programming}. In
+  \bibinfo{booktitle}{{\em Proceedings of the 2015 Annual Conference on Genetic
+  and Evolutionary Computation}} {\em (\bibinfo{series}{GECCO '15})}.
+  \bibinfo{publisher}{ACM}, \bibinfo{address}{New York, NY, USA},
+  \bibinfo{pages}{1023--1030}.
+\newblock
+\showISBNx{978-1-4503-3472-3}
+
+
+\bibitem[\protect\citeauthoryear{Graves, Wayne, Reynolds, Harley, Danihelka,
+  Grabska-Barwi{\'n}ska, Colmenarejo, Grefenstette, Ramalho, Agapiou,
+  et~al\mbox{.}}{Graves et~al\mbox{.}}{2016}]%
+        {graves2016hybrid}
+\bibfield{author}{\bibinfo{person}{Alex Graves}, \bibinfo{person}{Greg Wayne},
+  \bibinfo{person}{Malcolm Reynolds}, \bibinfo{person}{Tim Harley},
+  \bibinfo{person}{Ivo Danihelka}, \bibinfo{person}{Agnieszka
+  Grabska-Barwi{\'n}ska}, \bibinfo{person}{Sergio~G{\'o}mez Colmenarejo},
+  \bibinfo{person}{Edward Grefenstette}, \bibinfo{person}{Tiago Ramalho},
+  \bibinfo{person}{John Agapiou}, {and} \bibinfo{person}{others}.}
+  \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{Hybrid computing using a neural network with
+  dynamic external memory}.
+\newblock \bibinfo{journal}{{\em Nature\/}} \bibinfo{volume}{538},
+  \bibinfo{number}{7626} (\bibinfo{year}{2016}), \bibinfo{pages}{471--476}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Gulwani}{Gulwani}{2010}]%
+        {gulwani2010dimensions}
+\bibfield{author}{\bibinfo{person}{Sumit Gulwani}.}
+  \bibinfo{year}{2010}\natexlab{}.
+\newblock \showarticletitle{Dimensions in program synthesis}. In
+  \bibinfo{booktitle}{{\em Proceedings of the 12th international ACM SIGPLAN
+  symposium on Principles and practice of declarative programming}}. ACM,
+  \bibinfo{pages}{13--24}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Hall, Frank, Holmes, Pfahringer, Reutemann,
+  and Witten}{Hall et~al\mbox{.}}{2009}]%
+        {Hall:2009:WDM:1656274.1656278}
+\bibfield{author}{\bibinfo{person}{Mark Hall}, \bibinfo{person}{Eibe Frank},
+  \bibinfo{person}{Geoffrey Holmes}, \bibinfo{person}{Bernhard Pfahringer},
+  \bibinfo{person}{Peter Reutemann}, {and} \bibinfo{person}{Ian~H. Witten}.}
+  \bibinfo{year}{2009}\natexlab{}.
+\newblock \showarticletitle{The WEKA Data Mining Software: An Update}.
+\newblock \bibinfo{journal}{{\em SIGKDD Explor. Newsl.\/}}
+  \bibinfo{volume}{11}, \bibinfo{number}{1} (\bibinfo{date}{Nov.}
+  \bibinfo{year}{2009}), \bibinfo{pages}{10--18}.
+\newblock
+\showISSN{1931-0145}
+\showDOI{%
+\url{http://dx.doi.org/10.1145/1656274.1656278}}
+
+
+\bibitem[\protect\citeauthoryear{Haynes}{Haynes}{1997}]%
+        {haynes1997line}
+\bibfield{author}{\bibinfo{person}{Thomas Haynes}.}
+  \bibinfo{year}{1997}\natexlab{}.
+\newblock \showarticletitle{On-line adaptation of search via knowledge reuse}.
+\newblock \bibinfo{journal}{{\em Genetic Programming\/}}
+  (\bibinfo{year}{1997}), \bibinfo{pages}{156--161}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Koza}{Koza}{1992}]%
+        {koza1992genetic}
+\bibfield{author}{\bibinfo{person}{John~R Koza}.}
+  \bibinfo{year}{1992}\natexlab{}.
+\newblock \bibinfo{booktitle}{{\em Genetic programming: on the programming of
+  computers by means of natural selection}}. Vol.~\bibinfo{volume}{1}.
+\newblock \bibinfo{publisher}{MIT press}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Krawiec}{Krawiec}{2015}]%
+        {KrawiecBPS2016}
+\bibfield{author}{\bibinfo{person}{Krzysztof Krawiec}.}
+  \bibinfo{year}{2015}\natexlab{}.
+\newblock \bibinfo{booktitle}{{\em Behavioral Program Synthesis with Genetic
+  Programming}}. \bibinfo{series}{Studies in Computational Intelligence},
+  Vol.~\bibinfo{volume}{618}.
+\newblock \bibinfo{publisher}{Springer International Publishing}.
+\newblock
+\showDOI{%
+\url{http://dx.doi.org/doi:10.1007/978-3-319-27565-9}}
+
+
+\bibitem[\protect\citeauthoryear{Krawiec and O'Reilly}{Krawiec and
+  O'Reilly}{2014}]%
+        {krawiecGecco2014}
+\bibfield{author}{\bibinfo{person}{Krzysztof Krawiec} {and}
+  \bibinfo{person}{Una-May O'Reilly}.} \bibinfo{year}{2014}\natexlab{}.
+\newblock \showarticletitle{Behavioral programming: a broader and more detailed
+  take on semantic GP}. In \bibinfo{booktitle}{{\em Proceedings of the 2014
+  Annual Conference on Genetic and Evolutionary Computation}}. ACM,
+  \bibinfo{pages}{935--942}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Krawiec and Swan}{Krawiec and Swan}{2013}]%
+        {krawiec2013pattern}
+\bibfield{author}{\bibinfo{person}{Krzysztof Krawiec} {and}
+  \bibinfo{person}{Jerry Swan}.} \bibinfo{year}{2013}\natexlab{}.
+\newblock \showarticletitle{Pattern-guided genetic programming}. In
+  \bibinfo{booktitle}{{\em Proceedings of the 15th annual conference on Genetic
+  and evolutionary computation}}. ACM, \bibinfo{pages}{949--956}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Liskowski and Krawiec}{Liskowski and
+  Krawiec}{2016}]%
+        {liskowski2016online}
+\bibfield{author}{\bibinfo{person}{Pawe{\l} Liskowski} {and}
+  \bibinfo{person}{Krzysztof Krawiec}.} \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{Online discovery of search objectives for
+  test-based problems}.
+\newblock \bibinfo{journal}{{\em Evolutionary computation\/}}
+  (\bibinfo{year}{2016}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{McDermott, White, Luke, Manzoni, Castelli,
+  Vanneschi, Jaskowski, Krawiec, Harper, De~Jong, et~al\mbox{.}}{McDermott
+  et~al\mbox{.}}{2012}]%
+        {benchmarks}
+\bibfield{author}{\bibinfo{person}{James McDermott}, \bibinfo{person}{David~R
+  White}, \bibinfo{person}{Sean Luke}, \bibinfo{person}{Luca Manzoni},
+  \bibinfo{person}{Mauro Castelli}, \bibinfo{person}{Leonardo Vanneschi},
+  \bibinfo{person}{Wojciech Jaskowski}, \bibinfo{person}{Krzysztof Krawiec},
+  \bibinfo{person}{Robin Harper}, \bibinfo{person}{Kenneth De~Jong}, {and}
+  \bibinfo{person}{others}.} \bibinfo{year}{2012}\natexlab{}.
+\newblock \showarticletitle{Genetic programming needs better benchmarks}. In
+  \bibinfo{booktitle}{{\em Proceedings of the 14th annual conference on Genetic
+  and evolutionary computation}}. ACM, \bibinfo{pages}{791--798}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{McKay}{McKay}{2000}]%
+        {mckay2000fitness}
+\bibfield{author}{\bibinfo{person}{Robert~I McKay}.}
+  \bibinfo{year}{2000}\natexlab{}.
+\newblock \showarticletitle{Fitness sharing in genetic programming}. In
+  \bibinfo{booktitle}{{\em Proceedings of the 2nd Annual Conference on Genetic
+  and Evolutionary Computation}}. Morgan Kaufmann Publishers Inc.,
+  \bibinfo{pages}{435--442}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{McPhee, Ohs, and Hutchison}{McPhee
+  et~al\mbox{.}}{2008}]%
+        {mcphee2008semantic}
+\bibfield{author}{\bibinfo{person}{Nicholas~Freitag McPhee},
+  \bibinfo{person}{Brian Ohs}, {and} \bibinfo{person}{Tyler Hutchison}.}
+  \bibinfo{year}{2008}\natexlab{}.
+\newblock \showarticletitle{Semantic building blocks in genetic programming}.
+  In \bibinfo{booktitle}{{\em European Conference on Genetic Programming}}.
+  Springer, \bibinfo{pages}{134--145}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Rinard}{Rinard}{2012}]%
+        {rinard2012example}
+\bibfield{author}{\bibinfo{person}{Martin~C Rinard}.}
+  \bibinfo{year}{2012}\natexlab{}.
+\newblock \showarticletitle{Example-driven program synthesis for end-user
+  programming: technical perspective}.
+\newblock \bibinfo{journal}{{\it Commun. ACM}} \bibinfo{volume}{55},
+  \bibinfo{number}{8} (\bibinfo{year}{2012}), \bibinfo{pages}{96--96}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Solar-Lezama}{Solar-Lezama}{2008}]%
+        {solar2008program}
+\bibfield{author}{\bibinfo{person}{Armando Solar-Lezama}.}
+  \bibinfo{year}{2008}\natexlab{}.
+\newblock \showarticletitle{Program synthesis by sketching}.
+\newblock  (\bibinfo{year}{2008}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Srivastava, Gulwani, and Foster}{Srivastava
+  et~al\mbox{.}}{2010}]%
+        {srivastava2010program}
+\bibfield{author}{\bibinfo{person}{Saurabh Srivastava}, \bibinfo{person}{Sumit
+  Gulwani}, {and} \bibinfo{person}{Jeffrey~S Foster}.}
+  \bibinfo{year}{2010}\natexlab{}.
+\newblock \showarticletitle{From program verification to program synthesis}. In
+  \bibinfo{booktitle}{{\em ACM Sigplan Notices}}, Vol.~\bibinfo{volume}{45}.
+  ACM, \bibinfo{pages}{313--326}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Vanneschi, Castelli, and Silva}{Vanneschi
+  et~al\mbox{.}}{2014}]%
+        {vanneschi2014survey}
+\bibfield{author}{\bibinfo{person}{Leonardo Vanneschi}, \bibinfo{person}{Mauro
+  Castelli}, {and} \bibinfo{person}{Sara Silva}.}
+  \bibinfo{year}{2014}\natexlab{}.
+\newblock \showarticletitle{A survey of semantic methods in genetic
+  programming}.
+\newblock \bibinfo{journal}{{\em Genetic Programming and Evolvable Machines\/}}
+  \bibinfo{volume}{15}, \bibinfo{number}{2} (\bibinfo{year}{2014}),
+  \bibinfo{pages}{195--214}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Weimer, Forrest, Le~Goues, and Nguyen}{Weimer
+  et~al\mbox{.}}{2010}]%
+        {weimer2010automatic}
+\bibfield{author}{\bibinfo{person}{Westley Weimer}, \bibinfo{person}{Stephanie
+  Forrest}, \bibinfo{person}{Claire Le~Goues}, {and} \bibinfo{person}{ThanhVu
+  Nguyen}.} \bibinfo{year}{2010}\natexlab{}.
+\newblock \showarticletitle{Automatic program repair with evolutionary
+  computation}.
+\newblock \bibinfo{journal}{{\it Commun. ACM}} \bibinfo{volume}{53},
+  \bibinfo{number}{5} (\bibinfo{year}{2010}), \bibinfo{pages}{109--116}.
+\newblock
+
+
+\end{thebibliography}

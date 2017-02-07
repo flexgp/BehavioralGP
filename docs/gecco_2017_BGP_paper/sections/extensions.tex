@@ -14,7 +14,7 @@ What emerges from the details of BGP's successful examples is a stepwise strateg
 
 % WEKA Citation M. Hall, E. Frank, G. Holmes, B. Pfahringer,%P. Reutemann, and I. H. Witten. The weka data mining software: An update. SIGKDD Explor. Newsl., 11(1):10–18, Nov. 2009.
 
-One example of the strategy is realized in \cite{krawiecGecco2014} where, in Step~(2), the fast REPTree (Reduced  Error  Pruning  Tree) algorithm  of decision tree classification from the WEKA Data Mining software library\cite{Hall:2009:WDM:1656274.1656278} is used for regression modeling.  REPTree builds a decision/regression tree using information gain/variance. In Step~(3) merit is measured per Equation~\ref{eq:subtree_weight} where $|U(p)|$ is the number of subprograms (equivalently distinct columns of the trace) used in the model and $e$ is model error.
+One example of the strategy is realized in \cite{krawiecGecco2014} where, in Step~(2), the fast RepTree (\REPTREE - Reduced  Error  Pruning  Tree) algorithm  of decision tree classification from the WEKA Data Mining software library\cite{Hall:2009:WDM:1656274.1656278} is used for regression modeling.  \REPTREE builds a decision/regression tree using information gain/variance. In Step~(3) merit is measured per Equation~\ref{eq:subtree_weight} where $|U(p)|$ is the number of subprograms (equivalently distinct columns of the trace) used in the model and $e$ is model error.
 
 
 \begin{equation}
