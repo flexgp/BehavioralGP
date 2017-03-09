@@ -41,6 +41,9 @@ It would be interesting to see if combining mutation, crossover, and archive-bas
 %Comparing the performance of REPTree vs the Scikit Learn decision tree, I find that REPTree typically builds models with much higher errors when run on the trace, while Scikit Learn builds models with near zero error.  It would be interesting to explore what impact this has to the evolutionary process.
 
 \subsubsection{Model Evaluation}
-In BGP, after the model is built on the trace of each program, it is evaluated on the trace.  The result of its evaluation is used as the output of one of the fitness functions for the program.  It would be interesting to explore evaluating each model on a test set, instead of the trace.  Perhaps this would yield a more useful fitness function.
+In BGP, after the model is built on the trace of each program, it is evaluated on the trace.  The result of its evaluation is then used as the output of one of the fitness functions for the program.  It would be interesting to explore evaluating each model on a test set, instead of the trace.  Perhaps this would yield a more useful fitness function.
+
+\subsubsection{Statistical Significance of the Results}
+Finally, in order to better understand the significance of the results presented in this work, it would be useful to determine for which configurations the difference in performance is statistically significant.
 
 %\section{Conclusion}

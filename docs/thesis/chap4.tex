@@ -42,7 +42,7 @@ For a baseline comparison, I run conventional GP with the two conventional GP fi
 \end{enumerate}
 \end{multicols}
 
-For the majority of the configurations, I perform 30 runs on each data set.  However, all of the Scikit Learn configurations take much longer to run because they require calling Python from within Java.  Therefore, they are run 5 times each.  Additionally, BP2A - Lasso, and BP4A - Lasso, both did not run to completion.  As a result, they are omitted from the discussion.  They are addressed in Section \ref{section:future_work}.
+For the majority of the configurations, I perform 30 runs on each data set.  However, all of the Scikit Learn configurations take much longer to run because they require calling Python from within Java.  Therefore, they are run 17 times each.  Additionally, BP2A - Lasso, and BP4A - Lasso, both did not run to completion.  As a result, they are omitted from the discussion.  They are addressed in Section \ref{section:future_work}.
 
 \section{Results}
 Appendix \ref{appendix:results} contains tables for the average and standard deviation of program fitness, program size, and program runtime, for the best of run programs for each configuration and data set.  A best of run program is the program with the lowest program error generated in a given run.  Additionally, there is a table with the percentage of runs that produced a perfect individual for each configuration and dataset.  Below I discuss the results in aggregate and compare them to those of Krawiec et al.
@@ -63,7 +63,7 @@ Krawiec et al found that the three BGP configurations that they run rank as foll
 \item \textbf{Program runtime}: GP, BP4, BP4A, BP2A
 \end{itemize}
 
-It is important to note that the above ranks by Krawiec et al. are calculated based on the performance of each configuration across multiple task domains: boolean, categorical, and regression, while I only implement BGP for regression.  Both Krawiec et al., and I find that program fitness rank is inversely proportional to program size rank.  For program runtime, both sets of results suggest that GP is by far the fastest, and using an archive is slower than not.  For program fitness, both Krawiec et al., and I find that using an archive results in a better fitness than if an archive is not used, however, my results suggest that the added fitness functions hurt the evolutionary process.  Considering average fitness rank, it seems as though the BGP paradigm of replacing crossover with archive-based crossover is certainly beneficial.  However, considering the number of perfect programs found, my results suggest that configurations with an archive do not perform as well.
+It is important to note that the above ranks by Krawiec et al. are calculated based on the performance of each configuration across multiple task domains: boolean, categorical, and regression, while I only implement BGP for regression.  For program runtime, both Krawiec et al., and I find that GP is by far the fastest, and using an archive is slower than not.  Considering program fitness, and the number of perfect programs found, both Krawiec et al., and I find that the BGP paradigm of replacing crossover with archive-based crossover is beneficial.  However, my results suggest that when considering program fitness, the added fitness functions hurt the evolutionary process.
 
 \begin{table*}[ht]
 \centering
@@ -73,39 +73,39 @@ It is important to note that the above ranks by Krawiec et al. are calculated ba
 \hline\hline
 & Average Fitness Rank & & Average Rank For Finding Perfect Programs & \\
 \hline
-1 & BP2A - Different Rates & 3.53 & GP & 1.47 \\
-2 & BP2A - REPTree & 4.06 & BP2A - Scikit Learn & 2.06 \\
-3 & BP2A - Scikit Learn & 4.71 & BP4 - Scikit Learn & 2.06 \\
-4 & GP & 5.35 & BP2A - Larger Archive & 2.59 \\
-5 & BP2A - Larger Archive & 5.41 & BP2A - REPTree & 2.65 \\
-6 & BP4A - Scikit Learn & 5.65 & BP4 - Lasso & 2.76 \\
-7 & BP4 - Scikit Learn & 6.06 & BP2A - Randomized & 2.82 \\
-8 & BP2A - Randomized & 6.18 & BP2A - Different Rates & 2.88 \\
-9 & BP2A - Full Pop & 9.94 & BP4 - REPTree & 2.88 \\
-10 & BP4 - Lasso & 10.88 & BP4A - Scikit Learn & 2.88 \\
-11 & BP4A - Different Rates & 11.12 & BP4A - Larger Archive & 3.59 \\
-12 & BP4A - REPTree & 11.53 & BP4A - Randomized & 3.65 \\
-13 & BP4A - Larger Archive & 11.65 & BP4A - REPTree & 3.88 \\
-14 & BP4 - REPTree & 11.88 & BP4A - Different Rates & 4.18 \\
-15 & BP4A - Randomized & 12.06 & BP2A - Full Pop & 4.76 \\
+1 & BP2A - Larger Archive & 3.59 & BP2A - Full Pop & 1.12 \\
+2 & BP2A - REPTree & 3.76 & BP4A - Larger Archive & 1.71 \\
+3 & BP2A - Different Rates & 3.82 & BP4A - Different Rates & 2.24 \\
+4 & BP2A - Scikit Learn & 6.18 & BP4A - Scikit Learn & 2.47 \\
+5 & BP4A - Scikit Learn & 6.29 & BP2A - Randomized & 2.65 \\
+6 & BP4 - Scikit Learn & 6.53 & BP4A - REPTree & 2.65 \\
+7 & BP2A - Randomized & 6.65 & BP2A - Larger Archive & 2.76 \\
+8 & GP & 7.0 & BP4A - Randomized & 3.18 \\
+9 & BP4A - Different Rates & 9.82 & BP4 - REPTree & 3.24 \\
+10 & BP4 - Lasso & 9.88 & BP2A - Different Rates & 3.53 \\
+11 & BP4A - REPTree & 10.12 & BP4 - Lasso & 3.53 \\
+12 & BP4A - Larger Archive & 10.94 & BP2A - REPTree & 3.59 \\
+13 & BP2A - Full Pop & 11.35 & BP2A - Scikit Learn & 3.59 \\
+14 & BP4 - REPTree & 11.76 & GP & 4.59 \\
+15 & BP4A - Randomized & 12.29 & BP4 - Scikit Learn & 5.59 \\
 \hline\hline
 & Average Size Rank & & Average Runtime Rank & \\
  \hline
-1 & BP4 - REPTree & 3.0 & GP & 1.0 \\
-2 & BP4 - Lasso & 3.88 & BP4 - REPTree & 2.0 \\
-3 & BP4 - Scikit Learn & 5.82 & BP2A - Different Rates & 3.24 \\
-4 & BP4A - Randomized & 5.94 & BP4A - Larger Archive & 5.41 \\
-5 & BP4A - REPTree & 6.35 & BP4A - Different Rates & 5.41 \\
-6 & GP & 6.65 & BP2A - Larger Archive & 5.94 \\
-7 & BP4A - Larger Archive & 7.06 & BP2A - Randomized & 6.47 \\
-8 & BP4A - Different Rates & 7.29 & BP4A - Randomized & 7.76 \\
-9 & BP2A - Scikit Learn & 9.41 & BP2A - REPTree & 8.82 \\
-10 & BP2A - Different Rates & 9.41 & BP4A - REPTree & 9.18 \\
-11 & BP4A - Scikit Learn & 9.53 & BP2A - Full Pop & 10.76 \\
-12 & BP2A - Randomized & 10.0 & BP4 - Lasso & 12.18 \\
-13 & BP2A - Larger Archive & 10.24 & BP2A - Scikit Learn & 13.29 \\
-14 & BP2A - REPTree & 10.35 & BP4 - Scikit Learn & 13.94 \\
-15 & BP2A - Full Pop & 14.88 & BP4A - Scikit Learn & 14.59 \\
+1 & BP4 - Scikit Learn & 2.82 & GP & 1.0 \\
+2 & GP & 3.0 & BP2A - Larger Archive & 2.24 \\
+3 & BP2A - Randomized & 5.82 & BP4 - REPTree & 4.76 \\
+4 & BP4 - Lasso & 6.29 & BP4A - Different Rates & 5.0 \\
+5 & BP2A - Scikit Learn & 6.59 & BP2A - Randomized & 5.71 \\
+6 & BP4 - REPTree & 7.18 & BP4A - Randomized & 6.18 \\
+7 & BP4A - Scikit Learn & 7.41 & BP2A - REPTree & 6.47 \\
+8 & BP2A - Different Rates & 7.71 & BP2A - Different Rates & 6.47 \\
+9 & BP2A - Larger Archive & 8.29 & BP4A - Larger Archive & 7.35 \\
+10 & BP2A - REPTree & 9.35 & BP4A - REPTree & 9.88 \\
+11 & BP4A - Larger Archive & 9.53 & BP2A - Full Pop & 10.94 \\
+12 & BP4A - Randomized & 9.88 & BP4 - Lasso & 12.35 \\
+13 & BP4A - Different Rates & 10.35 & BP4 - Scikit Learn & 12.94 \\
+14 & BP4A - REPTree & 10.88 & BP4A - Scikit Learn & 14.06 \\
+15 & BP2A - Full Pop & 14.82 & BP2A - Scikit Learn & 14.65 \\
 \hline
 \end{tabular}
 \end{adjustbox}
@@ -190,13 +190,13 @@ It is important to note that the above ranks by Krawiec et al. are calculated ba
 %\end{table*}
 
 \subsubsection{Full Population Model}
-It seems that running the model on the each program trace is almost always better than running the model on the combined trace of the entire population.  In the full population case, each generation, the archive is only populated with subtrees taken from a single model, which might result in a less diverse archive.  Further work is needed to understand precisely why this model performs less well.
+It seems that running the model on each program trace is almost always better than running the model on the combined trace of the entire population.  In the full population case, each generation, the archive is only populated with subtrees taken from a single model, which might result in a less diverse archive.  Further work is needed to understand precisely why this model performs less well.
 
 \subsubsection{Lasso Model}
 The most significant feature of BGP that this configuration brings to light is that it is important to use a highly robust machine learning model for BGP.  Even for BP4 - Lasso, which did run to completion, the standard deviation of the runtimes are by far the largest (see Table \ref{table:std_time}).  The results also suggest, that for BP4, Lasso may provide better additional fitness measures than REPTree.
 
 \subsubsection{Scikit Learn Model}
-Because each BGP configuration using the Scikit Learn Model was only run five times on each data set, it is hard to make strong conclusions about its performance.  However, it seems that the resulting fitness is neither conclusively better nor worse than using REPTree.  However, the runtimes of all of the Scikit Learn Model configurations were notably the longest.  This is primarily due to the overhead of running a model that is written in the Python programming language, and calling it from Java.
+For the Scikit Learn model, it seems that the resulting fitness is neither conclusively better nor worse than using REPTree.  However, the runtimes of all of the Scikit Learn Model configurations were notably the longest.  This is primarily due to the overhead of running a model that is written in the Python programming language, and calling it from Java.
 
 \subsubsection{Randomized Model}
 The randomized model consistently performed worse than the model that used the trees generated by REPTree.  This gives confidence to the claim that the subtrees generated by REPTree are more beneficial for driving the evolutionary process. 
@@ -205,6 +205,6 @@ The randomized model consistently performed worse than the model that used the t
 The results suggest that using a larger archive does not substantially help nor harm the resulting fitness of the generated programs.
 
 \subsubsection{Different Rates}
-It does appear that for both relevant BGP configurations, using a higher archive-based crossover rate, slightly improves the resulting program fitness for a given run.  This seems to invalidate the possibility that BGP only performed better than GP because the effective reproduction operator probabilities were substantially different from conventional GP.  It is also noteworthy, that using a higher archive-based crossover rate decreases the average runtime.
+It appears that for both relevant BGP configurations, using a higher archive-based crossover rate, does not have a substantial effect on the resulting program fitness for a given run.  This seems to invalidate the possibility that BGP only performed better than GP because the effective reproduction operator probabilities were substantially different from conventional GP.
 
 

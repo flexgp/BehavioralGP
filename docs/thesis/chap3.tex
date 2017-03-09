@@ -73,12 +73,45 @@ Once the trace for a given program in the population has been collected the mach
 The algorithm that was used for the model in the original implementation of behavioral genetic programming, by Krawiec et al. was REPTree. \cite{reptree}  REPTree is a decision tree that can be used for both classification and regression tasks.  For each program in the population, a different model is built on the program trace.  In my implementation, one can use different models by writing different implementations for the model interface.
 
 \subsubsection{Archive}
-In behavioral genetic programming, an archive is used from which to draw subtrees that are used for archive-based crossover.  The archive is given a maximum capacity, which in the original implementation of Behavioral Programming by Krawiec et al. was set to 50.  After each round of fitness function evaluations, the archive is repopulated in the following way.  First the candidate subtrees are selected based on whether or not their column in the trace was used in the machine learning model.  Each subtree is assigned a weight given by Equation \ref{eq:subtree_weight}, where $e$ is the model error from Equation \ref{eq:model_error} and $|U(p)|$ is the number of distinct columns of the trace used in the model.  Note that all subtrees that are used in a certain model are given the same weight in the archive.  Each generation, after the model has been generated, the candidate subtrees are combined with the pre existing contents of the archive (with the exception of the first generation, as the archive would be empty).  If the number of candidate subtrees combined with the previous contents of the archive is less than the archive capacity, then all of the subtrees are added to the archive.  If the number of candidate subtrees combined with the previous contents of the archive is greater than the capacity of the archive, then subtrees are drawn without replacement with probability proportional to their assigned weights.  For my implementation I use a modification  \cite{samplingnew} of the algorithm introduced by Efraimidis and Spirakis \cite{samplingold} to efficiently draw from a weighted distribution without replacement.  When subtrees are drawn from the archive for archive-based crossover, they are drawn from the weighted distribution with replacement.
+In behavioral genetic programming, an archive is used from which to draw subtrees that are used for archive-based crossover.  The archive is given a maximum capacity, which in the original implementation of Behavioral Programming by Krawiec et al. was set to 50.  After each round of fitness function evaluations, the archive is repopulated in the following way.  First the candidate subtrees are selected based on whether or not their column in the trace was used in the machine learning model.  Each subtree is assigned a weight given by Equation \ref{eq:subtree_weight}, where $e$ is the model error from Equation \ref{eq:model_error} and $|U|$ is the number of distinct columns of the trace used in the model.  Note that all subtrees that are used in a certain model are given the same weight in the archive.  Each generation, after the model has been generated, the candidate subtrees are combined with the pre existing contents of the archive (with the exception of the first generation, as the archive would be empty).  If the number of candidate subtrees combined with the previous contents of the archive is less than the archive capacity, then all of the subtrees are added to the archive.  If the number of candidate subtrees combined with the previous contents of the archive is greater than the capacity of the archive, then subtrees are drawn without replacement with probability proportional to their assigned weights.  Algorithm \ref{pseudocode} illustrates this procedure.  For my implementation I use a modification \cite{samplingnew} of the algorithm introduced by Efraimidis and Spirakis \cite{samplingold} to efficiently draw from a weighted distribution without replacement (Note that Algorithm \ref{pseudocode} does not include the details of this procedure).  When subtrees are drawn from the archive for archive-based crossover, they are drawn from the weighted distribution with replacement.
 
 \begin{equation}
 \label{eq:subtree_weight}
-w = \frac{1}{(1 + e)|U(p)|}
+w = \frac{1}{(1 + e)|U|}
 \end{equation}
+
+\begin{algorithm}
+\caption{Populate Archive}\label{pseudocode}
+\begin{algorithmic}[1]
+\Procedure{PopulateArchive}{}
+\For {\textit{subtree}\text{ in }\textit{archive}}
+\State $w \gets \text{the weight of }\textit{subtree}$
+\State $\text{add (}\textit{subtree,w}\text{) to }\textit{candidateSubtrees}$
+\EndFor
+\State $\text{clear }\textit{archive}$
+\For {\textit{program}\text{ in }\textit{population}}
+\State $T \gets \textit{collectTrace(program)}$
+\State $\textit{M} \gets \textit{buildModel(T)}$
+\State $U \gets \text{subtrees included in } \textit{M}$
+\State $w \gets 1/((1 + e)|U|)$
+\For {\textit{subtree}\text{ in }\textit{U}}
+\State $\text{add (}\textit{subtree,w}\text{) to }\textit{candidateSubtrees}$
+\EndFor
+%\State $\text{add }$\text{(}\textit{U, w}\text{)}\text{ to }\textit{candidateSubtrees}
+\EndFor
+\If {|\textit{candidateSubtrees}| $\leq$ \textit{ARCHIVE\_CAPACITY}}
+\State $\text{add all }\textit{candidateSubtrees}\text{ to }\textit{archive}$
+\Else
+\While {\textit{archive.size} $<$ \textit{ARCHIVE\_CAPACITY}}
+\State $\textit{subtree} \gets \text{draw from }\textit{candidateSubtrees}$
+\State $w \gets \text{the weight of }\textit{subtree}$
+\State $\text{remove (}\textit{subtree,w}\text{) from }\textit{candidateSubtrees}$
+\State $\text{add (}\textit{subtree,w}\text{) to }\textit{archive}$
+\EndWhile
+\EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
 
 One significant implementation detail is that the archive cannot have two subtrees which both have the same output on all of the data points (termed the same \textit{semantics}).  In both the original implementation and my own, if two subtrees have the same semantics, then only the subtree with fewer nodes is kept.  Subtrees are duplicated both when they are added to the archive, and drawn from the archive, to ensure that no two programs have a reference to the same subtree.
 
@@ -88,18 +121,18 @@ Once all of the fitness functions have been evaluated, and the archive repopulat
 
 The NSGA-II algorithm first classifies each program into a series of fronts.  The first front (termed \textit{pareto front}) is defined by all of the programs for which no other program in the population performs better on at least one fitness function, and as well or better on the remaining fitness functions.  Each successive front is defined by first removing the last front from the population, and recomputing the next front on the remaining programs in the same way that the pareto front was computed.  Every program in a given front outranks all programs in all subsequent fronts, and is outranked by all programs in all previous fronts.
 
-Within a given front each program is ranked by its crowding distance.  To compute the crowding distance of an individual program, first all fitness measures are normalized (Note that in BGP we use fitness functions which are already normalized).  Then for each fitness measure, the difference between the fitness of the program with the next highest fitness and the next lowest fitness is computed.  Ordinarily, the crowding distance for an individual program is given by the average difference across all fitness measures.  In this implementation, instead of using the average difference, the product of the differences is used.  If for a given fitness measure an individual program has either the highest or lowest fitness value in the population, it receives a crowding distance of infinity.  Programs with higher crowding distances outrank programs with lower crowding distances.  The reason for the crowding distance ranking is to increase the diversity of the population.  Programs with higher crowding distances are more dissimilar to other programs in the population.
+Within a given front each program is ranked by its crowding distance.  To compute the crowding distance of an individual program, first all fitness measures are normalized (Note that in BGP we use fitness functions which are already normalized).  Then for each fitness measure, the difference between the fitness of the program with the next highest fitness and the next lowest fitness is computed.  The crowding distance for an individual program is given by the average difference across all fitness measures.  If for a given fitness measure an individual program has either the highest or lowest fitness value in the population, it receives a crowding distance of infinity.  Programs with higher crowding distances outrank programs with lower crowding distances.  The reason for the crowding distance ranking is to increase the diversity of the population.  Programs with higher crowding distances are more dissimilar to other programs in the population.
 
 \section{Extensions to Behavioral Genetic Programming}
 \label{section:extensions}
 One of the core goals of this work is to explore different extensions and alternative implementations of behavioral genetic programming.  For the purpose of this work I explore several variants of the BGP machine learning model, which are detailed below.
 
 \subsection{Full Population Model}
-One of the main ideas that I explore is how the model would perform if instead of training one model on the trace of each program in the population, I train one model for the entire population on the combined traces of all of the programs.
+One of the main ideas that I explore is how the model would perform if instead of training one model on the trace of each program in the population, I train one model for the entire population on the combined traces of all of the programs.  This effectively creates a single trace matrix with the same number of rows but many more columns.  The combined trace matrix represents an extremely high dimensional problem, with uninvestigated correlation of its features.
 
 The idea behind training a model for each individual in the population is twofold.  The first is that the accuracy of the model gives insight into how much information the subtrees in a program encode about the desired output. The second is that knowing which subtrees are used in the model gives insight into which subtrees are more valuable than others.  What it does not tell us is which subtrees will work well with other subtrees in the population.
 
-The motivation behind combining all of the program traces to train a single machine learning model is to hopefully expose certain interdependencies between subtrees coming from different programs in the population.  With this method one can populate the archive in the same way as in ordinary BGP, however, one cannot use the additional fitness measures, because each program in the population does not have a distinct model error and model complexity associated with it.
+The motivation behind combining all of the program traces to train a single machine learning model is to hopefully identify groups of subtrees coming from different programs in the population that work well together.  With this method one can populate the archive in the same way as in ordinary BGP, however, one cannot use the additional fitness measures, because each program in the population does not have a distinct model error and model complexity associated with it.
 
 \subsection{Lasso Model}
 Another implementation that I explore uses Least Absolute Shrinkage and Selection Operator (Lasso) as the machine learning model.  Instead of training REPTree on the trace of each program in the population, I run the Lasso regression method.  For each feature in the data set on which Lasso is run, it assigns a real valued weight.  The predicted output is given by the inner product of the features in the data set, and the weights assigned by Lasso, plus a real valued offset.  One benefit to Lasso is that it will perform feature selection by assigning some feature weights a value of 0.  In this model, I use the same formula for model error, and I define the size of the model $|M|$ as the number of features with non-zero coefficients.  Only subtrees with corresponding features that are given non-zero weights by Lasso are included in the archive.  I use the absolute value of the weights assigned by Lasso as the weight for each respective subtree in the archive.
