@@ -10,7 +10,7 @@ These instructions will get you a copy of the project up and running on your loc
 ant -buildfile build.xml
 ```
 
-This will create an ```out``` directory.  To run conventional genetic programming on the Keijzer1 data set, simply run
+This will create an ```out``` directory.  To run conventional genetic programming on the Keijzer1 data set for one minute, simply run
 
 ```
 java -jar out/artifacts/BGP_steven_fine_jar/BGP_steven_fine.jar -train ./data/keijzer1 -minutes 1 -properties ./props/gp
@@ -21,8 +21,6 @@ java -jar out/artifacts/BGP_steven_fine_jar/BGP_steven_fine.jar -train ./data/ke
 There are a variety of data sets in the ```data``` directory.  Any of these data sets can be used by replacing the argument for ```-train``` with a different data file. To use your own data set it must be provided in csv format where each line corresponds to a single data point and the target values are placed in the last column.
 
 To run different configurations of genetic programming, a property file must be specified. The ```props``` directory contains a large number of different configurations for different genetic programming runs.  The three BGP configurations presented by Krawiec et al. can be run by using the files ```./props/bp2a_reptree```, ```./props/bp4_reptree```, and ```./props/bp4a_reptree``` respectively.  To use any configuration file simple replace the argument for ```-properties``` with a different propery file.
-
-## Example
 
 ## License
 
