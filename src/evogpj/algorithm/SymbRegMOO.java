@@ -685,7 +685,7 @@ public class SymbRegMOO {
         bestPop = new Population();
         // get the best individual
         best = pop.get(0);
-        System.out.println(best.getFitnesses());
+//        System.out.println(best.getFitnesses());
         // record the best individual in models.txt
         bestPop.add(best);
         long timeStamp = (System.currentTimeMillis() - startTime) / 1000;
@@ -700,11 +700,11 @@ public class SymbRegMOO {
             }
             // print information about this generation
             //System.out.format("Statistics: %d " + calculateStats() + "%n", generation);
-            System.out.format("Best individual for generation %d:%n", generation);
+//            System.out.format("Best individual for generation %d:%n", generation);
             double MSE = best.getFitness();
             MSE = ((1-MSE) / (MSE + 1));
-            System.out.println(best.getFitnesses());
-            System.out.println(MSE);
+//            System.out.println(best.getFitnesses());
+//            System.out.println(MSE);
             System.out.flush();
             bestPop.add(best);
             timeStamp = (System.currentTimeMillis() - startTime) / 1000;
@@ -717,22 +717,22 @@ public class SymbRegMOO {
         Iterator<String> fitnessFunctionIterator = fitnessFunctions.keySet().iterator();
         String firstFitnessFunction = fitnessFunctionIterator.next();
         String secondFitnessFunction = fitnessFunctionIterator.next();
-        this.saveText(MODELS_PATH, "", false);
-        for(Individual ind:bestPop){
-            if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
-                for(int j = 0;j<ind.getWeights().size()-1;j++){
-                    this.saveText(MODELS_PATH, ind.getWeights().get(j) + " ", true);
-                }
-                this.saveText(MODELS_PATH, ind.getWeights().get(ind.getWeights().size()-1) + ",", true);
-                this.saveText(MODELS_PATH, ind.getLassoIntercept() + ",", true);
-            }
-            this.saveText(MODELS_PATH, ind.toString() + "\n", true);
-        }
+//        this.saveText(MODELS_PATH, "", false);
+//        for(Individual ind:bestPop){
+//            if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
+//                for(int j = 0;j<ind.getWeights().size()-1;j++){
+//                    this.saveText(MODELS_PATH, ind.getWeights().get(j) + " ", true);
+//                }
+//                this.saveText(MODELS_PATH, ind.getWeights().get(ind.getWeights().size()-1) + ",", true);
+//                this.saveText(MODELS_PATH, ind.getLassoIntercept() + ",", true);
+//            }
+//            this.saveText(MODELS_PATH, ind.toString() + "\n", true);
+//        }
         Individual acc = paretoFront.get(0);
         Individual comp = paretoFront.get(0);
         Individual knee = paretoFront.get(0);
         paretoFront.calculateEuclideanDistances(fitnessFunctions);
-        this.saveText(PARETO_PATH, "", false);
+//        this.saveText(PARETO_PATH, "", false);
         FitnessFunction firstFitness = fitnessFunctions.get(firstFitnessFunction);
         FitnessFunction secondFitness = fitnessFunctions.get(secondFitnessFunction);
         for(Individual ind:paretoFront){
@@ -747,28 +747,28 @@ public class SymbRegMOO {
             if(ind.getEuclideanDistance()<knee.getEuclideanDistance()){
                 knee = ind;
             }
-            this.saveText(PARETO_PATH, minTarget + "," + maxTarget + ",", true);
-            if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
-                for(int j = 0;j<ind.getWeights().size()-1;j++){
-                    this.saveText(PARETO_PATH, ind.getWeights().get(j) + " ", true);
-                }
-                this.saveText(PARETO_PATH, ind.getWeights().get(ind.getWeights().size()-1) + ",", true);
-                this.saveText(PARETO_PATH, ind.getLassoIntercept() + ",", true);
-            }
-            this.saveText(PARETO_PATH, ind.toString() + "\n", true);
+//            this.saveText(PARETO_PATH, minTarget + "," + maxTarget + ",", true);
+//            if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
+//                for(int j = 0;j<ind.getWeights().size()-1;j++){
+//                    this.saveText(PARETO_PATH, ind.getWeights().get(j) + " ", true);
+//                }
+//                this.saveText(PARETO_PATH, ind.getWeights().get(ind.getWeights().size()-1) + ",", true);
+//                this.saveText(PARETO_PATH, ind.getLassoIntercept() + ",", true);
+//            }
+//            this.saveText(PARETO_PATH, ind.toString() + "\n", true);
 
         }
         // SAVE LEAST COMPLEX MODEL OF THE PARETO FRONT
-        this.saveText(LEAST_COMPLEX_PATH, "", false);
-        this.saveText(LEAST_COMPLEX_PATH, minTarget + "," + maxTarget + ",", true);
-        if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
-            for(int j = 0;j<comp.getWeights().size()-1;j++){
-                this.saveText(LEAST_COMPLEX_PATH, comp.getWeights().get(j) + " ", true);
-            }
-            this.saveText(LEAST_COMPLEX_PATH, comp.getWeights().get(comp.getWeights().size()-1) + ",", true);
-            this.saveText(LEAST_COMPLEX_PATH, comp.getLassoIntercept() + ",", true);
-        }
-        this.saveText(LEAST_COMPLEX_PATH, comp.toString() + "\n", true);
+//        this.saveText(LEAST_COMPLEX_PATH, "", false);
+//        this.saveText(LEAST_COMPLEX_PATH, minTarget + "," + maxTarget + ",", true);
+//        if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
+//            for(int j = 0;j<comp.getWeights().size()-1;j++){
+//                this.saveText(LEAST_COMPLEX_PATH, comp.getWeights().get(j) + " ", true);
+//            }
+//            this.saveText(LEAST_COMPLEX_PATH, comp.getWeights().get(comp.getWeights().size()-1) + ",", true);
+//            this.saveText(LEAST_COMPLEX_PATH, comp.getLassoIntercept() + ",", true);
+//        }
+//        this.saveText(LEAST_COMPLEX_PATH, comp.toString() + "\n", true);
 
         // SAVE MOST ACCURATE MODEL OF THE PARETO FRONT
         this.saveText(MOST_ACCURATE_PATH, "", false);
@@ -783,16 +783,16 @@ public class SymbRegMOO {
         this.saveText(MOST_ACCURATE_PATH, acc.toString() + "\n", true);
 
         // SAVE KNEE MODEL OF THE PARETO FRONT
-        this.saveText(KNEE_PATH, "", false);
-        this.saveText(KNEE_PATH, minTarget + "," + maxTarget + ",", true);
-        if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
-            for(int j = 0;j<knee.getWeights().size()-1;j++){
-                this.saveText(KNEE_PATH, knee.getWeights().get(j) + " ", true);
-            }
-            this.saveText(KNEE_PATH, knee.getWeights().get(knee.getWeights().size()-1) + ",", true);
-            this.saveText(KNEE_PATH, knee.getLassoIntercept() + ",", true);
-        }
-        this.saveText(KNEE_PATH, knee.toString() + "\n", true);
+//        this.saveText(KNEE_PATH, "", false);
+//        this.saveText(KNEE_PATH, minTarget + "," + maxTarget + ",", true);
+//        if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
+//            for(int j = 0;j<knee.getWeights().size()-1;j++){
+//                this.saveText(KNEE_PATH, knee.getWeights().get(j) + " ", true);
+//            }
+//            this.saveText(KNEE_PATH, knee.getWeights().get(knee.getWeights().size()-1) + ",", true);
+//            this.saveText(KNEE_PATH, knee.getLassoIntercept() + ",", true);
+//        }
+//        this.saveText(KNEE_PATH, knee.toString() + "\n", true);
         return acc;
     }
     
