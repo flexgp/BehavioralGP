@@ -208,8 +208,6 @@ public final class Parameters {
         public static final String ARCHIVE_AUGMENTED_REPRODUCE = "operator.ArchiveAugmentedReproduce";
 
         // ARCHIVE values
-        public static final String SIMPLE_ARCHIVE = "fitness.SimpleArchive";
-        public static final String REPTREE_ARCHIVE = "fitness.REPTreeArchive";
         public static final String BP_ARCHIVE = "fitness.BPArchive";
 
         // MODEL values

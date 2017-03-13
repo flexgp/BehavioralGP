@@ -396,11 +396,7 @@ public class SymbRegMOO {
         }
 
         // Set up archive
-        if (ARCHIVE.equals(Parameters.Operators.SIMPLE_ARCHIVE)) {
-            archive = new SimpleArchive(rand);
-        } else if (ARCHIVE.equals(Parameters.Operators.REPTREE_ARCHIVE)) {
-            archive = new REPTreeArchive(rand, targetValues);
-        } else if (ARCHIVE.equals(Parameters.Operators.BP_ARCHIVE)) {
+        if (ARCHIVE.equals(Parameters.Operators.BP_ARCHIVE)) {
             archive = new BPArchive(rand, ARCHIVE_CAPACITY);
         } else {
             System.err.format("Invalid Archive %s specified for problem type %s%n", ARCHIVE);
