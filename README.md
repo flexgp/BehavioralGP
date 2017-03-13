@@ -10,7 +10,7 @@ These instructions will get you a copy of the project up and running on your loc
 ant -buildfile build.xml
 ```
 
-This will create an 'out' directory.  To run conventional genetic programming on the Keijzer1 data set, simply run
+This will create an ```out``` directory.  To run conventional genetic programming on the Keijzer1 data set, simply run
 
 ```
 java -jar out/artifacts/BGP_steven_fine_jar/BGP_steven_fine.jar -train ./data/keijzer1 -minutes 1 -properties ./props/gp
