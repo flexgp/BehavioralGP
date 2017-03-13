@@ -771,16 +771,16 @@ public class SymbRegMOO {
 //        this.saveText(LEAST_COMPLEX_PATH, comp.toString() + "\n", true);
 
         // SAVE MOST ACCURATE MODEL OF THE PARETO FRONT
-//        this.saveText(MOST_ACCURATE_PATH, "", false);
-//        this.saveText(MOST_ACCURATE_PATH, minTarget + "," + maxTarget + ",", true);
-//        if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
-//            for(int j = 0;j<acc.getWeights().size()-1;j++){
-//                this.saveText(MOST_ACCURATE_PATH, acc.getWeights().get(j) + " ", true);
-//            }
-//            this.saveText(MOST_ACCURATE_PATH, acc.getWeights().get(acc.getWeights().size()-1) + ",", true);
-//            this.saveText(MOST_ACCURATE_PATH, acc.getLassoIntercept() + ",", true);
-//        }
-//        this.saveText(MOST_ACCURATE_PATH, acc.toString() + "\n", true);
+        this.saveText(MOST_ACCURATE_PATH, "", false);
+        this.saveText(MOST_ACCURATE_PATH, minTarget + "," + maxTarget + ",", true);
+        if (firstFitnessFunction.equals(Parameters.Operators.SR_JAVA_FITNESS)) {
+            for(int j = 0;j<acc.getWeights().size()-1;j++){
+                this.saveText(MOST_ACCURATE_PATH, acc.getWeights().get(j) + " ", true);
+            }
+            this.saveText(MOST_ACCURATE_PATH, acc.getWeights().get(acc.getWeights().size()-1) + ",", true);
+            this.saveText(MOST_ACCURATE_PATH, acc.getLassoIntercept() + ",", true);
+        }
+        this.saveText(MOST_ACCURATE_PATH, acc.toString() + "\n", true);
 
         // SAVE KNEE MODEL OF THE PARETO FRONT
 //        this.saveText(KNEE_PATH, "", false);
