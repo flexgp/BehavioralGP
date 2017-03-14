@@ -100,18 +100,6 @@
     <pathelement location="${basedir}/lib/guava-19.0.jar"/>
     <pathelement location="${basedir}/lib/weka.jar"/>
   </path>
-  <!-- Register Custom Compiler Taskdefs -->
-  <property name="javac2.home" value="${idea.home}/lib"/>
-  <path id="javac2.classpath">
-    <pathelement location="${javac2.home}/javac2.jar"/>
-    <pathelement location="${javac2.home}/jdom.jar"/>
-    <pathelement location="${javac2.home}/asm-all.jar"/>
-    <pathelement location="${javac2.home}/jgoodies-forms.jar"/>
-  </path>
-  <target name="register.custom.compilers">
-    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
-    <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>
-  </target>
   
   <!-- Modules -->
   
@@ -178,15 +166,15 @@
   
   <target name="compile.module.bgp_steven_fine" depends="compile.module.bgp_steven_fine.production,compile.module.bgp_steven_fine.tests" description="Compile module BGP_steven_fine"/>
   
-  <target name="compile.module.bgp_steven_fine.production" depends="register.custom.compilers" description="Compile module BGP_steven_fine; production classes">
+  <target name="compile.module.bgp_steven_fine.production" description="Compile module BGP_steven_fine; production classes">
     <mkdir dir="${bgp_steven_fine.output.dir}"/>
-    <javac2 destdir="${bgp_steven_fine.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.bgp_steven_fine}/javac">
+    <javac destdir="${bgp_steven_fine.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.bgp_steven_fine}/javac">
       <compilerarg line="${compiler.args.bgp_steven_fine}"/>
       <bootclasspath refid="bgp_steven_fine.module.bootclasspath"/>
       <classpath refid="bgp_steven_fine.module.production.classpath"/>
       <src refid="bgp_steven_fine.module.sourcepath"/>
       <patternset refid="excluded.from.compilation.bgp_steven_fine"/>
-    </javac2>
+    </javac>
     
     <copy todir="${bgp_steven_fine.output.dir}">
       <fileset dir="${module.bgp_steven_fine.basedir}/src">
@@ -196,7 +184,7 @@
     </copy>
   </target>
   
-  <target name="compile.module.bgp_steven_fine.tests" depends="register.custom.compilers,compile.module.bgp_steven_fine.production" description="compile module BGP_steven_fine; test classes" unless="skip.tests"/>
+  <target name="compile.module.bgp_steven_fine.tests" depends="compile.module.bgp_steven_fine.production" description="compile module BGP_steven_fine; test classes" unless="skip.tests"/>
   
   <target name="clean.module.bgp_steven_fine" description="cleanup module">
     <delete dir="${bgp_steven_fine.output.dir}"/>
@@ -240,5 +228,4 @@
   </target>
   
   <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
-
 </project>
