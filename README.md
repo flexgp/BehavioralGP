@@ -27,3 +27,7 @@ To use your own data set it must be provided in csv format where each line corre
 To run different configurations of genetic programming, a property file must be specified. The `props` directory contains a large number of different configurations for different genetic programming runs.  
 
 The three BGP configurations presented by Krawiec et al. can be run by using the files `./props/bp2a_reptree`, `./props/bp4_reptree`, and `./props/bp4a_reptree` respectively.  To use any configuration file simple replace the argument for `-properties` with a different propery file, E.g. `-properties ./props/bp4_reptree`.
+
+# Documentation
+
+See `docs` folder.
