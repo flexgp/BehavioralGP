@@ -9,7 +9,11 @@ import evogpj.operator.RandomOperator;
 import java.util.*;
 
 /**
- * Created by stevenfine on 9/19/16.
+ * Represents an archive in which each element of the archive has an associated
+ * weight. The probability of a given element being drawn from the archive is
+ * in proportion to its weight.
+ *
+ * @author Steven Fine
  */
 public abstract class WeightedArchive extends RandomOperator implements Archive {
 
@@ -33,6 +37,7 @@ public abstract class WeightedArchive extends RandomOperator implements Archive 
         totalWeight = 0;
     }
 
+    @Override
     public TreeNode getSubtree() throws EmptyArchiveException {
         if (archiveStorage.size() == 0) {
             throw new EmptyArchiveException();
