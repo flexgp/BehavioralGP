@@ -1,7 +1,7 @@
 package evogpj.evaluation;
 
 /**
- * Created by stevenfine on 1/12/17.
+ * @author Steven Fine
  */
 public class IndividualModelValueNotDefinedException extends Exception {
 
