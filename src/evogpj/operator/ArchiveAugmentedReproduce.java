@@ -9,7 +9,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by stevenfine on 9/16/16.
+ * Generate new {@link Individual}s by using either the {@link Mutate} operator,
+ * the {@link Crossover}, or the {@link ArchiveMutate} operator, each with an
+ * associated probability.
+ *
+ * @author Steven Fine
  */
 public class ArchiveAugmentedReproduce extends RandomOperator implements Reproduce {
 
