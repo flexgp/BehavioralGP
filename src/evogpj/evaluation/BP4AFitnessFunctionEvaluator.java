@@ -10,7 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by stevenfine on 1/11/17.
+ * In addition to evaluating all of the {@link FitnessFunction}s for each
+ * {@link evogpj.gp.Individual} in the {@link Population}, builds a
+ * {@link Model} on the collected genetic material, and adds subtrees to the
+ * {@link Archive} based on the {@link Model}.  Some of the
+ * {@link FitnessFunction}s may depend on the {@link Model}.
+ *
+ * @author Steven Fine
  */
 public class BP4AFitnessFunctionEvaluator implements FitnessFunctionEvaluator {
 
@@ -36,6 +42,7 @@ public class BP4AFitnessFunctionEvaluator implements FitnessFunctionEvaluator {
         }
     }
 
+    @Override
     public void evalPop(Population pop) {
         for (FitnessFunction f : noModelFitnessFunctions) {
             f.evalPop(pop);
