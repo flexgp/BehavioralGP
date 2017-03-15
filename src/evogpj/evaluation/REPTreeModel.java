@@ -11,7 +11,10 @@ import weka.core.*;
 import java.util.*;
 
 /**
- * Created by stevenfine on 1/12/17.
+ * Uses {@link REPTree} as the machine learning model for the purposes of
+ * Behavioral Genetic Programming.
+ *
+ * @author Steven Fine
  */
 public class REPTreeModel implements Model {
 
