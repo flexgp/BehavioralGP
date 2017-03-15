@@ -7,7 +7,9 @@ import evogpj.gp.MersenneTwisterFast;
 import java.util.*;
 
 /**
- * Created by stevenfine on 1/10/17.
+ * Implementation of the archive used in BGP.
+ *
+ * @author Steven Fine
  */
 public class BPArchive extends WeightedArchive {
 
