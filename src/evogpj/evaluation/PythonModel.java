@@ -10,7 +10,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by stevenfine on 1/25/17.
+ * Calls a Python script which in turn calls the decision tree learner.  Note
+ * that this class requires a python script called regression_tree.py in the
+ * same directory that the genetic program is run.
+ *
+ * @author Steven Fine
  */
 public class PythonModel extends MultiThreadedModel {
 
@@ -38,7 +42,7 @@ public class PythonModel extends MultiThreadedModel {
 
         List<String> command = new ArrayList<>();
         command.add("python");
-        command.add("./regression_tree.py"); // Make robust for final implementation
+        command.add("./regression_tree.py"); // TODO: Make robust for final implementation
         command.add(Integer.toString(featureNamesList.size()));
 
         for (int dataPointIndex = 0; dataPointIndex < numberOfFitnessCases; dataPointIndex++) {
