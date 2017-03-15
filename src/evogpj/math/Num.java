@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by stevenfine on 8/12/16.
+ * Represents a constant function.
+ *
+ * @author Steven Fine
  */
 public class Num extends ZeroArgFunction {
 
