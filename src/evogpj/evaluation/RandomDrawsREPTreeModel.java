@@ -18,7 +18,13 @@ import weka.core.Instances;
 import java.util.*;
 
 /**
- * Created by stevenfine on 2/3/17.
+ * Uses {@link REPTree} as the machine learning model for the purposes of
+ * Behavioral Genetic Programming, but instead of building a model on the trace
+ * of each {@link Individual} in the {@link Population}, draws subsets of
+ * candidate subtrees from the combined trace at random. Builds a model
+ * on each subset.
+ *
+ * @author Steven Fine
  */
 public class RandomDrawsREPTreeModel implements Model {
     protected List<Double> targetValues;
