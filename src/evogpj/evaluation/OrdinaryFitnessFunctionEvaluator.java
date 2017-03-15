@@ -5,7 +5,11 @@ import evogpj.gp.Population;
 import java.util.LinkedHashMap;
 
 /**
- * Created by stevenfine on 1/11/17.
+ * Simply evaluates all of the {@link FitnessFunction}s for each
+ * {@link evogpj.gp.Individual} in the {@link Population} used in the genetic
+ * programming run.
+ *
+ * @author Steven Fine
  */
 public class OrdinaryFitnessFunctionEvaluator implements FitnessFunctionEvaluator  {
 
@@ -15,6 +19,7 @@ public class OrdinaryFitnessFunctionEvaluator implements FitnessFunctionEvaluato
         this.fitnessFunctions = fitnessFunctions;
     }
 
+    @Override
     public void evalPop(Population pop) {
         for (String name : fitnessFunctions.keySet()) {
             FitnessFunction f = fitnessFunctions.get(name);
