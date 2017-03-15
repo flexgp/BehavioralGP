@@ -12,7 +12,12 @@ import weka.core.*;
 import java.util.*;
 
 /**
- * Created by stevenfine on 1/25/17.
+ * This implementation of {@link Model} is identical to {@link REPTreeModel},
+ * except that instead of using the subtrees that are used by {@link REPTree},
+ * the subtrees that will be placed in the {@link Archive} are drawn uniformly
+ * at random from the candidate subtrees.
+ *
+ * @author Steven Fine
  */
 public class RandomModel implements Model {
 
