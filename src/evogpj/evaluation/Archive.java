@@ -9,7 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by stevenfine on 8/3/16.
+ * Represents an archive in which subtrees are stored to be used later in the
+ * genetic programming process.
+ *
+ * @author Steven Fine
  */
 public interface Archive {
 

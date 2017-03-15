@@ -9,11 +9,12 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Extend {@link SinglePointUniformCrossover} so that first we choose the
- * the cross-over depth uniformly at random in given tree, then select point
- * uniformly at random at given depth.
+ * Extension of {@link SinglePointUniformCrossover} which determines the
+ * crossover point by first selecting the depth of the crossover point in the
+ * tree uniformly at random.  Then selecting the subtree uniformly at random at
+ * the given depth.
  *
- * Created by stevenfine on 1/6/17.
+ * @author Steven Fine
  */
 public class UniformDepthCrossover extends SinglePointUniformCrossover {
 

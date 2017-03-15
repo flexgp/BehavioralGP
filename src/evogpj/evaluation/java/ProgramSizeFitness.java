@@ -7,7 +7,10 @@ import evogpj.gp.Individual;
 import evogpj.gp.Population;
 
 /**
- * Created by stevenfine on 1/10/17.
+ * Evaluates the program fitness for each {@link Individual} by computing
+ * {@link Tree#getSize()}.
+ *
+ * @author Steven Fine
  */
 public class ProgramSizeFitness extends FitnessFunction {
 

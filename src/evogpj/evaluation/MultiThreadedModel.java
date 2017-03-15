@@ -10,7 +10,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by stevenfine on 1/26/17.
+ * Represents a {@link Model} that can be built using multiple {@link Thread}s.
+ *
+ * @author Steven Fine
  */
 public abstract class MultiThreadedModel implements Model {
 

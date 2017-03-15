@@ -10,7 +10,11 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Created by stevenfine on 1/6/17.
+ * Extension of {@link SubtreeMutate} which determines the mutation point by
+ * first selecting the depth of the mutation point in the tree uniformly at
+ * random.  Then selecting the subtree uniformly at random at the given depth.
+ *
+ * @author Steven Fine
  */
 public class UniformDepthMutate extends SubtreeMutate {
 

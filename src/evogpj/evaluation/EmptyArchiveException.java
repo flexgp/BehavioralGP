@@ -1,7 +1,7 @@
 package evogpj.evaluation;
 
 /**
- * Created by stevenfine on 8/5/16.
+ * @author Steven Fine
  */
 public class EmptyArchiveException extends Exception {
 

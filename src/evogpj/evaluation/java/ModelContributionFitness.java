@@ -8,7 +8,10 @@ import evogpj.gp.Individual;
 import evogpj.gp.Population;
 
 /**
- * Created by stevenfine on 2/3/17.
+ * Uses {@link Model#getModelContribution(Individual)} as the
+ * {@link Individual}'s fitness value.
+ *
+ * @author Steven Fine
  */
 public class ModelContributionFitness extends ModelFitnessFunction {
 

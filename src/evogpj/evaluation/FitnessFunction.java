@@ -56,6 +56,11 @@ public abstract class FitnessFunction {
 
 	public abstract Boolean isMaximizingFunction();
 
+	/**
+	 * Determines whether or not this {@link FitnessFunction} requires a
+	 * {@link Model} for its evaluation.
+	 * @return
+     */
 	public Boolean requiresModel() {
 		return false;
 	}

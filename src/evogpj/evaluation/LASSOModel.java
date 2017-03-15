@@ -11,7 +11,10 @@ import java.math.BigDecimal;
 import java.util.*;
 
 /**
- * Created by stevenfine on 1/25/17.
+ * Uses Lasso as the machine learning model for the purposes of
+ * Behavioral Genetic Programming.
+ *
+ * @author Steven Fine
  */
 public class LASSOModel implements Model {
     protected List<Double> targetValues;

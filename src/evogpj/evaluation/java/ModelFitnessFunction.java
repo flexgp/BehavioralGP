@@ -4,7 +4,10 @@ import evogpj.evaluation.Model;
 import evogpj.evaluation.FitnessFunction;
 
 /**
- * Created by stevenfine on 1/11/17.
+ * Represents a {@link FitnessFunction} that requires a {@link Model} for its
+ * evaluation.
+ *
+ * @author Steven Fine
  */
 public abstract class ModelFitnessFunction extends FitnessFunction {
 

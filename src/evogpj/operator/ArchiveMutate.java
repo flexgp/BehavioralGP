@@ -13,7 +13,10 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 /**
- * Created by stevenfine on 8/8/16.
+ * Implementation of {@link SelectPtMutate} that replaces a subtree in an
+ * {@link Individual} with a subtree from the {@link Archive}.
+ *
+ * @author Steven Fine
  */
 public class ArchiveMutate extends SelectPtMutate {
 

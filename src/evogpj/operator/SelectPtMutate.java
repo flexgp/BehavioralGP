@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by stevenfine on 1/5/17.
+ * Abstract implementation of {@link Mutate} that defines a method used to
+ * select the mutation point.
+ *
+ * @author Steven Fine
  */
 public abstract class SelectPtMutate extends RandomOperator implements Mutate {
 

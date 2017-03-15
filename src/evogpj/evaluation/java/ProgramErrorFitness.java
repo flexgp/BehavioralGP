@@ -17,7 +17,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by stevenfine on 1/10/17.
+ * Evaluates the program fitness for each {@link Individual} by computing the
+ * Manhattan distance between the output of the {@link Tree} on each data point
+ * and the desired output. Additionally collects and saves the trace of each
+ * {@link Individual} on the training data.
+ *
+ * @author Steven Fine
  */
 public class ProgramErrorFitness extends FitnessFunction {
 

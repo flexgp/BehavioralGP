@@ -13,7 +13,12 @@ import weka.core.*;
 import java.util.*;
 
 /**
- * Created by stevenfine on 1/25/17.
+ * Uses {@link REPTree} as the machine learning model for the purposes of
+ * Behavioral Genetic Programming, but instead of building a model on the trace
+ * of each {@link Individual} in the {@link Population} builds a single model on
+ * the combined trace.
+ *
+ * @author Steven Fine
  */
 public class FullPopulationREPTreeModel implements Model {
     protected List<Double> targetValues;
