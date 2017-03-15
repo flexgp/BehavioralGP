@@ -407,7 +407,6 @@ public class SymbRegMOO {
         for (String fitnessOperatorName : fitnessFunctions.keySet()) {
             if (fitnessOperatorName.equals(Parameters.Operators.SR_JAVA_FITNESS) ||
                     fitnessOperatorName.equals(Parameters.Operators.ORDINARY_GP_FITNESS) ||
-                    fitnessOperatorName.equals(Parameters.Operators.ARCHIVE_BUILDER_FITNESS) ||
                     fitnessOperatorName.equals(Parameters.Operators.PROGRAM_ERROR_FITNESS)) {
                 minTarget = data.getTargetMin();
                 maxTarget = data.getTargetMax();
@@ -423,8 +422,6 @@ public class SymbRegMOO {
                     fitnessFunction = new SRLARSJava(data, MEAN_POW, COERCE_TO_INT, EXTERNAL_THREADS);
                 } else if (fitnessOperatorName.equals(Parameters.Operators.ORDINARY_GP_FITNESS)) {
                     fitnessFunction = new OrdinaryGP(data, MEAN_POW, COERCE_TO_INT, EXTERNAL_THREADS);
-                } else if (fitnessOperatorName.equals(Parameters.Operators.ARCHIVE_BUILDER_FITNESS)) {
-                    fitnessFunction = new ArchiveBuilder(data, MEAN_POW, COERCE_TO_INT, EXTERNAL_THREADS, archive);
                 } else if (fitnessOperatorName.equals(Parameters.Operators.PROGRAM_ERROR_FITNESS)) {
                     fitnessFunction = new ProgramErrorFitness(data, EXTERNAL_THREADS);
                 }
