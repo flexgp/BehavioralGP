@@ -8,7 +8,10 @@ import evogpj.gp.Individual;
 import evogpj.gp.Population;
 
 /**
- * Created by stevenfine on 1/10/17.
+ * Uses {@link Model#getModelComplexity(Individual)} as the
+ * {@link Individual}'s fitness value.
+ *
+ * @author Steven Fine
  */
 public class ModelComplexityFitness extends ModelFitnessFunction {
 
