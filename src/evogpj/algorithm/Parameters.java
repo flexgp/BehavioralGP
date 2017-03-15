@@ -148,7 +148,6 @@ public final class Parameters {
         public static final String SR_CUDA_FITNESS_CORRELATION = "fitness.SRFitness.CudaCorrelation";
         public static final String SR_CUDA_FITNESS_CORRELATION_DUAL = "fitness.SRFitness.CudaCorrelationDual";
         public static final String ORDINARY_GP_FITNESS = "fitness.OrdinaryGP.Java";
-        public static final String ARCHIVE_BUILDER_FITNESS = "fitness.ArchiveBuilder.Java";
 
         // GPFunction Classification
         public static final String GPFUNCTION_JAVA = "fitness.GPFunctionFitness.Java";
