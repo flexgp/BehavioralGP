@@ -2,9 +2,11 @@
 
 This work builds off of the work done by Krawiec et al. in their paper entitled 'Behavioral GP: A Broader and More Detailed Take on Semantic GP'. It entails an implementation of Behavioral Genetic Programming (BGP) which is introduced in their work, with the addition of several extensions to the BGP paradigm.
 
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
 ## Quick Start
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. Simply download the zip, or clone the repository to your local machine. To build the application, in the root folder of the repository, simply run 
+The following works on Ubuntu 14.04.5 LTS. Simply download the zip, or clone the repository to your local machine. If you are using a different system, you may need to change the value of ```jdk.home.1.8``` to point to the location of your compiler. To build the application, in the root folder of the repository, simply run 
 
 ```
 ant -buildfile build.xml
