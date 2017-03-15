@@ -4,7 +4,10 @@ import evogpj.gp.GPException;
 import evogpj.gp.Population;
 
 /**
- * Created by stevenfine on 7/27/16.
+ * Interface for creating new {@link evogpj.gp.Individual}s from old
+ * {@link evogpj.gp.Individual}s.
+ *
+ * @author Steven Fine
  */
 public interface Reproduce {
 
