@@ -6,7 +6,10 @@ import evogpj.gp.MersenneTwisterFast;
 import evogpj.gp.Population;
 
 /**
- * Created by stevenfine on 8/9/16.
+ * Generate new {@link Individual}s by using either the {@link Mutate} operator
+ * or the {@link ArchiveMutate} operator, each with an associated probability.
+ *
+ * @author Steven Fine
  */
 public class ArchiveCrossoverReproduce extends RandomOperator implements Reproduce {
 
