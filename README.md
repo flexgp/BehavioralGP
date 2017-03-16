@@ -6,16 +6,28 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## Quick Start
 
-The following works on Ubuntu 14.04.5 LTS. Simply download the zip, or clone the repository to your local machine. If you are using a different system, you may need to change the value of ```jdk.home.1.8``` to point to the location of your compiler. To build the application, in the root folder of the repository, simply run 
+The following works on Ubuntu 14.04.5 LTS. Simply download the zip, or clone the repository to your local machine. (If you are using a different system, you may need to change the value of ```jdk.home.1.8``` in `build.properties`)
 
-```
+### Build
+
+To build the application, in the root folder of the repository, simply run 
+
+```bash
 ant -f build.xml
 ```
 
-This will create an `out` directory.  To run conventional genetic programming on the Keijzer1 data set for one minute, simply run
+This will create an `out` directory.
 
-```
+### Run
+To run conventional genetic programming on the Keijzer1 data set for one minute, simply run
+
+```bash
 java -jar out/artifacts/BGP_steven_fine_jar/BGP_steven_fine.jar -train ./data/keijzer1 -minutes 1 -properties ./props/gp
+```
+This will create a file called `mostAccurate.txt`, which contains the most accurate model from the run. It shows the fitness and an S-expression of the model, e.g.
+```bash
+$ cat mostAccurate.txt
+-0.22959479982773615,0.08131685328492509,(mylog (cos (* (sin (sin (+ (mylog (cos (sin (sin (+ (mylog (cos (* (sin (+ (mylog (cos (sin (sin (+ (mylog (mylog (cos (sin (sin (+ (mylog (cos (* (sin (sin (+ (mylog (cos (sin (sin (sin (sin (mylog (mylog X1)))))))) (mylog (sin (mylog X1)))))) X1))) (mylog (mylog X1)))))))) X1))))) (mylog (mylog X1)))) (mydivide (sin X1) X1)))) (mylog (mylog X1))))))) (mylog (mylog X1))))) X1)))
 ```
 
 ## Data sets
