@@ -1,0 +1,148 @@
+\section{Related work}
+\label{sec:related-work}
+
+In the STEALTH framework for anticipating tax evasion we have used
+previous work in GE and coevolutionary algorithms. In this section we
+describe the Genetic Programming approach with grammars called
+Grammatical Evolution in Section~\ref{sec:gramm-evol}. Coevolutionary
+algorithms are in Section~\ref{sec:co-evolution}. Finally, the work on
+coevolution and GE are in Section~\ref{sec:co-evol-gramm}
+
+\subsection{Grammatical Evolution}
+\label{sec:gramm-evol}
+
+Grammatical Evolution~(GE) is a version of genetic programming with a
+variable length integer representation and an indirect mapping using a
+grammar~\citep{o2003grammatical}, which allows us to generate valid
+phenotypes, which in our case are transaction sequences and audit
+policies. As shown in Figure~\ref{fig:ge_ex}, the grammar is composed
+of a single start symbol, terminal symbols and non-terminal symbols,
+as indicated by the boxes in the figure. The left hand box shows the
+grammar in BNF form and the right hand box shows the rewriting of
+integers to terminal symbols and the corresponding derivation tree. In
+the rewriting the start symbol is at the top and terminal symbols are
+at the bottom of each branch of the derivation tree. Integers are fed
+into the top and the direction of the path is determined by taking the
+modulo of the current integer, at which point the next integer is
+selected. The process is complete when the sentence comprises only
+terminal symbols.
+
+\begin{figure*}[!htb]
+\centering \includegraphics[width=0.99\textwidth]{figures/ge_ex}
+\caption{{\small Example of how GE rewrites a list of integers
+    (Genotype) into a list of transactions (Phenotype) with a BNF
+    grammar}}
+\label{fig:ge_ex}
+\end{figure*}
+
+The use of a grammar has allowed GE to be applied to many different
+areas. For example, games, finance, design, hyper-heuristic for
+combinatorial optimization problems and parallel sorting programs on
+multi-cores~\citep{shaker2012evolving, dempsey2009foundations,
+  byrne2014evolving, sabar2013grammatical,
+  chennupati2015automatic}. GE provides a division of search and
+solution space. The indirect encoding of the grammar allows search
+space transformations and both constrain and bias the search. In a
+proof-of-concept application, as currently for STEALTH, the usability
+and incorporation of domain knowledge currently outweighs the impact
+of GE operators, e.g. low locality~\citep{thorhauer2014locality,
+  whigham2015examining}.
+
+\subsection{Co-evolution}
+\label{sec:co-evolution}
+
+In biology, co-evolution describes situations where two or more
+species reciprocally affect each other's evolution. The notion of
+adversarial co-evolution from biology can be used for the
+circumstances of the auditors, e.g. each time the IRS changes the tax
+code the tax evaders react by finding new ambiguities. The auditor and
+the tax evaders are \textit{co-evolving} as interacting species. At
+its core, the overall dynamics of the system reflect a constantly
+transitioning series of complementary adjustments, with each
+predator/prey seeking to bring advantage to the predator/prey under
+adjustment.
+
+Coevolutionary algorithms explore domains in which no single
+evaluation function is present or known. Instead, algorithms rely on
+the aggregation of outcomes from interactions among coevolving
+entities to make selection decisions. The lack of an explicit
+measurement, understanding the dynamics of coevolutionary algorithms
+and determining the progress of a given algorithm present further
+challenges~\citep{popovici2012coevolutionary}. Usually, Evolutionary
+Algorithms begin with a fitness function, which for the purposes of
+this chapter is a function of the form $f: G \mapsto \mathbb{R}$ that
+assigns a real value to each possible genotype in $G$. Individual
+solutions are compared as $f(g_0)$ with $f(g_1)$ and the fitness
+ranking is always the same. In coevolution two individuals are
+compared based on their outcome from interaction with other
+individuals, thus the ranking of an individual solution can change
+over time.
+
+Coevolution is appropriate for domains that have no intrinsic
+objective measure, also called \textit{interactive} domains. There are
+two types of coevolution:
+\begin{inparadesc}
+\item [Compositional] for a problem the quality of a solution to the
+  problem involves an interaction among many components that together
+  might be thought of as a team, i.e. cooperating.
+\item [Test-based] for a problem is one in which the quality of a
+  potential solution is determined by its performance when interacting
+  with some set of tests, i.e. competitive. E.g. the interactive test
+  for a tax evasion strategy are different auditor behaviors, and vice
+  versa.
+\end{inparadesc}
+
+Coevolutionary algorithms and game theory are related which leads to
+applications in games~\citep{popovici2012coevolutionary}. A
+distinction from game theory is that co-evolutionary EAs can be
+applied to larger search spaces~\citep{rush2015coevolutionary}.  Some
+work has investigated solution concepts for test-case coevolution with
+a no-free-lunch framework\citep{tauritz2008no}. In other applications,
+some of the problems with streaming data classification are
+encountered in coevolution~\citep{heywood2015evolutionary}. Moreover,
+co-evolution has been compared to boosting~\citep{ibabagging}. In
+addition, co-evolution is also used for complexification of
+solutions~\citep{stanley2004competitive}. Finally, there are also
+applications to simulations of behavior, e.g. Zero-Day exploit
+strategies in Cyber Security~\citep{winterrose2014strategic} and the
+search for bug fixes~\citep{le2013moving}, where the program already
+exists. STEALTH addresses the EA ``middle''
+strategies~\citep{rush2015coevolutionary}.
+
+\subsection{Co-evolution and Grammatical Evolution}
+\label{sec:co-evol-gramm}
+
+GE has been applied with coevolutionary algorithms. In the GE
+literature on dynamic environments~\citep{dempsey2009foundations}
+co-evolution is characterized as ``Markov'', i.e. it has memory and
+proceeds from its current state. In coevolution the fitness of
+solutions are dependent on the search process, this dependency does
+not have to hold for dynamic environments. Some coevolutionary
+literature view interactive domains as static, with a different
+structure. In Grammatical evolution by grammatical
+evolution~(GEGE)~\citep{dempsey2009foundations} tries to
+simultaneously evolve the grammar and genetic code with a hierarchy of
+grammars. The aim is to find ``modules'' that can be reused when the
+environment changes, i.e. in a dynamic environment. GEGE is a compact
+representation of a larger grammar with an increased search space and
+strongly couples the grammars~\citep{azad2006examination}.
+
+Examples of applications of GE and coevolution are for reformulation
+of training as a two-population competition, that is learners versus
+training exemplars and use GE to represent Pareto-coevolutionary
+classifier and Multi-objective classifier~\citep{mcintyre2007multi,
+  mcintyre2008cooperative}.  An Artificial Life model for evolving a
+predator--prey ecosystem of mathematical expressions with
+GE~\citep{alfonseca2015evolving}. Coevolutionary algorithms with GE
+for financial trading, e.g. using multiple cooperative
+populations~\citep{adamu2011coevolutionary,
+  gabrielsson2014co}. Spatial co-evolution in age layered planes
+\citep{harper2014evolving} for robots in robocode using competitive
+coevolution.
+
+STEALTH requires the tax regulations to be encoded in software before
+the search for strategies can be performed. The tax law is defined by
+existing rules, in the IRC. The solutions in the separate populations
+in STEALTH are both interesting. Next we describes how to use GE and
+multi population interactive test based coevolution with US
+partnership taxation.

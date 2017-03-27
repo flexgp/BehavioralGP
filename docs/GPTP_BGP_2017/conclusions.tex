@@ -1,0 +1,35 @@
+\section{Conclusions \& Future Work}
+\label{sec:conclusions--future}
+
+We presented how Genetic Programming, grammars and coevolutionary
+algorithms could be used in practice. We expanded on the role of
+dynamic environments and coevolution in GE. We used a coevolutionary
+algorithm to replicate the co-evolutionary relationship between tax
+evaders and auditors, using US partnership taxation as an initial
+example. We proceeded with
+\begin{inparaenum}[\itshape (1)]
+\item representing the rule system in order to calculate benefit that
+  the advisor can offer to their client
+\item simulating interactions between the advisor's strategy and the
+  relevant regulatory authority, and
+\item optimizing for behavior on both ends of the relationship to
+  investigate potential areas of exploration.
+\end{inparaenum}
+
+The co-evolutionary relationship can be replicated through
+experimentation, given the proper specifications. Some further
+parameter calibrations are required in order to capture certain time
+scale effects, but the qualitative dynamics are present. Transaction
+sequences can be shown to respond to both tax minimizing behavior and
+risk of being audited. Similarly, auditing policies respond to and
+isolate behavior which generates lower than expected taxable income.
+
+For future work we will expand our representation of US partnership
+tax code we would like to non-recourse liabilities and depreciation
+deduction schedules as a means to minimize taxable income. Another key
+aspect of validation is to gain access to actual auditing data. This
+is a non-trivial process that requires security clerance clearance.
+Additional future work is to analyzing the coevolutionary algorithm
+and dynamics, i.e. how the solutions in the populations are coevolving
+during the co-evolutionary search. The operators used for the search,
+pareto-archives, cycling of solutions and multi-objective fitness.

@@ -1,0 +1,328 @@
+\section{Experiments}
+\label{sec:experiments}
+
+Ideally, we would like to be able to show that, with the proper
+specifications, dynamics between dominant tax strategies and dominant
+auditing policies can be replicated in a computational setting. That
+is, we see audit score sheets changing to assign high audit likelihood
+to certain transaction sequence behavior that produces relatively low
+taxable income. Then in turn, we see the population of transaction
+sequences changing to favor transaction sequences that continue to
+produce low levels of taxable income, but using techniques that are
+not deemed suspicious by the dominant audit score sheets in the
+opposing population. We demonstrate STEALTH using a particular known
+tax evasion scheme called Installment Bogus Optional Basis~(iBOB).
+
+\subsubsection{iBOB Description}
+\label{sec:ibob}
+
+In iBOB, a taxpayer arranges a network of transactions designed to
+reduce his tax liability upon the eventual sale of an asset owned by
+one of his subsidiaries~\cite{iBOB}.  He does this by stepping up the
+basis of this asset according to the rules set forth in \S 755 of the
+IRC.  In this way, he manages to eliminate taxable gain while
+ostensibly remaining within the bounds of the tax
+law~\cite{wright45financial}.
+
+The sequence of transactions, shown graphically in
+Figure~\ref{fig:iBob}, for the iBOB scheme are enumerated:
+
+\begin{figure}[htp]
+\centering
+\begin{subfigure}{.30\textwidth}
+  \centering \includegraphics[width=1.0\linewidth]{figures/iBob_1}
+  \caption{iBob step 0}
+  \label{fig:iBob_1}
+\end{subfigure}
+\begin{subfigure}{.30\textwidth}
+  \centering \includegraphics[width=1.0\linewidth]{figures/iBob_2}
+  \caption{iBob step 1}
+  \label{fig:iBob_2}
+\end{subfigure}
+\begin{subfigure}{.30\textwidth}
+  \centering \includegraphics[width=1.0\linewidth]{figures/iBob_3}
+  \caption{iBob step 2}
+  \label{fig:iBob_3}
+\end{subfigure}
+\caption{The steps in the iBOB tax evasion scheme. The basis of an
+  asset is artificially stepped up and tax is avoided by using
+  ``pass-through'' entities.}
+\label{fig:iBob}
+\end{figure}
+
+{\small
+\begin{enumerate}
+\setcounter{enumi}{-1}
+\item In the initial ownership network Mr. Jones is a 99\% partner in
+  JonesCo and FamilyTrust, whereas JonesCo is itself a 99\% partner in
+  another partnership, NewCo. NewCo owns a hotel with a current fair
+  market value~(FMV) of \$200. If NewCo decides to sell the hotel at
+  time step 1, Mr. Jones will incur a tax from this sale. The tax that
+  Mr. Jones owes is the difference between the FMV at which the hotel
+  was sold and his share of inside basis in this hotel,
+  i.e. \$199-\$119 = \$80.  Mr. Jones can evade this tax by
+  artificially stepping up the inside basis of the hotel to \$199.
+
+\item In the first transaction, we see that FamilyTrust, which
+  Mr. Jones controls, decides to buy JonesCo's partnership share in
+  NewCo for a promissory note with a current value of \$199.  Of
+  course, FamilyTrust has no intention of paying off this note, as any
+  such payments entail a tax burden upon NewCo. Having already made a
+  754 election, FamilyTrust steps up its inside basis in the hotel to
+  \$199.
+
+\item When NewCo sells the Hotel to Mr.Brown for \$200, Mr. Jones does
+  not incur any tax, as the difference between the current market
+  value and his share of inside basis in the hotel is now zero.
+\end{enumerate}
+}
+
+In our STEALTH implementation we note in addition to iBOB transaction
+(item 1) two additional patterns of transaction activity that can
+result in zero immediate tax liability for Mr Jones.  The first of
+these involves the transfer of a partnership interest between two
+``linked" entities in the same enterprise structure, usually resulting
+in a basis adjustment due to an earlier \S 754 election. By ``linked"
+we mean a transaction in which the two parties are connected by an
+ownership relationship.  In the iBOB context, these include ``singly
+linked" transactions, such as those that may occur between Mr Jones
+and JonesCo (or JonesCo and NewCo), and ``doubly linked" transactions,
+as may occur between Mr Jones and NewCo.  These types of transactions
+result in zero immediate tax liability for all parties, but would
+almost certainly be audited.  The second such transaction involves the
+use of Annuities such as promissory notes that are taxed only at the
+time of payment.  As with ``linked" transactions, defaulting on
+Annuity payments is nominally legal and results in zero tax liability
+but can be very suspicious for auditors.
+
+\subsubsection{Setup}
+
+We ran $100$ independent iterations of the co-evolutionary GA for $100$
+generations each with tax scheme and audit score populations of size
+$100$. We chose $0.5$ of the tax scheme population for evaluating the
+fitness of the solution in the other audit score population and
+vice-versa. The parameters that govern the GA simulation are displayed in
+Table~\ref{tab:SCOTE_parameters}.
+
+\begin{table}[!htb]
+  \small
+  \centering
+  \caption{Parameters for STEALTH iBOB experiments}
+  \label{tab:SCOTE_parameters} 
+  \begin{tabular}{l|p{8cm}|l}
+    \textit{Parameter} & \textit{Description} & \textit{Value} \\ \hline
+    \texttt{Mutation rate}     & probability of integer change in individual  &  $0.1$ \\ \hline
+    \texttt{Crossover rate}    & probability of combining two individual integer strings  &  $0.7$ \\ \hline
+    \texttt{Tournament Size} & number of competitors when selecting individuals  &  $ 2 $ \\ \hline
+    \texttt{Number chosen}   & fraction of other population each individual is evaluated  &  $ 0.5$ \\ \hline
+    \texttt{Population size}  & number of individuals in each population &  100   \\ \hline
+    \texttt{Generations}     & number of times populations are evaluated  &  100    \\ 
+  \end{tabular}
+\end{table}
+
+We are doing an initial exploration of the problem and the choice of
+parameters and operators are a first attempt. Each population has the
+same operator and parameter settings. In the initialization integers
+are randomly chosen. Individuals are selected from the population
+using tournament selection. In the crossover operation two individuals
+are combined into two new individual by randomly picking a single
+point and swap the after the point. The grammar used to map the
+integers in an individual is shown in Figure~\ref{fig:ge_ex} and the
+initial configuration is always the same. The mutation operation of an
+individual chooses a new random integer at a random position. The
+fitness of an individual is the average over a number of randomly
+chosen individuals from the other population.
+
+The objectives functions used for these experiments were single
+objective and opposites of one another. Given that Jones's taxable
+income was the only one of interest, $\zeta = 1$, and we can define
+his taxable income as just $\ell$. Thus the objective function for a
+transaction sequence is $h_e(\ell, s) = -\ell(1-s)$. Conversely, the
+objective function for audit score sheets are $h_a(\ell, s) = -
+\ell(1-s)$. A primary assumption underlying our model is that tax
+schemes and audit scores sheets are engaged in a perpetual
+co-evolutionary process in which no global attractor exists. To
+generate sustaining oscillations, we constrain the resources of the
+auditor. We restrain the audit score sheets to assign the lowest audit
+point a value of zero, so that there will always be at least one
+scheme that is not detectable by the auditor. For the experiments
+considered the audit observables are:
+\begin{inparaenum}
+\item \texttt{Material for Annuity}
+\item \texttt{Single Linked}
+\item \texttt{Double Linked}
+\item \texttt{iBOB}.
+\end{inparaenum}
+The value of each audit point can be thought of as the relative
+importance of the associated transaction to the auditor.
+
+\subsubsection{Coevolution of Auditors \& Evaders in iBOB}
+% NOTE fix the figure legends, audit is NOT just the 754 election
+
+For our analysis we pick one run from our experiments. Fitnesses from
+various subpopulations of the transaction sequence population are
+shown in Figure~\ref{fig:transaction_lag}. A sharp increase in the
+fitness of the ``best'' transaction sequence indicated the discovery
+of new way to minimize the payment of taxes. As soon as that occurs,
+the fitness of the best $10\%$ of transaction sequences increases to
+the maximum, shortly followed by the fitness of all of the sequences
+in the population. This seems to agree with the real-life observations
+of abusive tax shelters, where tax-minimizing schemes quickly
+propagate amongst the industry once
+discovered~\cite{wright45financial, confidencegames}. Also encouraging
+is the combined decline amongst all subpopulation fitnesses,
+indicative of the evolution of an audit score (not shown) sheet that
+increases the audit likelihood of a transaction sequence exhibiting
+the previously discovered scheme
+
+Figure~\ref{fig:best_audit_weights} below shows a nuanced picture of
+the audit score sheet population's response to the general trend in
+the transaction sequence population. The colored background shows the
+audit weight distribution of the most fit audit score sheet in
+the population. Conversely, colored the lines show the proportion of
+the transaction sequence population that uses the scheme of the
+corresponding color. Thus we can see how the proportion of certain tax
+schemes follow the existence of the highest fitness audit score sheet.
+
+We observe that an audit score sheet capable of sufficiently auditing
+a certain type of tax scheme can co-exist with that scheme for some
+time until the frequency of that tax strategy starts to decline. This
+demonstrates
+\begin{inparaenum}[\itshape a)]
+	\item the successful audit score sheet taking time to
+          propagate amongst its population and
+	\item the a notion of the fitness landscape of the transaction
+          sequences.
+\end{inparaenum}
+That is, audit score sheets have a fitness landscape that allows
+successful auditing policies to disseminate slowly. Conversely,
+dominant tax-minimization strategies have a more stochastic discovery
+process, but successful schemes propagate rapidly once found.
+
+\begin{figure}[!htb]
+\centering
+\begin{subfigure}{.49\textwidth}
+\includegraphics[width=0.99\textwidth]{figures/transaction_fitness_lag_ed_bf}
+\caption{{\small Fitness of best transaction sequences (red), mean of
+    top ten sequences (green) and mean of population (blue). The dots
+    signify points at which a novel tax-minimizing strategy is
+    evolved.}}
+\label{fig:transaction_lag}
+\end{subfigure}
+\begin{subfigure}{.49\textwidth}
+\centering
+\includegraphics[width=0.99\textwidth]{figures/UM_ndist_audit_observations_line_and_best_auditor_weights_bar_ed}
+\caption{{\small Audit weights of best audit score sheet and
+    proportions of various transaction sequence scheme types in
+    population}}
+\label{fig:best_audit_weights}
+\end{subfigure}
+\caption{{\small Example from on co-evolutionary iBOB run.}}
+\label{fig:best_solution_example}
+\end{figure}
+
+Thus the dynamics we set out to replicate with our model were
+achieved. Successful transaction sequences are those that generate low
+levels of taxable income for Jones, as well as exhibiting behavior
+that is not adequately represented in the audit score sheet
+population. Soon enough, the objective functions of the auditing
+policies begin to associated that behavior with low taxable income
+relative to other transaction sequences that accomplish the same
+economic purpose and assign an audit weight to that behavior. The
+effectiveness of that tax strategy then decreases until a new
+tax-minimizing strategy is found which once again evades all (or most)
+existing auditing policies. That strategy then rapidly spreads amongst
+the transaction sequence population and the process continues.
+
+Table \ref{tab:best_transactions} show how the best transaction
+sequences change over generations for a run. The initial best
+transaction sequence is not very large reduction in tax liability
+$(1)$, due to the random intitalization of the populations. After two
+generations an improved sequence is found $(2)$, although both a
+\texttt{Material for Annuity} and \texttt{Double Link} are observed in
+it. At generation seven $(3)$ the best transaction sequence can only
+be audited with \texttt{Material for Annuity}. By generation 31 $(4)$
+the best transaction sequence can be observed by a \texttt{Single
+  Link} when Brown buys NewCo from JonesCo and then with the final
+transaction Brown buys the hotel from NewCo, which is observed as a
+single linked transaction. At generation 33 the best transaction $(5)$
+is possible to observe with a \texttt{Material for Annuity}. By
+generation 70 $(6)$ the best transaction sequence is the same as at
+generation 31 $(4)$ and can be observed by a \texttt{Single Link} when
+Brown buys the hotel from NewCo, the partnership he previously
+bough. Finally at generation 78 $(7)$ the audit observable
+\texttt{iBOB} can capture the best transaction. We observe how all the
+audit observables were evaded due to the resource constraints on the
+auditor. It was also possible to note properties describe for
+co-evolutionary algorithms, namely how the evasion scheme $(4)$ cycled
+in the population.
+
+\begin{table}[htb]
+  \footnotesize
+  \centering
+  \caption{Best transactions sequences, the generation it entered the
+    population and the audit observables required to detect
+    it. Invalid transactions are cleared from the solutions for
+    readability.}
+  \label{tab:best_transactions}
+  \begin{tabular}{p{0.5cm} p{0.8cm}|p{5.2cm}|p{4.0cm}}
+    \textbf{Row} & \textbf{Gen} & \textbf{Transactions} & \textbf{Audit observables} \\
+    \hline %S1
+    $(1)$ & $<2$ &
+    Transaction(Brown, JonesCo, Annuity(200, 30), PartnershipAsset.(99, NewCo)); & \\
+    & & Transaction(NewCo, Jones, Material(200, Hotel, 1), PartnershipAsset(99, JonesCo)
+    &
+    None (Not a good sequence)
+\\
+\hline %S2
+$(2)$ & $ <7$ &
+Transaction(NewCo, Jones, Material(200, Hotel, 1), Annuity(300, 30))
+&
+\texttt{Material for annuity} and \texttt{Double linked}
+\\
+\hline %S3
+$(3)$ & $ <31$ &
+Transaction(NewCo, FamilyTrust, Material(200, Hotel, 1), Annuity(300, 30))
+&
+\texttt{Material for annuity}
+ \\
+ \hline %S4
+ $(4)$ & $ <33$ &
+ Transaction(Brown, JonesCo, Annuity(200, 30), PartnershipAsset(99, NewCo))
+ &
+\texttt{Single linked} (Brown buys hotel from himself)
+ \\
+ \hline %S5
+ $(5)$ & $ <70$ &
+ Transaction(Brown, JonesCo, Annuity(200, 30), PartnershipAsset.(99, NewCo)); & \\
+ & & Transaction(NewCo, Jones, Material(200, Hotel, 1), Annuity(300, 30))
+ &
+\texttt{Material for annuity}
+ \\
+ \hline %S6
+ $(6)$ & $ <78$ &
+ Transaction(Brown, JonesCo, Annuity(200, 30), PartnershipAsset(99, NewCo))
+ &
+ \texttt{Single linked} (same as at $(4)$)
+ \\
+ \hline %S7
+ $(7)$ & $ <100$ &
+ Transaction(FamilyTrust, JonesCo, Annuity(200, 30), PartnershipAsset(99, NewCo))
+ &
+ \texttt{iBOB}
+ \\
+  \end{tabular}
+\end{table}
+
+There are calibrations that can improve the fidelity of the
+experiments. For example, while transaction sequences are clearly more
+responsive to a successful individual in their population than audit
+score sheets, the time scale gives too much credit to the propagation
+of audit score sheets. For example, Figure~\ref{fig:transaction_lag}
+shows that a successful tax strategy enjoys only about $5-10$
+generations of unbridled prosperity until an auditing policy evolves
+and propagates that reduces its effectiveness. Transaction sequences
+take about the same amount of generations to figure out a new dominant
+tax strategy, the only tangible difference is the speed at which it
+propagates through the population. Thus, there must be further
+calibration in the model to reflect the differences in time scale.

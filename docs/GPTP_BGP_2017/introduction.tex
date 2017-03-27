@@ -1,0 +1,58 @@
+\section{Introduction}
+
+Genetic Programming~(GP) has been applied to different problems,
+e.g. in law there is a study of representing contracts as GP
+trees~\citep{chandler2007genetically}. In addition, adversarial
+coevolutionary algorithms have been used to model arms-races, e.g. in
+cyber security~\citep{haddadi2015botnet}. We present an application of
+GP on tax evasion, a fundamental and pervasive societal problem. Our
+focus is on the domain of US Partnership taxation, which had a \$91
+billion tax gap in 2012~\citep{gao2014}. Tax evasion can be seen as an
+adversarial arms-race, the attacker is the tax evader, the defender is
+the auditor. Tax auditors have historical examples of tax schemes to
+help auditing. On the evasion side tax shelter promoters often adapt
+their strategies as existing schemes are uncovered and when changes
+are made to the existing tax regulations. One example is the so called
+BOSS tax shelter (Bond and Options Sales Strategies) that was widely
+promoted yet was ultimately disallowed. While audit changes were
+implemented to detect BOSS they were not able to detect the newly
+emerged variant ``Son of BOSS''~\citep{wright45financial}.
+
+There are some technical challenges to modeling U.S. partnership taxation:
+\begin{inparaenum}[\itshape A)]
+\item the tax code's complexity
+\item the behaviors available to tax evaders and auditors
+\item the simultaneous co-adaptive behaviors of both auditors and tax
+  evaders.
+\end{inparaenum}
+First, we need to develop an abstraction of the relevant partnership
+tax law, which will allow us to compute both tax liability and
+likelihood of being audited. Second, we have to develop a model of
+taxpayer and auditor co-adaptive behavior. In the Simulation of Tax
+Evasion and Law Through Heuristics~(STEALTH) framework, see
+Figure~\ref{fig:STEALTH_overview}, we take knowledge from
+Coevolutionary algorithms~\citep{popovici2012coevolutionary} to model
+the dynamics of the coevolutionary adversarial relationship between
+tax evader and auditor. Specifically the competitive coevolution with
+two populations, i.e. interactive test-based coevolution. We chose a
+method with an explicit use of grammar for search bias and to compress
+the search space. Grammatical Evolution~(GE)~\citep{o2003grammatical}
+is one such grammar based GP method. Grammars are appropriate start
+point for defining, constraining and adding domain knowledge to the
+search space of evader and auditor actions. In the experiments we
+analyze the adversarial search dynamics of applying STEALTH to a tax
+evasion scheme, called iBOB~\citep{iBOB}, designed to defer tax
+payments by using US partnerships.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.99\linewidth]{figures/STEALTH_GPTP_STEALTH_overview}
+  \caption{STEALTH Framework Overview}
+  \label{fig:STEALTH_overview}
+\end{figure}
+
+In Section~\ref{sec:related-work} work on coevolution and GE are
+described. The STEALTH framework is described in
+Section~\ref{sec:method}. In Section~\ref{sec:experiments} there are
+experiments regarding STEALTH. Finally, there are conclusions and
+future work in Section~\ref{sec:conclusions--future}

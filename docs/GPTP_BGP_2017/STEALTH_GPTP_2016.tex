@@ -1,0 +1,78 @@
+\documentclass[a4paper]{article}
+
+\pdfpageattr {/Group << /S /Transparency /I true /CS /DeviceRGB>>}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{natbib}
+\usepackage[font={small,it}]{caption}
+\usepackage{xcolor}
+\usepackage{lipsum}
+\usepackage{soul}
+\usepackage{xspace}
+\usepackage{alltt}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{paralist}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{changes}
+\usepackage{verbatim}
+\usepackage{rotating}
+\usepackage{makecell}
+
+\sethlcolor{black}
+\makeatletter
+
+\def\bibfont{\footnotesize} % decrease font size in bibliography
+                            % section
+
+\begin{document}
+\newcommand{\CITE}[1]{\textcolor{green}{CITE:#1}}
+\newcommand{\TODO}[1]{\textcolor{blue}{TODO:#1}}
+\newcommand{\NOTE}[1]{\textcolor{red}{NOTE:#1}}
+
+\title{Investigating Multi population Competetive Coevolution for
+  Anticipation of Tax Evasion}
+
+%% \author{Erik Hemberg \and Jacob Rosen \and Una-May O'Reilly } 
+
+%% \institute{Erik Hemberg \at
+%%   MIT CSAIL, Cambridge, MA\\
+%%   \email{hembergerik@csail.mit.edu}
+%%   \and
+%%   Jacob Rosen \at
+%%   MIT CSAIL, Cambridge, MA\\
+%%   \email{jbrosen@mit.edu}
+%%   \and
+%%   Una-May O'Reilly \at
+%%   MIT CSAIL, Cambridge, MA\\
+%%   \email{unamay@csail.mit.edu}
+%% }
+
+\maketitle
+%\setcounter{tocdepth}{4}
+%\tableofcontents
+
+% 1p
+\input{abstract} 
+% 2p
+\input{introduction}
+% 4p
+\input{background}
+% 3p
+\input{method}
+% 2p
+\input{experiments}
+% 2p
+\input{conclusions}
+% 2p Bib
+
+\begin{flushleft}
+
+\bibliographystyle{plain}
+\bibliography{stealth_gptp_2016}
+
+\end{flushleft}
+
+\end{document}
