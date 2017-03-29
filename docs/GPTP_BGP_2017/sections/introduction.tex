@@ -1,0 +1,58 @@
+%\newcommand{\st}{subprogram\xspace} 
+
+\section{Introduction}\label{sect:intro}
+%Genetic programming is a general algorithmic technique in which the principles of neo-Darwinian evolution are translated  to algorithmic form in order to generate programs of specific functionality. 
+Our general goal is to improve the level of program complexity that genetic programming(GP) can routinely evolve\cite{koza1992genetic}. This is toward fulfilling its potential to occupy a significant niche in the ever advancing field of program synthesis\cite{weimer2010automatic, rinard2012example, gulwani2010dimensions}.  Behavioral genetic programming (BGP) is an extension to GP that advances toward this compelling goal\cite{krawiecGecco2014,KrawiecBPS2016}. The intuition of the BGP paradigm is that, during evolutionary search and optimization, information characterizing programs by behavioral properties that extend beyond how accurately they match their target outputs. This information from a program ``trace'' can be effectively integrated into extensions of the algorithm's fundamental mechanisms of fitness-based selection and genetic variation. 
+
+To identify useful subprograms BGP commonly exploits program \textit{trace} information (first introduced in \cite{krawiec2013pattern} which is a capture of the output of every subprogram within the program for every test data point during fitness evaluation.  %Consider a simple program, which computes the mathematical function $f(x) = \ln(x1) + (x1 - x2)$ and the sample data set in Table \ref{table:sample_data}. Conventional genetic programming will only consider the outputs for each data point: $\ln(3) + 1$, $\ln(5) + 2$, and compare those values to the desired output.  However, each subtree has its own output, which is ignored by the genetic programming process. 
+%\begin{table*}[ht]
+%\centering
+%\begin{tabular}{ c c | c }
+%\hline\hline
+%$x_{1}$ & $x_{2}$ & $y$ \\ [0.5ex]
+%\hline
+%3 & 2 & 3 \\
+%5 & 3 & 4 \\[1ex]
+%\hline
+%\end{tabular}
+%\caption{Sample data set.}
+%\label{table:sample_data}
+%\end{table*}
+%
+%The collection of the outputs on each subtree for all of the data points is called the trace.  For the program in Figure \ref{figure:gp_tree} and the fitness cases in Table \ref{table:sample_data}, the trace is shown in Table \ref{table:sample_trace}.
+%
+%\begin{table*}[ht]
+%\centering
+%\begin{tabular}{ c c c c c c }
+%\hline\hline
+%$s_{1}$ & $s_{2}$ & $s_{3}$ & $s_{4}$ & $s_{5}$ & $s_{6}$ \\ [0.5ex]
+%\hline
+%3 & $\ln(3)$ & 3 & 2 & 1 & $\ln(3)$ + 1 \\
+%5 & $\ln(5)$ & 5 & 3 & 2 & $\ln(5)$ + 2 \\[1ex]
+%\hline
+%\end{tabular}
+%\caption{The trace of the program from Figure \ref{figure:gp_tree} for the data set in Table \ref{table:sample_data}.}
+%\label{table:sample_trace}
+%\end{table*}
+The trace is stored in a matrix where the number of rows is equal to the number of test suite data points, and the number of columns is equal to the number of subtrees in a given program. % There is no set order of the columns, although here they are presented in the depth first traversal order of the subtrees that produce the values.  
+The trace captures a full snapshot of all of the intermediate states of the program evaluation. 
+
+BGP then uses the trace to estimate the merit of each subprogram by treating its column as a feature (or explanatory variable) in a \textit{model regression} on the desired program outputs.  The accuracy and complexity of the model reveals how useful the subprograms are. The model, if it has feature selection capability, also reveals  specific subprograms within the tree that are partially contributing to the program's fitness.  BGP uses this information in two ways. It can integrate \textit{model error }and \textit{model complexity} into the program's fitness. Second, it maintains an archive of the most useful subtrees identified by modeling each program and uses them in an \textit{archive-based crossover}. BGP has a number of variants that collectively yield impressive results, see \cite{krawiecGecco2014,KrawiecBPS2016}. 
+
+%It demonstrates that we should look at how a program behaves during execution because partial behavior, if it can be identified and isolated, can be used to direct GP toward better program synthesis. 
+%  move previous sentence to conclusion? redundant here?
+\newcommand{\ct}{$T^c$}
+%BGP is a paradigm rich with possible extensions to explore, many of which could give deeper insight into genetic programming synthesis methods. 
+
+In this work,  we explore various extensions to the BGP paradigm that are motivated by 2 central topics: \begin{inparaenum}
+
+\item \textbf{The impact of bias from the inference model on useful subprogram identification and program fitness.}  Model techniques and even the implementation of the same technique can differ in inductive  \textit{bias}, i.e. error from assumptions in the learning algorithm, e.g. implementation of a ``decision tree'' algorithm. These differences, in turn, impact which subprograms are inserted/retrieved from the BGP archive and the model accuracy and model complexity factors that are integrated into a program's fitness. Therefore, we investigate how much BGP is sensitive to model bias. %in terms of its impact on estimations of merit for subprograms and the ensuing integration of this estimates in program fitness and archiving and crossover.  
+\textit{How important is it which subprograms the model technique selects and how accurate a model is? }  We answer these questions by comparing BGP competence under 2 different implementations of decision tree modeling which we observe have different baises. Our investigation contrasts feature identification and model accuracy under the two implementations. 
+
+\item \textbf{``Plays well with others?''}: \textbf{Alternate ways to identify useful subprograms}. BGP uses the trace matrix from a program implying all the subprograms of one program are treated as a set of features during modeling. This means that feature selection and subprogram fitness estimation occurs within the program context.  Essentially, each subprogram is juxtaposed with ``relatives'' -- its parent, neighbors and even child in GP tree terms. Does this context provide the best means of identifying useful subprograms? It may not. Crossover moves a subprogram into another program so, to work most effectively, it should explore recombinations of subprograms that \textit{work well in other subprograms and programs in the population}. We examine this idea by concatenating program traces from a set of programs, not solely one program. This demands a new measure of fitness to reflect subprogram participation in the model as a means of archive selection and program fitness. We examine concatenation of the entire population and sub-populations based on fitness to ask whether fitter programs with concatenated traces are more effective than an open playing field. i.e. the entire population of subprograms.  
+  %Perhaps program context does not reflect how well a subprogram ``\textit{plays with other subprograms in the population}''.
+\end{inparaenum}
+
+Our specific demonstration focus herein is  symbolic regression. We choose SR because it remains a challenge and have good benchmarks~\cite{benchmarks} so it allows us to measure progress and extensions. It also has real world application to system identification and, with modest modification, machine learning regression and classification.  In passing, we replicate BGP logic, making our project software available with an open source license.
+
+We proceed as follows. We start with related work in Section~\ref{sec:related-work}. In Section~\ref{sect:foreground} we provide descriptions of our methods of comparison and investigation. In Section~\ref{sect:experiments} we provide implementation and experimental details and results. Section~\ref{sect:conc} concludes and mentions future work.

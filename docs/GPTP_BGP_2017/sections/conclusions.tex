@@ -1,0 +1,21 @@
+\section{Conclusions and Future Work}\label{sect:conc}
+
+The paper's primary contributions are to explore two subprogram value driven questions.  The first question addressed the importance of a choice of modeling algorithm. The modeling algorithm can impact one or both of selective pressure (because model fitness can be integrated back into program fitness) and genetic variation (because subprograms used by a model can be inserted into the BGP archive and used in BFGP crossover).   We tried two algorithms for decision trees: \REPTREE and \SCIKIT. Neither of the algorithms produced significantly better results across all the 17 benchmarks.  For some benchmarks  the average fitness results were significantly different but, again, neither of algorithms was consistently superior in each case. 
+Using a completely different modeling technique, i.e. one different from decision trees altogether,  that also provides feature selection would be an interesting comparison to using \REPTREE.  All feature selection algorithms are stochastic so their results vary. Perhaps the stochasticity of any algorithm overwhelms the impact of a particular technique's bias. We next will consider whether the stronger dissimilarity between the modeling bias of LASSO and decision trees has significant impact. LASSO is a linear technique and has a regularization pressure parameter making it an interesting option.
+
+
+Our second investigation explored choosing different sets of subprograms for modeling. Rather than use all the subprograms of one program, it mixed subprograms across a subset of programs from the entire population. Our question was whether identifying useful subprograms in this way and integrating them into selection (via integration of model fitness for a program) and/or genetic variation (via archive based crossover) would yield superior error for the best GP model of the run.  Again, we found our results to be equivocal.  None of the configurations emerged consistently superior. Again, however ranking and error differed among benchmarks. 
+
+This work brings to light particular paths  that to extend the concepts and understanding of BGP.  There are several avenues that could be explored:
+\begin{inparaenum}
+\item  
+It would be interesting to see if using a machine learning model whose purpose is more inline with what BGP asks for would benefit the evolutionary process.  For example, instead of building an entire machine learning model on the trace, one could use a feature selection technique, or measure the statistical correlation between the columns.  The output would provide material with which to populate the archive.  However, this would not provide additional fitness measures.
+
+\item
+It is unclear exactly why the BGP model that uses the combined traces of all of the programs in the population performed less well than running the model on each program trace independently.  It is possible that the idea has merit, but the particulars were not a good fit for BGP.  In particular, in each generation only a single machine learning model is built.  Therefore, all of the selected trees put into the archive in a single generation have the same weight.
+
+\item
+In BGP if two subtrees have identical columns in the program trace (i.e. identical \textit{semantics}), only the smaller subtree is kept.  This introduces a bias that is not necessarily beneficial to the evolutionary process.  It would be interesting to explore how common subtrees with identical semantics are, and if choosing the smaller tree is the better choice.
+\end{inparaenum}
+
+\section*{Acknowledgments} Suppressed to honor the author blind review process.

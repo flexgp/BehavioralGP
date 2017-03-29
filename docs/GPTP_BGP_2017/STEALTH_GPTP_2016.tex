@@ -21,6 +21,8 @@
 \usepackage{rotating}
 \usepackage{makecell}
 
+\usepackage{xparse}
+
 \sethlcolor{black}
 \makeatletter
 
@@ -29,21 +31,34 @@
 
 \begin{document}
 \newcommand{\CITE}[1]{\textcolor{green}{CITE:#1}}
-\newcommand{\TODO}[1]{\textcolor{blue}{TODO:#1}}
+%\newcommand{\TODO}[1]{\textcolor{blue}{TODO:#1}}
 \newcommand{\NOTE}[1]{\textcolor{red}{NOTE:#1}}
 
-\title{Investigating Multi population Competetive Coevolution for
-  Anticipation of Tax Evasion}
+\NewDocumentCommand{\eg}{}{e.g.\@\xspace}
+\NewDocumentCommand{\ie}{}{i.e.\@\xspace}
+\NewDocumentCommand{\etal}{}{et al.\@\xspace}
+\NewDocumentCommand{\req}{m}{\textbf{RQ#1}\@\xspace}
+\NewDocumentCommand{\TODO}{m}{\textcolor{red}{TODO:#1}\@\xspace}
+\NewDocumentCommand{\CHECK}{m}{\textcolor{red}{TODO:#1}\@\xspace}
+\NewDocumentCommand{\SCIKIT}{}{CART\@\xspace}
+\NewDocumentCommand{\REPTREE}{}{REPT\@\xspace}
+\NewDocumentCommand{\REPTree}{}{REPT\@\xspace}
 
-%% \author{Erik Hemberg \and Jacob Rosen \and Una-May O'Reilly } 
+\title{Exploiting Subprograms in Genetic Programming}
 
-%% \institute{Erik Hemberg \at
+%% \author{Steven B. Fine \and Erik Hemberg \and Krzysztof Krawiec \and Una-May O'Reilly } 
+
+%% \institute{Steven B. Fine \at
+%%   MIT CSAIL, Cambridge, MA\\
+%%   \email{sfine@mit.edu}
+%%   \and
+%%   Erik Hemberg \at
 %%   MIT CSAIL, Cambridge, MA\\
 %%   \email{hembergerik@csail.mit.edu}
 %%   \and
-%%   Jacob Rosen \at
-%%   MIT CSAIL, Cambridge, MA\\
-%%   \email{jbrosen@mit.edu}
+%%   Krzysztof Krawiec \at
+%%   Poznan Institute of Technology, Poland\\
+%%   \email{krzysztof.krawiec@cs.put.poznan.pl}
 %%   \and
 %%   Una-May O'Reilly \at
 %%   MIT CSAIL, Cambridge, MA\\
@@ -55,23 +70,23 @@
 %\tableofcontents
 
 % 1p
-\input{abstract} 
+\input{front/abstract} 
 % 2p
-\input{introduction}
+\input{sections/introduction}
 % 4p
-\input{background}
+\input{sections/related_work}
 % 3p
-\input{method}
+\input{sections/extensions}
 % 2p
-\input{experiments}
+\input{sections/experiments}
 % 2p
-\input{conclusions}
+\input{sections/conclusions}
 % 2p Bib
 
 \begin{flushleft}
 
 \bibliographystyle{plain}
-\bibliography{stealth_gptp_2016}
+\bibliography{BGP_gecco_2017}
 
 \end{flushleft}
 
