@@ -7,7 +7,7 @@ We start this section by detailing the benchmarks we use, the parameters of our 
 
 Our investigation uses 17 symbolic regression benchmarks from~\cite{benchmarks}. All of the benchmarks are defined such that the dependent variable is the output of a particular mathematical function for a given set of inputs.  All of the inputs are taken to form a grid on some interval.  Let $E[a, b, c]$ denote $c$ samples equally spaced in the interval $[a,b]$. (Note that McDermott et al. defines $E[a, b, c]$ slightly differently.)  Below is a list of all of the benchmarks that are used:
 
-\begin{enumerate}[noitemsep]
+\begin{enumerate}
 \item \textbf{Keijzer1}: $0.3x \sin(2 \pi x);$ $x \in E[-1,1,20]$
 \item \textbf{Keijzer11}: $x y+\sin((x-1)(y-1));$ $x, y \in E[-3,3,5]$
 \item \textbf{Keijzer12}: $x^{4}-x^{3}+\frac{y^{2}}{2}-y;$ $x, y \in E[-3,3,5]$
@@ -36,7 +36,7 @@ We use a standard implementation of GP and chose parameters according to setting
 \item \textbf{Population size}: 100
 \item \textbf{Number of Generations}: 250
 \item \textbf{Maximum Program Tree Depth}: 17
-\item \textbf{Function set}: $\{ +, -, *, /, \log, \exp, \sin, \cos, -x \}$
+\item \textbf{Function set}\footnote{Note that for our implementation of $/$, if the denominator is less than $10^{-6}$ we return $1$, and for our implementation of $\log$, if the denominator is less than $10^{-6}$ we return $0$.}: $\{ +, -, *, /, \log, \exp, \sin, \cos, -x \}$
 \item \textbf{Terminal set}: Only the features in the benchmark.
 \item \textbf{Archive Capacity}: 50
 \item \textbf{Mutation Rate $\mu$}: 0.1
@@ -65,7 +65,13 @@ For a deeper dive, at the specific benchmark level, Table~\ref{table:fitnessReTr
 
 \input{sections/decision_tree_fitness}
 
-\begin{figure}[htbp]\begin{center}\includegraphics[width=0.99\linewidth]{sections/figures/figure_reptree.png}\caption{We take one run of Keijzer1 running with \REPTREE modeling and configuration BP4.   We plot on the first row  model error on the left and the fitness of the best program (right).  The plots on the second row show number of features of model  and number of subprograms in the best program (right). The plots on the third row show the ratio of number of model features to program subtrees (left) and ratio of model error to program fitness. Since the run is configured for  BP4 program fitness integrates both model error and complexity.}\label{fig:deepdive}\end{center}\end{figure}
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=0.99\linewidth]{sections/figures/figure_reptree.png}
+\caption{We take one run of Keijzer1 running with \REPTREE modeling and configuration BP4.   We plot on the first row  model error on the left and the fitness of the best program (right).  The plots on the second row show number of features of model  and number of subprograms in the best program (right). The plots on the third row show the ratio of number of model features to program subtrees (left) and ratio of model error to program fitness. Since the run is configured for  BP4 program fitness integrates both model error and complexity.}
+\label{fig:deepdive}
+\end{center}
+\end{figure}
 
 %
 %Describe difference in implementations between Reptree and SKL-RepTree.\\
@@ -87,14 +93,14 @@ We conclude that in this case of different decision tree algorithms perhaps the 
 \subsection{Aggregate Trace Matrices}\label{sect:agg-features}
 For the algorithm configurations of this section which compare within \FULL and within \DRAW, we adopt a clearer notation. We drop the BGP prefix and we use $M$ or $\hat M$ to designate whether model error was integrated into program fitness and $A$ of $\hat A$ to designate whether subprograms were were qualified for archive insertion and archive retrieval during BGP crossover.
 
-More details of the \DRAW method are appropriate.  Referencing \cite{krawiecGecco2014} we analyzed how its model error, see Equation~\ref{eq:subtree_weight} and noted that  the $U|p|$ factor in its denominator increases the fitness of smaller subprograms. Therefore we designed \DRAW to also favor the archiving of smaller subprograms.  \DRAW proceeds as follows:
+More details of the \DRAW method are appropriate.  Referencing \cite{krawiecGecco2014} we analyzed the formula for computing the weight of a given subtree (see Equation~\ref{eq:subtree_weight}).  We noted that the $|U(p)|$ factor in its denominator indirectly increases the weight of smaller subprograms.  This occurs because smaller programs yield smaller models, and smaller programs have smaller subprograms.  Therefore we designed \DRAW to also favor the archiving of smaller subprograms.  \DRAW proceeds as follows:
 
 \begin{inparaenum}
 \item The population is sorted best to worst by program fitness (program error and size) using the NSGA pareto front crowding calculation because BGP is multi-objective.
 
 \item The sorted population is cut off from below at a threshold $\lambda \%$ to form $C$.  The trace matrixes of every program in $C$ are concatenated to form $T_C$ which we call the subprogram pool.  
 
-\item We next sort $C$ by \textbf{size} and select the smallest $20\%$ of elements of $C$ forming a size sample we call $K$. Note that $K$ has the smallest 20\% programs from $C$
+\item We next sort the population by \textbf{size} and select the smallest $20\%$ forming a size sample we call $K$.
    
 \item Finally we draw from $K$ at random to obtain the number of subprograms that will be collectively modeled. Then we select the equivalent number of columns at random from $T_C$ and form a model. We repeat this step each time for the size of the population.  This generates multiple smaller collections of diverse subprograms. 
 
@@ -109,9 +115,9 @@ More details of the \DRAW method are appropriate.  Referencing \cite{krawiecGecc
 
 \input{sections/ranks_all}
 
-We first asked what if  $C$ is composed of \textbf{every} subprogram in the population, i.e. $|C| = PopSize$?  While this $C$ using \FULL would only support one model being derived, it would give all subprograms in the population an opportunity to be used with each other in the model as features.  Similarly, but favoring many smaller combinations drawn from all subprograms, \DRAW would, through repetition,  give all subprograms in the population an opportunity to be used with some of the all the others.   If we compare the result of \DRAW to \FULL we can gauge the difference of generating many more small models vs one bigger model, when every subprogram in the population is ``eligible'' to be selected as a model feature.   This comparison is detailed on the bottom line of Table!\ref{table:XXdraws_avg_ranks} where the leftmost averaged ranking results (by average fitness, across the 17 benchmarks) for different model and archive options are from \DRAW and the rightmost are from \FULL. The data reveals that using all the subprograms, with either \FULL or \DRAW is NOT advantageous. Further empirical investigation to understand this result further should consider two issues: \begin{inparaenum} \item program size to fitness distribution of the population each generation could be leading to very large number of subprograms and \item the modeling algorithm (\REPTREE) may be overwhelmed, in the case of \FULL, by the number of features, given the much smaller number of training cases for the regression. \end{inparaenum}
+We first asked what if  $C$ is composed of \textbf{every} subprogram in the population, i.e. $|C| = PopSize$?  While this $C$ using \FULL would only support one model being derived, it would give all subprograms in the population an opportunity to be used with each other in the model as features.  Similarly, but favoring many smaller combinations drawn from all subprograms, \DRAW would, through repetition,  give all subprograms in the population an opportunity to be used with some of the all the others.   If we compare the result of \DRAW to \FULL we can gauge the difference of generating many more small models vs one bigger model, when every subprogram in the population is ``eligible'' to be selected as a model feature.   This comparison is detailed on the bottom line of Table \ref{table:XXdraws_avg_ranks} where the leftmost averaged ranking results (by average fitness, across the 17 benchmarks) for different model and archive options are from \DRAW and the rightmost are from \FULL. The data reveals that using all the subprograms, with either \FULL or \DRAW is NOT advantageous. Further empirical investigation to understand this result further should consider two issues: \begin{inparaenum} \item program size to fitness distribution of the population each generation could be leading to very large number of subprograms and \item the modeling algorithm (\REPTREE) may be overwhelmed, in the case of \FULL, by the number of features, given the much smaller number of training cases for the regression. \end{inparaenum}
 
-Next we can consider the rankings of each option of model fitness integration (M vs $\hat M$) across different selections for the subprogram pool $C$.  When $C=25\%$ the model feature options are from the highest fitness tier of the population.  This appears, in 4 cases of 6, to \textit{impede} the error of the best of run, as measured by average ranking.  In 4 of 6 cases, including all 3 of \DRAW,  sizing the subprogram pool to be slightly less elitist ($C=50\% or C=75\%$ was better. But extending $C$ to 100\% appears to be to diverse.  Table~\ref{table:fitness_draw_full} and Table\ref{table:XXdraws_avg_ranks} provide more detailed average fitness and ranking information, i.e. results for each individual benchmark.  
+Next we can consider the rankings of each option of model fitness integration (M vs $\hat M$) across different selections for the subprogram pool $C$.  When $C=25\%$ the model feature options are from the highest fitness tier of the population. In 4 of 6 cases, this appears to \textit{impede} the error of the best of run program, as measured by average ranking.  In 4 of 6 cases, including all 3 of \DRAW,  sizing the subprogram pool to be slightly less elitist ($C=50\%$ or $C=75\%$ was better. But extending $C$ to 100\% appears to be too diverse.  Table~\ref{table:fitness_draw_full} and Table~\ref{table:XXdraws_avg_ranks} provide more detailed average fitness and ranking information, i.e. results for each individual benchmark.  
 
 %show discuss results of full-pop (call it 100\_XX)\\
 %
