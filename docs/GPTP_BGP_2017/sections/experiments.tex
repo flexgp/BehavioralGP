@@ -36,7 +36,7 @@ We use a standard implementation of GP and chose parameters according to setting
 \item \textbf{Population size}: 100
 \item \textbf{Number of Generations}: 250
 \item \textbf{Maximum Program Tree Depth}: 17
-\item \textbf{Function set}\footnote{Note that for our implementation of $/$, if the denominator is less than $10^{-6}$ we return $1$, and for our implementation of $\log$, if the denominator is less than $10^{-6}$ we return $0$.}: $\{ +, -, *, /, \log, \exp, \sin, \cos, -x \}$
+\item \textbf{Function set}\footnote{Note that for our implementation of $/$, if the denominator is less than $10^{-6}$ we return $1$, and for our implementation of $\log$, if the argument is less than $10^{-6}$ we return $0$.}: $\{ +, -, *, /, \log, \exp, \sin, \cos, -x \}$
 \item \textbf{Terminal set}: Only the features in the benchmark.
 \item \textbf{Archive Capacity}: 50
 \item \textbf{Mutation Rate $\mu$}: 0.1
@@ -48,8 +48,30 @@ We use a standard implementation of GP and chose parameters according to setting
 \item \textbf{Number of runs} 30
 \end{itemize}
 
-First we use the 3 BGP algorithm configurations that use \REPTREE to replicate \cite{krawiecGecco2014}'s work on the symbolic regression benchmarks. These we call BGP2A, BGP4, BGP4A following precedent. In the name the digit 2 indicates that model error $e$ and complexity $c$ were not integrated into program fitness while 4 indicates they were.   The suffix A indicates whether or not subprograms from the model were qualified for archive insertion and archive retrieval during BGP crossover. When the A is omitted ordinary crossover is used. We observe results consistent with the prior work. Our open source software is available on Github.
-This allowed us to proceed to evaluate feature selection sensitivity based on modeling algorithm.
+We use the same four program fitness functions used in \cite{krawiecGecco2014} (in addition to model contribution fitness which is described in Section~\ref{section:identifying_useful_subprograms}). Program error $f$, is given by Equation~\ref{eq:f}, where $\hat y$ is the output of the program, $y$ is the desired output, and $d_{m}$ denotes the Manhattan distance between the two arguments.  Program size $s$, is given by Equation~\ref{eq:s}, where $|p|$ is the number of nodes in the tree that defines the program. Model error $e$, is given by Equation~\ref{eq:e}, where $M$ is the output of the machine learning model when it is evaluated on the trace of the program. Model complexity $c$, is given by Equation~\ref{eq:c}, where $|M|$ is the size of the model.
+
+\begin{equation}
+\label{eq:f}
+f = 1 - \frac{1}{1 + d_{m}(\hat y, y)}
+\end{equation}
+
+\begin{equation}
+\label{eq:s}
+s = 1 - \frac{1}{|p|}
+\end{equation}
+
+\begin{equation}
+\label{eq:e}
+e = 1 - \frac{1}{1 + d_{m}(M, y)}
+\end{equation}
+
+\begin{equation}
+\label{eq:c}
+c = 1 - \frac{1}{|M|}
+\end{equation}
+
+First we use the 3 BGP algorithm configurations that use \REPTREE to replicate \cite{krawiecGecco2014}'s work on the symbolic regression benchmarks. These we call BP2A, BP4, BP4A following precedent. In the name the digit 2 indicates that model error $e$ and complexity $c$ were not integrated into program fitness while 4 indicates they were.   The suffix A indicates whether or not subprograms from the model were qualified for archive insertion and archive retrieval during BGP crossover. When the A is omitted ordinary crossover is used. We observe results consistent with the prior work. Our open source software is available on Github.
+This allowed us to proceed to evaluate feature selection sensitivity to the modeling algorithm.
 
 It is important to note, that for each configuration we report regression, i.e. training set performance. We are primarily interested in exploring subprogram behavior and how to assemble subprograms. Reporting generalization would complicate the discussion without materially affecting our conclusions. 
 
@@ -59,11 +81,11 @@ Q1. Does the feature selection bias of the model step matter?
 
 \input{sections/decision_tree_ranks}
 
-Table~\ref{table:ranksReTreeVCART} shows the results of running the 3 different configurations (BGP2A, BGP4, BGP4A) each with the two decision tree algorithms.  Averaging over the rankings across each benchmark we find that BP2A using \REPTREE is best. For BPG2A, \REPTREE outranks \SCIKIT but when model error is integrated into the program fitness, (i.e. BPG4A and BPG4) regardless of whether or not an archive is used, \SCIKIT is superior to \REPTREE.  
+Table~\ref{table:ranksReTreeVCART} shows the results of running the 3 different configurations (BP2A, BP4, BP4A) each with the two decision tree algorithms.  Averaging over the rankings across each benchmark we find that BP2A using \REPTREE is best. For BP2A, \REPTREE outranks \SCIKIT but when model error is integrated into the program fitness, (i.e. BP4A and BP4) regardless of whether or not an archive is used, \SCIKIT is superior to \REPTREE.  
 
-When we compare the results of using the archive while model error is integrated into the program fitness (i.e.  BPG4A to BPG4), for both \REPTREE and \SCIKIT it is better to use an archive than to forgo one.  Comparing BPG2A with BPG4A, we can measure the impact of model error and complexity integration.  We find that for both \SCIKIT and \REPTREE it is not helpful to integrate model error and complexity into program fitness. 
+When we compare the results of using the archive while model error is integrated into the program fitness (i.e.  BP4A to BP4), for both \REPTREE and \SCIKIT it is better to use an archive than to forgo one.  Comparing BP2A with BP4A, we can measure the impact of model error and complexity integration.  We find that for both \SCIKIT and \REPTREE it is not helpful to integrate model error and complexity into program fitness. 
 
-For a deeper dive, at the specific benchmark level, Table~\ref{table:fitnessReTreeVCART} shows the average best fitness at end of run (of 30 runs), for each benchmark.   Averaging all fitness results, no clear winner is  discernible. For certain comparisons \SCIKIT will be superior while for others \REPTREE is.   We also show one randomly selected run of Keijzer1 running with \REPTREE modeling and configuration BPG4 in Figure~\ref{fig:deepdive}.   We plot on the first row  model error on the left and the fitness of the best program (right).  The plots on the second row show number of features of model  and number of subprograms in the best program (right). The plots on the third row show the ratio of number of model features to program subtrees (left) and ratio of model error to program fitness. Since the run is configured for  BPG4 program fitness integrates both model error and complexity.  No discernible difference arose among this sort of plot. This is understandable given the stochastic nature of BGP.
+For a deeper dive, at the specific benchmark level, Table~\ref{table:fitnessReTreeVCART} shows the average best fitness at end of run (of 30 runs), for each benchmark.   Averaging all fitness results, no clear winner is  discernible. For certain comparisons \SCIKIT will be superior while for others \REPTREE is.   We also show one randomly selected run of Keijzer1 running with \REPTREE modeling and configuration BP4 in Figure~\ref{fig:deepdive}.   We plot on the first row  model error on the left and the fitness of the best program (right).  The plots on the second row show number of features of model  and number of subprograms in the best program (right). The plots on the third row show the ratio of number of model features to program subtrees (left) and ratio of model error to program fitness. Since the run is configured for  BP4 program fitness integrates both model error and complexity.  No discernible difference arose among this sort of plot. This is understandable given the stochastic nature of BGP.
 
 \input{sections/decision_tree_fitness}
 

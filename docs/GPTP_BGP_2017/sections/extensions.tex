@@ -27,6 +27,7 @@ w = \frac{1}{(1 + e)|U(p)|}
 Following our motivation to understand the impact of model bias on useful subprogram identification and program fitness, we first explore an alternative realization of BGP's strategy by using the \SCIKIT optimized version of the CART decision tree algorithm\footnote{\url{http://scikit-learn.org/stable/modules/tree.html\#tree-algorithms-id3-c4-5-c5-0-and-cart}}.  CART (Classification and Regression Trees) is very similar to C4.5, but it differs in that it supports numerical target variables (regression) and does not compute rule sets. CART constructs binary trees using the feature and threshold that yield the largest information gain at each node.  With the \SCIKIT implementation we derive a model in the same manner that we derive a model from \REPTREE.  We denote the model derived for \SCIKIT by $M_S$ and contrast it with the model derived from \REPTREE, which we now denote by $M_R$.
 
 \subsection{Identifying Useful Subprograms}
+\label{section:identifying_useful_subprograms}
 \newcommand{\FULL}{\textbf{FULL}\xspace}
 \newcommand{\DRAW}{\textbf{DRAW}\xspace}
 Next we realize alternative implementations of the BGP strategy. We do this to investigate alternative ways of identifying useful subprograms, considering that prior work only considers models that are trained on the trace of a single program. In Step~(1) we first select a set of programs  $C$ from the population. We then form a new kind of trace matrix, $T_c$, by column-wise concatenating all $T${'s} of the programs in $C$. In a version we call \FULL,  $T_c$ is then passed through Step~(2). We proceed with step (3), but it is important to note that the weights given to the subprograms considered for the archive are identical, because only a single model is built. Step (4) is altered to incorporate model contribution in place of model error and complexity. The model is built from the features of many programs, so the model error and model complexity for each individual program are undefined. Model contribution measures how many features each program contributes to $M$.  For this we use $w_{c}$, which is given by Equation~\ref{eq:subtree_contrib}, where $p'$ is the number of features in $M$ from program $p$, and $|U(M)|$ is the total number of features from $T_{c}$ used in $M$. This method allows us to experiment with different programs in $C$, trying $C$ containing all the programs in the population, for diversity and, conversely trying elitism, holding only a top fraction of the  population by fitness. 
@@ -40,7 +41,7 @@ w_c = 1 - \frac{p'}{|U(M)|}
 
 An alternative implementation, that we name \DRAW,  is to draw random subsets from $T_{c}$, and build a model on each.  This would possibly contribute to a more robust archive, if it can be populated with subtrees that are frequently selected by the machine learning model.  We modify Step~(3) to account for the possibility that a specific subtree was chosen to be in more than one model.  In this case, the subtree's merit $w$ is set to be the sum of the assigned merit values each time the subtree is chosen.  Step~(4) is modified in the same way as it is in \FULL.
 
-Implementation details of \FULL and of \DRAW are provided the next section.  
+Implementation details of \FULL and of \DRAW are provided in the next section.  
 
 
 %Initially $U$ will be the entire population.
