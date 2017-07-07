@@ -6,7 +6,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## Quick Start
 
-The following works on Ubuntu 14.04.5 LTS. Simply download the zip, or clone the repository to your local machine. (If you are using a different system, you may need to change the value of ```jdk.home.1.8``` to point to the location of your JDK compiler.)
+The following works on Ubuntu 14.04.5 LTS. Simply download the zip, or clone the repository to your local machine. (If you are using a different system, you may need to change the value of ```jdk.home.1.8``` in `build.properties`)
+
+### Build
 
 To build the application, in the root folder of the repository, simply run 
 
@@ -15,6 +17,8 @@ ant -f build.xml
 ```
 
 This will create an `out` directory.
+
+### Run
 
 To run conventional genetic programming on the Keijzer1 data set for one minute, simply run
 
